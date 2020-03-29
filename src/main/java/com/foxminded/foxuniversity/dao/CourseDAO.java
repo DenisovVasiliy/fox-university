@@ -53,4 +53,9 @@ public class CourseDAO {
         }
         return false;
     }
+
+    public boolean update(Course course) {
+        return jdbcTemplate.update(environment.getProperty(QueriesConstants.UPDATE_COURSE),
+                course.getName(), course.getDescription(), course.getId()) > 0;
+    }
 }
