@@ -1,9 +1,10 @@
 package com.foxminded.foxuniversity.dao;
 
-import com.foxminded.foxuniversity.dao.infra.QueriesConstants;
 import com.foxminded.foxuniversity.dao.mappers.CourseMapper;
 import com.foxminded.foxuniversity.domain.Course;
+import com.foxminded.foxuniversity.domain.Group;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,27 +21,41 @@ public class CourseDAO {
 
     @Autowired
     private Environment environment;
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     private SimpleJdbcInsert jdbcInsert;
+    @Autowired
+    private CourseMapper courseMapper;
+
+    @Value("${course.getAll}")
+    private String getAll;
+    @Value("${course.getById}")
+    private String getById;
+    @Value("${course.getByGroup}")
+    private String getByGroup;
+    @Value("${course.update}")
+    private String update;
+    @Value("${course.delete}")
+    private String delete;
 
     public List<Course> getAll() {
-        return jdbcTemplate.query(environment.getProperty(QueriesConstants.GET_ALL_COURSES), new CourseMapper());
+        return jdbcTemplate.query(getAll, courseMapper);
     }
 
     public Course getById(int id) {
-        return jdbcTemplate.queryForObject(
-                environment.getProperty(QueriesConstants.GET_COURSE_BY_ID), new Object[]{id}, new CourseMapper());
+        return jdbcTemplate.queryForObject(getById, new Object[]{id}, courseMapper);
+    }
+
+    public List<Course> getByGroup(Group group) {
+        return jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, courseMapper);
     }
 
     public boolean delete(Course course) {
-        return jdbcTemplate.update(environment.getProperty(QueriesConstants.DELETE_COURSE), course.getId()) > 0;
+        return jdbcTemplate.update(delete, course.getId()) > 0;
     }
 
-    public boolean save(Course course) {
+    public boolean saveCourse(Course course) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(course);
         Number id = jdbcInsert.withTableName("courses").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
@@ -55,7 +70,6 @@ public class CourseDAO {
     }
 
     public boolean update(Course course) {
-        return jdbcTemplate.update(environment.getProperty(QueriesConstants.UPDATE_COURSE),
-                course.getName(), course.getDescription(), course.getId()) > 0;
+        return jdbcTemplate.update(update, course.getName(), course.getDescription(), course.getId()) > 0;
     }
 }
