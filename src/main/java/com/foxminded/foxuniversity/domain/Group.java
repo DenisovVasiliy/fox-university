@@ -6,6 +6,7 @@ public class Group {
     private int id;
     private String name;
     private List<Course> courses;
+    private List<Student> students;
 
     public Group (String name) {
         this.name = name;
@@ -34,6 +35,14 @@ public class Group {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     @Override
