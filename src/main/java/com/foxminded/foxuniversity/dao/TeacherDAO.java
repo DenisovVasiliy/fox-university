@@ -9,11 +9,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @PropertySource("classpath:queries.properties")
@@ -62,17 +65,16 @@ public class TeacherDAO {
     }
 
     public boolean save(Teacher teacher) {
-        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(teacher);
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("first_name", teacher.getFirstName())
+                .addValue("last_name", teacher.getLastName())
+                .addValue("course_id", teacher.getCourse().getId());
         Number id = jdbcInsert.withTableName("teachers").usingGeneratedKeyColumns("id")
-                .executeAndReturnKey(parameterSource);
+                .executeAndReturnKey(parameters);
         if(id != null) {
             teacher.setId(id.intValue());
-            return updateCourse(teacher);
+            return true;
         }
         return false;
-    }
-
-    private boolean updateCourse(Teacher teacher) {
-        return jdbcTemplate.update(updateCourse, teacher.getCourse().getId(), teacher.getId()) > 0;
     }
 }
