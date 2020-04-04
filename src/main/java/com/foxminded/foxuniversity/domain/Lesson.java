@@ -13,15 +13,6 @@ public class Lesson {
     private Time startTime;
     private LessonsType type;
 
-    public Lesson(int id, Course course, List<Group> groups, Day day, Time startTime, LessonsType type) {
-        this.id = id;
-        this.course = course;
-        this.groups = groups;
-        this.day = day;
-        this.startTime = startTime;
-        this.type = type;
-    }
-
     public Lesson(int id, Course course, List<Group> groups, Teacher teacher,
                   int classroom, Day day, Time startTime, LessonsType type) {
         this.id = id;
