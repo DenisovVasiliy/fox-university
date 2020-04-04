@@ -13,6 +13,8 @@ import java.sql.SQLException;
 public class TeacherMapper implements RowMapper<Teacher> {
     @Autowired
     CourseDAO courseDAO;
+
+    @Override
     public Teacher mapRow(ResultSet set, int i) throws SQLException {
         return new Teacher(set.getInt("id"), set.getString("first_name"),
                 set.getString("last_name"), courseDAO.getById(set.getInt("course_id")));
