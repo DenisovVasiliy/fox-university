@@ -6,7 +6,6 @@ import com.foxminded.foxuniversity.domain.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -18,8 +17,7 @@ import java.util.List;
 @Repository
 @PropertySource("classpath:queries.properties")
 public class TeacherDAO {
-    @Autowired
-    private Environment environment;
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -66,10 +64,10 @@ public class TeacherDAO {
                 .addValue("first_name", teacher.getFirstName())
                 .addValue("last_name", teacher.getLastName())
                 .addValue("course_id", teacher.getCourse().getId());
-        Number id = jdbcInsert.withTableName("teachers").usingGeneratedKeyColumns("id")
+        Number generatedId = jdbcInsert.withTableName("teachers").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameters);
-        if(id != null) {
-            teacher.setId(id.intValue());
+        if(generatedId != null) {
+            teacher.setId(generatedId.intValue());
             return true;
         }
         return false;

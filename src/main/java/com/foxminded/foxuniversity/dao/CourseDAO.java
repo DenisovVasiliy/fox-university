@@ -6,7 +6,6 @@ import com.foxminded.foxuniversity.domain.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -19,8 +18,6 @@ import java.util.List;
 @PropertySource("classpath:queries.properties")
 public class CourseDAO {
 
-    @Autowired
-    private Environment environment;
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -61,9 +58,6 @@ public class CourseDAO {
                 .executeAndReturnKey(parameterSource);
         if (id != null) {
             course.setId(id.intValue());
-            if(course.getLessons() != null) {
-                //call save course's lessons
-            }
             return true;
         }
         return false;
