@@ -50,14 +50,23 @@ CREATE TABLE IF NOT EXISTS lessons
   teacher_id INTEGER,
   classroom INTEGER,
   day VARCHAR(30) NOT NULL CHECK (day != ''),
-  type VARCHAR(30) NOT NULL CHECK (day != ''),
+  type VARCHAR(30) NOT NULL CHECK (type != ''),
   FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE TABLE IF NOT EXISTS courses_lessons
+CREATE TABLE IF NOT EXISTS lessons_courses
 (
   course_id INTEGER,
   lesson_id INTEGER UNIQUE,
   FOREIGN KEY (course_id) REFERENCES courses(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS lessons_groups
+(
+  group_id INTEGER,
+  lesson_id INTEGER,
+  UNIQUE (group_id , lesson_id),
+  FOREIGN KEY (group_id) REFERENCES groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
