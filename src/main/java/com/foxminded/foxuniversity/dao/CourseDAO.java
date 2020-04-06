@@ -52,7 +52,7 @@ public class CourseDAO {
         return jdbcTemplate.update(delete, course.getId()) > 0;
     }
 
-    public boolean saveCourse(Course course) {
+    public boolean save(Course course) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(course);
         Number id = jdbcInsert.withTableName("courses").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
