@@ -60,9 +60,9 @@ public class StudentDAO {
                 .addValue("last_name", student.getLastName());
         Number generatedId = jdbcInsert.withTableName("students").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
-        if(generatedId != null) {
+        if (generatedId != null) {
             student.setId(generatedId.intValue());
-            if(student.getGroup() != null) {
+            if (student.getGroup() != null) {
                 return assignToGroup(student, student.getGroup());
             } else return true;
         }
@@ -71,8 +71,8 @@ public class StudentDAO {
 
     public boolean update(Student student) {
         int updatedRows = jdbcTemplate.update(update, student.getFirstName(), student.getLastName(), student.getId());
-        if(student.getGroup() != null) {
-            if(updateAssignment(student)) {
+        if (student.getGroup() != null) {
+            if (updateAssignment(student)) {
                 return true;
             } else return assignToGroup(student, student.getGroup());
         }

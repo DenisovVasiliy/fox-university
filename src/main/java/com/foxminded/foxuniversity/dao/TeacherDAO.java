@@ -66,7 +66,7 @@ public class TeacherDAO {
                 .addValue("course_id", teacher.getCourse().getId());
         Number generatedId = jdbcInsert.withTableName("teachers").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameters);
-        if(generatedId != null) {
+        if (generatedId != null) {
             teacher.setId(generatedId.intValue());
             return true;
         }

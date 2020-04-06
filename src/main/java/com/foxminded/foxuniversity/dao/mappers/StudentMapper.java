@@ -20,7 +20,7 @@ public class StudentMapper implements RowMapper<Student> {
         Student student = new Student(resultSet.getInt("id"), resultSet.getString("first_name"),
                 resultSet.getString("last_name"));
         int groupId = resultSet.getInt("group_id");
-        if(groupId > 0) {
+        if (groupId > 0) {
             student.setGroup(groupDAO.getById(groupId));
         }
         return student;

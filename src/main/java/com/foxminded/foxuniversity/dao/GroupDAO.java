@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.IntStream.of;
@@ -82,9 +81,9 @@ public class GroupDAO {
                 .addValue("name", group.getName());
         Number generatedId = jdbcInsert.withTableName("groups").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
-        if(generatedId != null) {
+        if (generatedId != null) {
             group.setId(generatedId.intValue());
-            if(group.getCourses() != null) {
+            if (group.getCourses() != null) {
                 return assignToCourses(group, group.getCourses());
             }
             return true;
