@@ -70,13 +70,13 @@ public class StudentDAO {
     }
 
     public boolean update(Student student) {
-        jdbcTemplate.update(update, student.getFirstName(), student.getLastName(), student.getId());
+        int updatedRows = jdbcTemplate.update(update, student.getFirstName(), student.getLastName(), student.getId());
         if(student.getGroup() != null) {
             if(updateAssignment(student)) {
                 return true;
             } else return assignToGroup(student, student.getGroup());
         }
-        return false;
+        return updatedRows > 0;
     }
 
     public boolean updateAssignment(Student student) {
