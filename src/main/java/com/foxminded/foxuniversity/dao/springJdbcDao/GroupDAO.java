@@ -1,8 +1,10 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.dao.springJdbcDao;
 
+import com.foxminded.foxuniversity.dao.GroupDaoInterface;
 import com.foxminded.foxuniversity.dao.mappers.GroupMapper;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
+import com.foxminded.foxuniversity.domain.Lesson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -21,7 +23,7 @@ import static java.util.stream.IntStream.of;
 
 @Repository
 @PropertySource("classpath:queries.properties")
-public class GroupDAO {
+public class GroupDAO implements GroupDaoInterface {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -35,6 +37,8 @@ public class GroupDAO {
     private String getAll;
     @Value("${group.getById}")
     private String getById;
+    @Value("${group.getByLesson}")
+    private String getByLesson;
     @Value("${group.update}")
     private String update;
     @Value("${group.delete}")
@@ -44,22 +48,32 @@ public class GroupDAO {
     @Value("${group.assignToCourse}")
     private String assignToCourse;
 
+    @Override
     public List<Group> getAll() {
         return jdbcTemplate.query(getAll, groupMapper);
     }
 
+    @Override
     public Group getById(int id) {
         return jdbcTemplate.queryForObject(getById, new Object[]{id}, groupMapper);
     }
 
+    @Override
+    public List<Group> getByLesson(Lesson lesson) {
+        return jdbcTemplate.query(getByLesson, new Object[]{lesson.getId()}, groupMapper);
+    }
+
+    @Override
     public boolean delete(Group group) {
         return jdbcTemplate.update(delete, group.getId()) > 0;
     }
 
+    @Override
     public boolean update(Group group) {
         return jdbcTemplate.update(update, group.getName()) > 0;
     }
 
+    @Override
     public boolean assignToCourses(Group group, List<Course> courses) {
         int[] result = jdbcTemplate.batchUpdate(assignToCourse, new BatchPreparedStatementSetter() {
             @Override
@@ -76,6 +90,7 @@ public class GroupDAO {
         return of(result).sum() == courses.size();
     }
 
+    @Override
     public boolean save(Group group) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", group.getName());
@@ -91,10 +106,12 @@ public class GroupDAO {
         return false;
     }
 
+    @Override
     public boolean deleteFromCourse(Group group, Course course) {
         return jdbcTemplate.update(deleteFromCourse, group.getId(), course.getId()) > 0;
     }
 
+    @Override
     public boolean deleteFromCourse(Group group, List<Course> courses) {
         int[] result = jdbcTemplate.batchUpdate(deleteFromCourse, new BatchPreparedStatementSetter() {
             @Override

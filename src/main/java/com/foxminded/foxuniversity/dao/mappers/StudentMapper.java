@@ -1,6 +1,6 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.dao.GroupDAO;
+import com.foxminded.foxuniversity.dao.springJdbcDao.GroupDAO;
 import com.foxminded.foxuniversity.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;

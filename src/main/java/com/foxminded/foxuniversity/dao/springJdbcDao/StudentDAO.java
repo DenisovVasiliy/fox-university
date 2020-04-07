@@ -1,5 +1,6 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.dao.springJdbcDao;
 
+import com.foxminded.foxuniversity.dao.StudentDaoInterface;
 import com.foxminded.foxuniversity.dao.mappers.StudentMapper;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Repository
 @PropertySource("classpath:queries.properties")
-public class StudentDAO {
+public class StudentDAO implements StudentDaoInterface {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -42,18 +43,22 @@ public class StudentDAO {
     @Value("${student.deleteAssignment}")
     private String deleteAssignment;
 
+    @Override
     public List<Student> getAll() {
         return jdbcTemplate.query(getAll, studentMapper);
     }
 
+    @Override
     public Student getById(int id) {
         return jdbcTemplate.queryForObject(getById, new Object[]{id}, studentMapper);
     }
 
+    @Override
     public List<Student> getByGroup(Group group) {
         return jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, studentMapper);
     }
 
+    @Override
     public boolean save(Student student) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("first_name", student.getFirstName())
@@ -69,6 +74,7 @@ public class StudentDAO {
         return false;
     }
 
+    @Override
     public boolean update(Student student) {
         int updatedRows = jdbcTemplate.update(update, student.getFirstName(), student.getLastName(), student.getId());
         if (student.getGroup() != null) {
@@ -79,18 +85,22 @@ public class StudentDAO {
         return updatedRows > 0;
     }
 
+    @Override
     public boolean updateAssignment(Student student) {
         return jdbcTemplate.update(updateAssignment, student.getGroup().getId(), student.getId()) > 0;
     }
 
+    @Override
     public boolean assignToGroup(Student student, Group group) {
         return jdbcTemplate.update(assignToGroup, student.getId(), group.getId()) > 0;
     }
 
+    @Override
     public boolean delete(Student student) {
         return jdbcTemplate.update(delete, student.getId()) > 0;
     }
 
+    @Override
     public boolean deleteAssignment(Student student) {
         return jdbcTemplate.update(deleteAssignment, student.getId()) > 0;
     }

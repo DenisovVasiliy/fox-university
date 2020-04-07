@@ -1,5 +1,6 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.dao.springJdbcDao;
 
+import com.foxminded.foxuniversity.dao.TeacherDaoInterface;
 import com.foxminded.foxuniversity.dao.mappers.TeacherMapper;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Teacher;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Repository
 @PropertySource("classpath:queries.properties")
-public class TeacherDAO {
+public class TeacherDAO implements TeacherDaoInterface {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -38,27 +39,33 @@ public class TeacherDAO {
     @Value("${teacher.delete}")
     private String delete;
 
+    @Override
     public List<Teacher> getAll() {
         return jdbcTemplate.query(getAll, teacherMapper);
     }
 
+    @Override
     public Teacher getById(int id) {
         return jdbcTemplate.queryForObject(getById, new Object[]{id}, teacherMapper);
     }
 
+    @Override
     public List<Teacher> getByCourse(Course course) {
         return jdbcTemplate.query(getByCourse, new Object[]{course.getId()}, teacherMapper);
     }
 
+    @Override
     public boolean delete(Teacher teacher) {
         return jdbcTemplate.update(delete, teacher.getId()) > 0;
     }
 
+    @Override
     public boolean update(Teacher teacher) {
         return jdbcTemplate.update(update,
                 teacher.getFirstName(), teacher.getLastName(), teacher.getCourse().getId(), teacher.getId()) > 0;
     }
 
+    @Override
     public boolean save(Teacher teacher) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("first_name", teacher.getFirstName())

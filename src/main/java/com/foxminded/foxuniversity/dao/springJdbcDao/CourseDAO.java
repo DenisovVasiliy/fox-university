@@ -1,5 +1,6 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.dao.springJdbcDao;
 
+import com.foxminded.foxuniversity.dao.CourseDaoInterface;
 import com.foxminded.foxuniversity.dao.mappers.CourseMapper;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Repository
 @PropertySource("classpath:queries.properties")
-public class CourseDAO {
+public class CourseDAO implements CourseDaoInterface {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -36,22 +37,27 @@ public class CourseDAO {
     @Value("${course.delete}")
     private String delete;
 
+    @Override
     public List<Course> getAll() {
         return jdbcTemplate.query(getAll, courseMapper);
     }
 
+    @Override
     public Course getById(int id) {
         return jdbcTemplate.queryForObject(getById, new Object[]{id}, courseMapper);
     }
 
+    @Override
     public List<Course> getByGroup(Group group) {
         return jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, courseMapper);
     }
 
+    @Override
     public boolean delete(Course course) {
         return jdbcTemplate.update(delete, course.getId()) > 0;
     }
 
+    @Override
     public boolean save(Course course) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(course);
         Number id = jdbcInsert.withTableName("courses").usingGeneratedKeyColumns("id")
@@ -63,6 +69,7 @@ public class CourseDAO {
         return false;
     }
 
+    @Override
     public boolean update(Course course) {
         return jdbcTemplate.update(update, course.getName(), course.getDescription(), course.getId()) > 0;
     }
