@@ -9,7 +9,10 @@ import java.util.List;
 @Repository
 public interface StudentDaoInterface extends DaoInterface<Student> {
     public List<Student> getByGroup(Group group);
+
     public boolean assignToGroup(Student student, Group group);
+
     public boolean updateAssignment(Student student);
+
     public boolean deleteAssignment(Student student);
 }
