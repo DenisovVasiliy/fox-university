@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS lessons
   teacher_id INTEGER,
   classroom INTEGER,
   day VARCHAR(30) NOT NULL CHECK (day != ''),
+  time TIME NOT NULL,
   type VARCHAR(30) NOT NULL CHECK (type != ''),
   FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
