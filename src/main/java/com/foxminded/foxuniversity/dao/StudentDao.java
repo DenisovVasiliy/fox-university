@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudentDaoInterface extends DaoInterface<Student> {
+public interface StudentDao extends GenericDao<Student> {
     public List<Student> getByGroup(Group group);
 
     public boolean assignToGroup(Student student, Group group);

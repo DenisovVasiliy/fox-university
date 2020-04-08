@@ -1,6 +1,6 @@
-package com.foxminded.foxuniversity.dao.springJdbcDao;
+package com.foxminded.foxuniversity.dao.implementation;
 
-import com.foxminded.foxuniversity.dao.StudentDaoInterface;
+import com.foxminded.foxuniversity.dao.StudentDao;
 import com.foxminded.foxuniversity.dao.mappers.StudentMapper;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Repository
 @PropertySource("classpath:queries.properties")
-public class StudentDAO implements StudentDaoInterface {
+public class StudentDaoPostgres implements StudentDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

@@ -1,6 +1,6 @@
-package com.foxminded.foxuniversity.dao.springJdbcDao;
+package com.foxminded.foxuniversity.dao.implementation;
 
-import com.foxminded.foxuniversity.dao.LessonDaoInterface;
+import com.foxminded.foxuniversity.dao.LessonDao;
 import com.foxminded.foxuniversity.dao.mappers.LessonMapper;
 import com.foxminded.foxuniversity.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import static java.util.stream.IntStream.of;
 
 @Repository
 @PropertySource("classpath:queries.properties")
-public class LessonDAO implements LessonDaoInterface {
+public class LessonDaoPostgres implements LessonDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GroupDaoInterface extends DaoInterface<Group> {
+public interface GroupDao extends GenericDao<Group> {
     public boolean assignToCourses(Group group, List<Course> courses);
 
     public boolean deleteFromCourse(Group group, Course course);

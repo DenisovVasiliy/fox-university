@@ -1,6 +1,6 @@
-package com.foxminded.foxuniversity.dao.springJdbcDao;
+package com.foxminded.foxuniversity.dao.implementation;
 
-import com.foxminded.foxuniversity.dao.GroupDaoInterface;
+import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.dao.mappers.GroupMapper;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
@@ -23,15 +23,13 @@ import static java.util.stream.IntStream.of;
 
 @Repository
 @PropertySource("classpath:queries.properties")
-public class GroupDAO implements GroupDaoInterface {
+public class GroupDaoPostgres implements GroupDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private SimpleJdbcInsert jdbcInsert;
     @Autowired
     private GroupMapper groupMapper;
-    @Autowired
-    private CourseDAO courseDAO;
 
     @Value("${group.getAll}")
     private String getAll;

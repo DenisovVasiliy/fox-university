@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DaoInterface<T> {
+public interface GenericDao<T> {
     public List<T> getAll();
 
     public T getById(int id);

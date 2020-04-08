@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LessonDaoInterface extends DaoInterface<Lesson> {
+public interface LessonDao extends GenericDao<Lesson> {
     public List<Lesson> getByCourse(Course course);
 
     public List<Lesson> getByStudent(Student student);
