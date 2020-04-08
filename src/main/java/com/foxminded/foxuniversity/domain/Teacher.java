@@ -42,8 +42,7 @@ public class Teacher {
 
         if (id != teacher.id) return false;
         if (!firstName.equals(teacher.firstName)) return false;
-        if (!lastName.equals(teacher.lastName)) return false;
-        return course.equals(teacher.course);
+        return lastName.equals(teacher.lastName);
     }
 
     @Override
