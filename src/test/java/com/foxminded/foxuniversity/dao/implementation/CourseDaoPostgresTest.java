@@ -1,7 +1,7 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.dao.implementation;
 
 import com.foxminded.foxuniversity.AppConfig;
-import com.foxminded.foxuniversity.dao.implementation.CourseDaoPostgres;
+import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class CourseDaoPostgresTest {
     private static ApplicationContext context;
-    private static CourseDaoPostgres courseDAO;
+    private static CourseDao courseDAO;
     private static Course course = new Course(0, "Testing", "Test course.");
     private static ScriptRunner runner;
 
@@ -82,14 +82,14 @@ class CourseDaoPostgresTest {
         courseDAO.delete(courses.get(2));
 
         actual = courseDAO.getAll();
-        List<Course> expected = courses.subList(0,2);
+        List<Course> expected = courses.subList(0, 2);
         assertEquals(expected, actual);
     }
 
     @Test
     public void shouldGetCoursesByGroup() {
         List<Course> actual = courseDAO.getByGroup(groups.get(0));
-        List<Course> expected = courses.subList(0,2);
+        List<Course> expected = courses.subList(0, 2);
         assertEquals(expected, actual);
     }
 
@@ -113,5 +113,4 @@ class CourseDaoPostgresTest {
                 new FileReader(context.getClassLoader().getResource("clearDatabase.sql").getFile()));
         runner.runScript(reader);
     }
-
 }
