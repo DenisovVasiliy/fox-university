@@ -1,7 +1,6 @@
 package com.foxminded.foxuniversity.dao.implementation;
 
 
-
 import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.StudentDao;
 import com.foxminded.foxuniversity.domain.Group;
@@ -41,7 +40,7 @@ class StudentDaoPostgresTest {
                 new FileReader(context.getClassLoader().getResource("createTables.sql").getFile()));
         runner.runScript(reader);
 
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             students.add(new Student(i + 1, "S-0" + (i + 1), "Student"));
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
         }
@@ -85,14 +84,14 @@ class StudentDaoPostgresTest {
         assertNotEquals(0, student.getId());
         Student actual = studentDao.getById(student.getId());
         assertEquals(student, actual);
-        assertEquals(student.getGroup(),actual.getGroup());
+        assertEquals(student.getGroup(), actual.getGroup());
     }
 
     @Test
     public void shouldAssignStudentToGroup() {
         Student expected = studentDao.getById(4);
         assertNull(expected.getGroup());
-        if(studentDao.assignToGroup(expected, groups.get(2))) {
+        if (studentDao.assignToGroup(expected, groups.get(2))) {
             expected.setGroup(groups.get(2));
         }
         Student actual = studentDao.getById(expected.getId());
@@ -149,7 +148,7 @@ class StudentDaoPostgresTest {
         Student updatedStudent = studentDao.getById(1);
         assertNotNull(updatedStudent.getGroup());
 
-        if(studentDao.deleteAssignment(updatedStudent)) {
+        if (studentDao.deleteAssignment(updatedStudent)) {
             updatedStudent.setGroup(null);
         }
 
