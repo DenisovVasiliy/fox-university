@@ -119,7 +119,7 @@ public class LessonDaoPostgres implements LessonDao {
     public boolean update(Lesson lesson) {
         return jdbcTemplate.update(update,
                 lesson.getCourse().getId(), lesson.getTeacher().getId(), lesson.getClassroom(),
-                lesson.getDay().toString(), lesson.getStartTime(), lesson.getType().toString()) > 0;
+                lesson.getDay().toString(), lesson.getStartTime(), lesson.getType().toString(), lesson.getId()) > 0;
     }
 
     @Override
