@@ -117,8 +117,8 @@ class LessonDaoPostgresTest {
         Lesson expected = lessonDao.getById(3);
         assertEquals(groups.subList(1, 2), expected.getGroups());
 
-        if (lessonDao.assignGroups(expected, groups.subList(0,1))) {
-            expected.setGroups(groups.subList(0,2));
+        if (lessonDao.assignGroups(expected, groups.subList(0, 1))) {
+            expected.setGroups(groups.subList(0, 2));
         }
         List<Group> actual = groupDao.getByLesson(expected);
         assertEquals(expected.getGroups(), actual);
@@ -155,7 +155,7 @@ class LessonDaoPostgresTest {
         assertEquals(lessons, actual);
 
         lessonDao.delete(lessons.get(2));
-        
+
         actual = lessonDao.getAll();
         assertEquals(lessons.subList(0, 2), actual);
     }
