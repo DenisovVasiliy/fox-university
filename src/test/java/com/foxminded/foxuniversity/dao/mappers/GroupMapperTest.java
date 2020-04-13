@@ -32,7 +32,7 @@ class GroupMapperTest {
     }
 
     @Test
-    public void shouldReturnCourseWithCorrectSettings() throws SQLException {
+    public void shouldReturnGroupWithCorrectSettings() throws SQLException {
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("name")).thenReturn("Name");
         Group group = groupMapper.mapRow(resultSet, 1);
