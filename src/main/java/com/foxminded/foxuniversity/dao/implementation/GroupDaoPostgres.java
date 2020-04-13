@@ -68,7 +68,7 @@ public class GroupDaoPostgres implements GroupDao {
 
     @Override
     public boolean update(Group group) {
-        return jdbcTemplate.update(update, group.getName()) > 0;
+        return jdbcTemplate.update(update, group.getName(), group.getId()) > 0;
     }
 
     @Override
