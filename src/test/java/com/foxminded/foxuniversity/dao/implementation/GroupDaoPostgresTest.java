@@ -29,7 +29,6 @@ class GroupDaoPostgresTest {
     private static CourseDao courseDao;
     private static ScriptRunner runner;
     private static Lesson lesson;
-    private static Teacher teacher;
 
     private static List<Group> groups = new ArrayList<>();
     private static List<Course> courses = new ArrayList<>();
@@ -50,7 +49,7 @@ class GroupDaoPostgresTest {
             courses.add(new Course(i + 1, "C-0" + (i + 1), "C-0" + (i + 1) + " course"));
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
         }
-        teacher = new Teacher(0, "Test", "Teacher", courses.get(0));
+        Teacher teacher = new Teacher(0, "Test", "Teacher", courses.get(0));
         lesson = new Lesson(2, courses.get(0), teacher, 10, Day.MONDAY,
                 new Time(9, 30, 0), LessonsType.LECTURE);
     }
