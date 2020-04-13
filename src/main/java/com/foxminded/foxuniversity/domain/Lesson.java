@@ -36,6 +36,22 @@ public class Lesson {
         return course;
     }
 
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public void setDay(Day day) {
+        this.day = day;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setType(LessonsType type) {
+        this.type = type;
+    }
+
     public List<Group> getGroups() {
         return groups;
     }
@@ -100,7 +116,7 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return "Lesson{" +
+        return "\nLesson{" +
                 "id=" + id +
                 ", course=" + course.getName() +
                 ", groups=" + groups +
