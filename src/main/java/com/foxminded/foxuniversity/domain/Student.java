@@ -24,6 +24,14 @@ public class Student {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public String getLastName() {
         return lastName;
     }
@@ -58,7 +66,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "\nStudent{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

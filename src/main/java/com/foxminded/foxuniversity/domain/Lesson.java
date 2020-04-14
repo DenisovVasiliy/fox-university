@@ -13,20 +13,10 @@ public class Lesson {
     private Time startTime;
     private LessonsType type;
 
-    public Lesson(int id, Course course, List<Group> groups, Day day, Time startTime, LessonsType type) {
-        this.id = id;
-        this.course = course;
-        this.groups = groups;
-        this.day = day;
-        this.startTime = startTime;
-        this.type = type;
-    }
-
-    public Lesson(int id, Course course, List<Group> groups, Teacher teacher,
+    public Lesson(int id, Course course, Teacher teacher,
                   int classroom, Day day, Time startTime, LessonsType type) {
         this.id = id;
         this.course = course;
-        this.groups = groups;
         this.teacher = teacher;
         this.classroom = classroom;
         this.day = day;
@@ -38,12 +28,36 @@ public class Lesson {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Course getCourse() {
         return course;
     }
 
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public void setDay(Day day) {
+        this.day = day;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setType(LessonsType type) {
+        this.type = type;
+    }
+
     public List<Group> getGroups() {
         return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     public Day getDay() {
@@ -83,7 +97,7 @@ public class Lesson {
 
         if (id != lesson.id) return false;
         if (!course.equals(lesson.course)) return false;
-        if (!groups.equals(lesson.groups)) return false;
+        if (classroom != lesson.classroom) return false;
         if (day != lesson.day) return false;
         if (!startTime.equals(lesson.startTime)) return false;
         return type == lesson.type;
@@ -102,9 +116,9 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return "Lesson{" +
+        return "\nLesson{" +
                 "id=" + id +
-                ", course=" + course +
+                ", course=" + course.getName() +
                 ", groups=" + groups +
                 ", teacher=" + teacher +
                 ", classroom=" + classroom +

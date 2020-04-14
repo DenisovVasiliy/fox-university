@@ -23,6 +23,14 @@ public class Course {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -73,7 +81,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course{" +
+        return "\nCourse{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
