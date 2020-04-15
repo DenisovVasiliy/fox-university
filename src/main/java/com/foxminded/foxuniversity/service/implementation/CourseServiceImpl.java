@@ -5,6 +5,7 @@ import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.LessonService;
+import com.foxminded.foxuniversity.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseDao courseDao;
     @Autowired
     private LessonService lessonService;
+    @Autowired
+    private TeacherService teacherService;
 
     @Override
     public List<Course> getAll() {
@@ -44,7 +47,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean delete(Course course) {
-        return courseDao.delete(course);
+        if (teacherService.getByCourse(course).isEmpty()) {
+            return courseDao.delete(course);
+        }
+        return false;
     }
 
     @Override
