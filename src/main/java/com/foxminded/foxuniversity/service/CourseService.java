@@ -9,5 +9,6 @@ import java.util.List;
 @Component
 public interface CourseService extends GenericService<Course> {
     public List<Course> getByGroup(Group group);
+
     public void fillCoursesLessons(Course course);
 }
