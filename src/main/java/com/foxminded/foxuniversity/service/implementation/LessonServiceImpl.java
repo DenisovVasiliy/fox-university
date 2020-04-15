@@ -6,6 +6,7 @@ import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Student;
 import com.foxminded.foxuniversity.domain.Teacher;
+import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ import java.util.List;
 public class LessonServiceImpl implements LessonService {
     @Autowired
     private LessonDao lessonDao;
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public List<Lesson> getAll() {
@@ -73,5 +76,10 @@ public class LessonServiceImpl implements LessonService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void fillGroups(Lesson lesson) {
+        lesson.setGroups(groupService.getByLesson(lesson));
     }
 }
