@@ -57,38 +57,47 @@ class GroupServiceImplTest {
     }
 
     @Test
-    public void shouldCallGetAllGroups() {
-        groupService.getAll();
+    public void shouldCallGetAllGroupsAndReturnResult() {
+        when(groupDao.getAll()).thenReturn(singletonList(group));
+        List<Group> actual = groupService.getAll();
         verify(groupDao).getAll();
+        assertEquals(singletonList(group), actual);
     }
 
     @Test
-    public void shouldCallGetGroupById() {
-        groupService.getById(1);
+    public void shouldCallGetGroupByIdAndReturnResult() {
+        when(groupDao.getById(1)).thenReturn(group);
+        Group actual = groupService.getById(1);
         verify(groupDao).getById(1);
+        assertEquals(group, actual);
     }
 
     @Test
-    public void shouldCallGetGroupByLesson() {
-        groupService.getByLesson(lesson);
+    public void shouldCallGetGroupByLessonAndReturnResult() {
+        when(groupDao.getByLesson(lesson)).thenReturn(singletonList(group));
+        List<Group> actual = groupService.getByLesson(lesson);
         verify(groupDao).getByLesson(lesson);
+        assertEquals(singletonList(group), actual);
     }
 
     @Test
-    public void shouldCallSaveGroup() {
-        groupService.save(group);
+    public void shouldCallSaveGroupAndReturnResult() {
+        when(groupDao.save(group)).thenReturn(true);
+        assertTrue(groupService.save(group));
         verify(groupDao).save(group);
     }
 
     @Test
-    public void shouldCallUpdateGroup() {
-        groupService.update(group);
+    public void shouldCallUpdateGroupAndReturnResult() {
+        when(groupDao.update(group)).thenReturn(true);
+        assertTrue(groupService.update(group));
         verify(groupDao).update(group);
     }
 
     @Test
-    public void shouldCallDeleteGroup() {
-        groupService.delete(group);
+    public void shouldCallDeleteGroupAndReturnResult() {
+        when(groupDao.delete(group)).thenReturn(true);
+        assertTrue(groupService.delete(group));
         verify(groupDao).delete(group);
     }
 

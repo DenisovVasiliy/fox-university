@@ -72,21 +72,21 @@ class StudentServiceImplTest {
     }
 
     @Test
-    public void shouldCallSaveStudentAndReturnTrue() {
+    public void shouldCallSaveStudentAndReturnResult() {
         when(studentDao.save(student)).thenReturn(true);
         assertTrue(studentService.save(student));
         verify(studentDao).save(student);
     }
 
     @Test
-    public void shouldCallUpdateStudentAndReturnTrue() {
+    public void shouldCallUpdateStudentAndReturnResult() {
         when(studentDao.update(student)).thenReturn(true);
         assertTrue(studentService.update(student));
         verify(studentDao).update(student);
     }
 
     @Test
-    public void shouldCallDeleteStudentAndReturnTrue() {
+    public void shouldCallDeleteStudentAndReturnResult() {
         when(studentDao.delete(student)).thenReturn(true);
         assertTrue(studentService.delete(student));
         verify(studentDao).delete(student);
@@ -141,7 +141,7 @@ class StudentServiceImplTest {
     }
 
     @Test
-    public void shouldCallUpdateAssignmentAndReturnTrue() {
+    public void shouldCallUpdateAssignmentAndReturnResult() {
         when(studentDao.updateAssignment(student)).thenReturn(true);
         assertTrue(studentService.updateAssignment(student));
         verify(studentDao).updateAssignment(student);

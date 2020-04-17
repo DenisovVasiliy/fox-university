@@ -77,14 +77,14 @@ class CourseServiceImplTest {
     }
 
     @Test
-    public void shouldCallSaveCourseAndReturnTrue() {
+    public void shouldCallSaveCourseAndReturnResult() {
         when(courseDao.save(course)).thenReturn(true);
         assertTrue(courseService.save(course));
         verify(courseDao).save(course);
     }
 
     @Test
-    public void shouldCallUpdateCourseAndReturnTrue() {
+    public void shouldCallUpdateCourseAndReturnResult() {
         when(courseDao.update(course)).thenReturn(true);
         assertTrue(courseService.update(course));
         verify(courseDao).update(course);

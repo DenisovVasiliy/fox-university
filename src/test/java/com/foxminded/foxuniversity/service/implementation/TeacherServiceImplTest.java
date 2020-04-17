@@ -16,9 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.List;
+
 import static java.util.Collections.emptyList;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static java.util.Collections.singletonList;
@@ -37,7 +38,7 @@ class TeacherServiceImplTest {
     private static TeacherService teacherService;
 
     private Teacher teacher = new Teacher(1, "Test", "Teacher", course);
-
+    private List<Teacher> teachers = singletonList(teacher);
 
     @BeforeAll
     public static void setUp() {
@@ -46,32 +47,40 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    public void shouldCallGetAllTeachers() {
-        teacherService.getAll();
+    public void shouldCallGetAllTeachersAndReturnResult() {
+        when(teacherDao.getAll()).thenReturn(teachers);
+        List<Teacher> actual = teacherService.getAll();
         verify(teacherDao).getAll();
+        assertEquals(teachers, actual);
     }
 
     @Test
-    public void shouldCallGetTeacherById() {
-        teacherService.getById(1);
+    public void shouldCallGetTeacherByIdAndReturnResult() {
+        when(teacherDao.getById(1)).thenReturn(teacher);
+        Teacher actual = teacherService.getById(1);
         verify(teacherDao).getById(1);
+        assertEquals(teacher, actual);
     }
 
     @Test
-    public void shouldCallGetTeacherByCourse() {
-        teacherService.getByCourse(course);
+    public void shouldCallGetTeacherByCourseAndReturnResult() {
+        when(teacherDao.getByCourse(course)).thenReturn(teachers);
+        List<Teacher> actual = teacherService.getByCourse(course);
         verify(teacherDao).getByCourse(course);
+        assertEquals(teachers, actual);
     }
 
     @Test
-    public void shouldCallSaveTeacher() {
-        teacherService.save(teacher);
+    public void shouldCallSaveTeacherAndReturnResult() {
+        when(teacherDao.save(teacher)).thenReturn(true);
+        assertTrue(teacherService.save(teacher));
         verify(teacherDao).save(teacher);
     }
 
     @Test
-    public void shouldCallUpdateTeacher() {
-        teacherService.update(teacher);
+    public void shouldCallUpdateTeacherAndReturnResult() {
+        when(teacherDao.update(teacher)).thenReturn(true);
+        assertTrue(teacherService.update(teacher));
         verify(teacherDao).update(teacher);
     }
 
@@ -92,7 +101,9 @@ class TeacherServiceImplTest {
 
     @Test
     public void shouldCallLessonServiceGetByTeacher() {
-        teacherService.getTimetable(teacher);
+        when(lessonService.getByTeacher(teacher)).thenReturn(singletonList(lesson));
+        List<Lesson> actual = teacherService.getTimetable(teacher);
         verify(lessonService).getByTeacher(teacher);
+        assertEquals(singletonList(lesson), actual);
     }
 }

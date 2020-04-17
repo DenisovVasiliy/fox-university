@@ -18,6 +18,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,6 +44,7 @@ class LessonServiceImplTest {
 
     private static List<Group> groups = new ArrayList<>();
     private static Lesson lesson;
+    private static List<Lesson> lessons;
 
     @BeforeAll
     public static void setUp() {
@@ -53,54 +55,67 @@ class LessonServiceImplTest {
         }
         lesson = new Lesson(2, course, teacher, 10, Day.MONDAY,
                 new Time(9, 30, 0), LessonsType.LECTURE);
-
+        lessons = singletonList(lesson);
     }
 
     @Test
-    public void shouldCallGetAllLessons() {
-        lessonService.getAll();
+    public void shouldCallGetAllLessonsAndReturnResult() {
+        when(lessonDao.getAll()).thenReturn(lessons);
+        List<Lesson> actual = lessonService.getAll();
         verify(lessonDao).getAll();
+        assertEquals(lessons, actual);
     }
 
     @Test
-    public void shouldCallGetLessonById() {
-        lessonService.getById(1);
+    public void shouldCallGetLessonByIdAndReturnResult() {
+        when(lessonDao.getById(1)).thenReturn(lesson);
+        Lesson actual = lessonService.getById(1);
         verify(lessonDao).getById(1);
+        assertEquals(lesson, actual);
     }
 
     @Test
-    public void shouldCallGetLessonByCourse() {
-        lessonService.getByCourse(course);
+    public void shouldCallGetLessonsByCourseAndReturnResult() {
+        when(lessonDao.getByCourse(course)).thenReturn(lessons);
+        List<Lesson> actual = lessonService.getByCourse(course);
         verify(lessonDao).getByCourse(course);
+        assertEquals(lessons, actual);
     }
 
     @Test
-    public void shouldCallGetLessonByStudent() {
-        lessonService.getByStudent(student);
+    public void shouldCallGetLessonByStudentAndReturnResult() {
+        when(lessonDao.getByStudent(student)).thenReturn(lessons);
+        List<Lesson> actual = lessonService.getByStudent(student);
         verify(lessonDao).getByStudent(student);
+        assertEquals(lessons, actual);
     }
 
     @Test
-    public void shouldCallGetLessonByTeacher() {
-        lessonService.getByTeacher(teacher);
+    public void shouldCallGetLessonByTeacherAndReturnResult() {
+        when(lessonDao.getByTeacher(teacher)).thenReturn(lessons);
+        List<Lesson> actual = lessonService.getByTeacher(teacher);
         verify(lessonDao).getByTeacher(teacher);
+        assertEquals(lessons, actual);
     }
 
     @Test
-    public void shouldCallSaveLesson() {
-        lessonService.save(lesson);
+    public void shouldCallSaveLessonAndReturnResult() {
+        when(lessonDao.save(lesson)).thenReturn(true);
+        assertTrue(lessonService.save(lesson));
         verify(lessonDao).save(lesson);
     }
 
     @Test
-    public void shouldCallUpdateLesson() {
-        lessonService.update(lesson);
+    public void shouldCallUpdateLessonAndReturnResult() {
+        when(lessonDao.update(lesson)).thenReturn(true);
+        assertTrue(lessonService.update(lesson));
         verify(lessonDao).update(lesson);
     }
 
     @Test
-    public void shouldCallDeleteLesson() {
-        lessonService.delete(lesson);
+    public void shouldCallDeleteLessonAndReturnResult() {
+        when(lessonDao.delete(lesson)).thenReturn(true);
+        assertTrue(lessonService.delete(lesson));
         verify(lessonDao).delete(lesson);
     }
 
