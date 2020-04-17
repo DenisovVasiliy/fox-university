@@ -50,7 +50,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean assignToGroup(Student student, Group group) {
-        if (student.getGroup() == null && group != null) {
+        if (group == null) return false;
+        if (student.getGroup() == null) {
             if (studentDao.assignToGroup(student, group)) {
                 student.setGroup(group);
                 return true;
