@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,38 +52,46 @@ class CourseServiceImplTest {
     }
 
     @Test
-    public void shouldCallGetAllCourses() {
-        courseService.getAll();
+    public void shouldCallGetAllCoursesAndReturnResult() {
+        when(courseDao.getAll()).thenReturn(singletonList(course));
+        List<Course> actual = courseService.getAll();
         verify(courseDao).getAll();
+        assertEquals(singletonList(course), actual);
     }
 
     @Test
-    public void shouldCallGetCourseById() {
-        courseService.getById(1);
+    public void shouldCallGetCourseByIdAndReturnResult() {
+        when(courseDao.getById(1)).thenReturn(course);
+        Course actual = courseService.getById(1);
         verify(courseDao).getById(1);
+        assertEquals(course, actual);
     }
 
     @Test
-    public void shouldCallGetCourseByGroup() {
+    public void shouldCallGetCoursesByGroupAndReturnResult() {
         Group group = new Group(1, "123");
-        courseService.getByGroup(group);
+        when(courseDao.getByGroup(group)).thenReturn(singletonList(course));
+        List<Course> actual = courseService.getByGroup(group);
         verify(courseDao).getByGroup(group);
+        assertEquals(singletonList(course), actual);
     }
 
     @Test
-    public void shouldCallSaveCourse() {
-        courseService.save(course);
+    public void shouldCallSaveCourseAndReturnTrue() {
+        when(courseDao.save(course)).thenReturn(true);
+        assertTrue(courseService.save(course));
         verify(courseDao).save(course);
     }
 
     @Test
-    public void shouldCallUpdateCourse() {
-        courseService.update(course);
+    public void shouldCallUpdateCourseAndReturnTrue() {
+        when(courseDao.update(course)).thenReturn(true);
+        assertTrue(courseService.update(course));
         verify(courseDao).update(course);
     }
 
     @Test
-    public void shouldCallDeleteCourseIfThereAreNoTeachers() {
+    public void shouldCallDeleteCourseAndReturnTrueIfThereAreNoTeachers() {
         when(teacherService.getByCourse(course)).thenReturn(new ArrayList<>());
         when(courseDao.delete(course)).thenReturn(true);
         assertTrue(courseService.delete(course));
@@ -90,7 +99,7 @@ class CourseServiceImplTest {
     }
 
     @Test
-    public void shouldNotCallDeleteCourseIfThereAreSomeTeachers() {
+    public void shouldNotCallDeleteCourseAndReturnFalseIfThereAreSomeTeachers() {
         Teacher teacher = new Teacher(1, "Test", "Teacher", course);
         when(teacherService.getByCourse(course)).thenReturn(singletonList(teacher));
         assertFalse(courseService.delete(course));
