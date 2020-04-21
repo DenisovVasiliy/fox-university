@@ -22,17 +22,17 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getAll() {
-        return courseDao.getAll();
+        return fillCoursesLessons(courseDao.getAll());
     }
 
     @Override
     public Course getById(int id) {
-        return courseDao.getById(id);
+        return fillCoursesLessons(courseDao.getById(id));
     }
 
     @Override
     public List<Course> getByGroup(Group group) {
-        return courseDao.getByGroup(group);
+        return fillCoursesLessons(courseDao.getByGroup(group));
     }
 
     @Override
@@ -53,8 +53,15 @@ public class CourseServiceImpl implements CourseService {
         return false;
     }
 
-    @Override
-    public void fillCoursesLessons(Course course) {
+    private Course fillCoursesLessons(Course course) {
         course.setLessons(lessonService.getByCourse(course));
+        return course;
+    }
+
+    private List<Course> fillCoursesLessons(List<Course> courses) {
+        for (Course course : courses) {
+            fillCoursesLessons(course);
+        }
+        return courses;
     }
 }

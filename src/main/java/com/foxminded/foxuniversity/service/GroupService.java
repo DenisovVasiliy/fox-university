@@ -14,8 +14,4 @@ public interface GroupService extends GenericService<Group> {
     boolean deleteFromCourse(Group group, List<Course> courses);
 
     List<Group> getByLesson(Lesson lesson);
-
-    void fillCourses(Group group);
-
-    void fillStudents(Group group);
 }

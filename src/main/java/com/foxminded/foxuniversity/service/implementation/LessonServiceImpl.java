@@ -22,12 +22,27 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getAll() {
-        return lessonDao.getAll();
+        return fillGroups(lessonDao.getAll());
     }
 
     @Override
     public Lesson getById(int id) {
-        return lessonDao.getById(id);
+        return fillGroups(lessonDao.getById(id));
+    }
+
+    @Override
+    public List<Lesson> getByCourse(Course course) {
+        return fillGroups(lessonDao.getByCourse(course));
+    }
+
+    @Override
+    public List<Lesson> getByStudent(Student student) {
+        return fillGroups(lessonDao.getByStudent(student));
+    }
+
+    @Override
+    public List<Lesson> getByTeacher(Teacher teacher) {
+        return fillGroups(lessonDao.getByTeacher(teacher));
     }
 
     @Override
@@ -43,21 +58,6 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public boolean delete(Lesson lesson) {
         return lessonDao.delete(lesson);
-    }
-
-    @Override
-    public List<Lesson> getByCourse(Course course) {
-        return lessonDao.getByCourse(course);
-    }
-
-    @Override
-    public List<Lesson> getByStudent(Student student) {
-        return lessonDao.getByStudent(student);
-    }
-
-    @Override
-    public List<Lesson> getByTeacher(Teacher teacher) {
-        return lessonDao.getByTeacher(teacher);
     }
 
     @Override
@@ -78,8 +78,15 @@ public class LessonServiceImpl implements LessonService {
         return false;
     }
 
-    @Override
-    public void fillGroups(Lesson lesson) {
+    private Lesson fillGroups(Lesson lesson) {
         lesson.setGroups(groupService.getByLesson(lesson));
+        return lesson;
+    }
+
+    private List<Lesson> fillGroups(List<Lesson> lessons) {
+        for (Lesson lesson : lessons) {
+            fillGroups(lesson);
+        }
+        return lessons;
     }
 }

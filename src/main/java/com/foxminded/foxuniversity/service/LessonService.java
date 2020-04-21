@@ -20,6 +20,4 @@ public interface LessonService extends GenericService<Lesson> {
     boolean assignGroups(Lesson lesson, List<Group> groups);
 
     boolean deleteGroup(Lesson lesson, Group group);
-
-    void fillGroups(Lesson lesson);
 }

@@ -22,11 +22,24 @@ public class GroupServiceImpl implements GroupService {
     private StudentService studentService;
 
     public List<Group> getAll() {
-        return groupDao.getAll();
+        List<Group> groups = groupDao.getAll();
+        fillCourses(groups);
+        fillStudents(groups);
+        return groups;
     }
 
     public Group getById(int id) {
-        return groupDao.getById(id);
+        Group group = groupDao.getById(id);
+        fillCourses(group);
+        fillStudents(group);
+        return group;
+    }
+
+    public List<Group> getByLesson(Lesson lesson) {
+        List<Group> groups = groupDao.getByLesson(lesson);
+        fillCourses(groups);
+        fillStudents(groups);
+        return groups;
     }
 
     public boolean save(Group group) {
@@ -67,15 +80,23 @@ public class GroupServiceImpl implements GroupService {
         return false;
     }
 
-    public List<Group> getByLesson(Lesson lesson) {
-        return groupDao.getByLesson(lesson);
-    }
-
-    public void fillCourses(Group group) {
+    private void fillCourses(Group group) {
         group.setCourses(courseService.getByGroup(group));
     }
 
-    public void fillStudents(Group group) {
+    private void fillCourses(List<Group> groups) {
+        for (Group group : groups) {
+            fillCourses(group);
+        }
+    }
+
+    private void fillStudents(Group group) {
         group.setStudents(studentService.getByGroup(group));
+    }
+
+    private void fillStudents(List<Group> groups) {
+        for (Group group : groups) {
+            fillStudents(group);
+        }
     }
 }
