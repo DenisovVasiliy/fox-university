@@ -11,13 +11,13 @@ import java.util.List;
 
 @Repository
 public interface LessonDao extends GenericDao<Lesson> {
-    public List<Lesson> getByCourse(Course course);
+    List<Lesson> getByCourse(Course course);
 
-    public List<Lesson> getByStudent(Student student);
+    List<Lesson> getByStudent(Student student);
 
-    public List<Lesson> getByTeacher(Teacher teacher);
+    List<Lesson> getByTeacher(Teacher teacher);
 
-    public boolean assignGroups(Lesson lesson, List<Group> groups);
+    boolean assignGroups(Lesson lesson, List<Group> groups);
 
-    public boolean deleteGroup(Lesson lesson, Group group);
+    boolean deleteGroup(Lesson lesson, Group group);
 }

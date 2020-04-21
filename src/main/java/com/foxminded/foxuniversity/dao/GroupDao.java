@@ -9,11 +9,11 @@ import java.util.List;
 
 @Repository
 public interface GroupDao extends GenericDao<Group> {
-    public boolean assignToCourses(Group group, List<Course> courses);
+    boolean assignToCourses(Group group, List<Course> courses);
 
-    public boolean deleteFromCourse(Group group, Course course);
+    boolean deleteFromCourse(Group group, Course course);
 
-    public boolean deleteFromCourse(Group group, List<Course> courses);
+    boolean deleteFromCourse(Group group, List<Course> courses);
 
-    public List<Group> getByLesson(Lesson lesson);
+    List<Group> getByLesson(Lesson lesson);
 }

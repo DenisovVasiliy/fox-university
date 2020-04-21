@@ -6,13 +6,13 @@ import java.util.List;
 
 @Repository
 public interface GenericDao<T> {
-    public List<T> getAll();
+    List<T> getAll();
 
-    public T getById(int id);
+    T getById(int id);
 
-    public boolean save(T object);
+    boolean save(T object);
 
-    public boolean update(T object);
+    boolean update(T object);
 
-    public boolean delete(T object);
+    boolean delete(T object);
 }

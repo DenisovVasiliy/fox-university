@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TeacherDao extends GenericDao<Teacher> {
-    public List<Teacher> getByCourse(Course course);
+    List<Teacher> getByCourse(Course course);
 }

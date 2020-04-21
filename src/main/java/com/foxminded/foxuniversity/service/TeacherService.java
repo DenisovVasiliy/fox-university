@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 public interface TeacherService extends GenericService<Teacher> {
-    public List<Teacher> getByCourse(Course course);
+    List<Teacher> getByCourse(Course course);
 
-    public List<Lesson> getTimetable(Teacher teacher);
+    List<Lesson> getTimetable(Teacher teacher);
 }

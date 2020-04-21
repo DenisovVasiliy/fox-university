@@ -8,11 +8,11 @@ import java.util.List;
 
 @Repository
 public interface StudentDao extends GenericDao<Student> {
-    public List<Student> getByGroup(Group group);
+    List<Student> getByGroup(Group group);
 
-    public boolean assignToGroup(Student student, Group group);
+    boolean assignToGroup(Student student, Group group);
 
-    public boolean updateAssignment(Student student);
+    boolean updateAssignment(Student student);
 
-    public boolean deleteAssignment(Student student);
+    boolean deleteAssignment(Student student);
 }

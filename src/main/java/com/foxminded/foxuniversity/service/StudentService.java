@@ -9,13 +9,13 @@ import java.util.List;
 
 @Component
 public interface StudentService extends GenericService<Student> {
-    public List<Student> getByGroup(Group group);
+    List<Student> getByGroup(Group group);
 
-    public boolean assignToGroup(Student student, Group group);
+    boolean assignToGroup(Student student, Group group);
 
-    public boolean updateAssignment(Student student);
+    boolean updateAssignment(Student student);
 
-    public boolean deleteAssignment(Student student);
+    boolean deleteAssignment(Student student);
 
-    public List<Lesson> getTimetable(Student student);
+    List<Lesson> getTimetable(Student student);
 }

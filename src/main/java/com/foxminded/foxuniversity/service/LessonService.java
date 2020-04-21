@@ -11,15 +11,15 @@ import java.util.List;
 
 @Component
 public interface LessonService extends GenericService<Lesson> {
-    public List<Lesson> getByCourse(Course course);
+    List<Lesson> getByCourse(Course course);
 
-    public List<Lesson> getByStudent(Student student);
+    List<Lesson> getByStudent(Student student);
 
-    public List<Lesson> getByTeacher(Teacher teacher);
+    List<Lesson> getByTeacher(Teacher teacher);
 
-    public boolean assignGroups(Lesson lesson, List<Group> groups);
+    boolean assignGroups(Lesson lesson, List<Group> groups);
 
-    public boolean deleteGroup(Lesson lesson, Group group);
+    boolean deleteGroup(Lesson lesson, Group group);
 
-    public void fillGroups(Lesson lesson);
+    void fillGroups(Lesson lesson);
 }

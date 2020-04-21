@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CourseDao extends GenericDao<Course> {
-    public List<Course> getByGroup(Group group);
+    List<Course> getByGroup(Group group);
 }
