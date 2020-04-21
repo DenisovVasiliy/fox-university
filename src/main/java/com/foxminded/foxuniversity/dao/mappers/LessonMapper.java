@@ -1,9 +1,9 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
 
-import com.foxminded.foxuniversity.dao.implementation.CourseDaoPostgres;
-import com.foxminded.foxuniversity.dao.implementation.GroupDaoPostgres;
-import com.foxminded.foxuniversity.dao.implementation.TeacherDaoPostgres;
+import com.foxminded.foxuniversity.dao.CourseDao;
+import com.foxminded.foxuniversity.dao.GroupDao;
+import com.foxminded.foxuniversity.dao.TeacherDao;
 import com.foxminded.foxuniversity.domain.Day;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.LessonsType;
@@ -17,11 +17,11 @@ import java.sql.SQLException;
 @Component
 public class LessonMapper implements RowMapper<Lesson> {
     @Autowired
-    private CourseDaoPostgres courseDAO;
+    private CourseDao courseDAO;
     @Autowired
-    private TeacherDaoPostgres teacherDAO;
+    private TeacherDao teacherDAO;
     @Autowired
-    private GroupDaoPostgres groupDAO;
+    private GroupDao groupDAO;
 
     @Override
     public Lesson mapRow(ResultSet set, int i) throws SQLException {

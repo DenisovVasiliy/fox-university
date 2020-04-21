@@ -3,8 +3,13 @@ package com.foxminded.foxuniversity.dao.implementation;
 import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.dao.LessonDao;
-import com.foxminded.foxuniversity.dao.StudentDao;
-import com.foxminded.foxuniversity.domain.*;
+import com.foxminded.foxuniversity.domain.Course;
+import com.foxminded.foxuniversity.domain.Group;
+import com.foxminded.foxuniversity.domain.Day;
+import com.foxminded.foxuniversity.domain.Teacher;
+import com.foxminded.foxuniversity.domain.LessonsType;
+import com.foxminded.foxuniversity.domain.Lesson;
+import com.foxminded.foxuniversity.domain.Student;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +26,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class LessonDaoPostgresTest {
     private static ApplicationContext context;

@@ -1,9 +1,9 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.MappersTestConfig;
-import com.foxminded.foxuniversity.dao.implementation.CourseDaoPostgres;
-import com.foxminded.foxuniversity.dao.implementation.GroupDaoPostgres;
-import com.foxminded.foxuniversity.dao.implementation.TeacherDaoPostgres;
+import com.foxminded.foxuniversity.AppConfig;
+import com.foxminded.foxuniversity.dao.CourseDao;
+import com.foxminded.foxuniversity.dao.GroupDao;
+import com.foxminded.foxuniversity.dao.TeacherDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Teacher;
@@ -13,6 +13,7 @@ import com.foxminded.foxuniversity.domain.Day;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
@@ -31,9 +32,13 @@ import static java.util.Collections.singletonList;
 class LessonMapperTest {
     @Mock
     private static ResultSet resultSet;
-    private static CourseDaoPostgres courseDAO;
-    private static GroupDaoPostgres groupDao;
-    private static TeacherDaoPostgres teacherDao;
+    @Mock
+    private static CourseDao courseDAO;
+    @Mock
+    private static GroupDao groupDao;
+    @Mock
+    private static TeacherDao teacherDao;
+    @InjectMocks
     private static LessonMapper lessonMapper;
     private static ApplicationContext context;
     private static Group group = new Group(4, "C-Name");
@@ -45,11 +50,8 @@ class LessonMapperTest {
 
     @BeforeAll
     public static void setUp() {
-        context = new AnnotationConfigApplicationContext(MappersTestConfig.class);
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
         lessonMapper = context.getBean(LessonMapper.class);
-        courseDAO = context.getBean(CourseDaoPostgres.class);
-        groupDao = context.getBean(GroupDaoPostgres.class);
-        teacherDao = context.getBean(TeacherDaoPostgres.class);
         expectedLesson.setGroups(groups);
     }
 

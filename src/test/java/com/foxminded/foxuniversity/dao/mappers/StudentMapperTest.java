@@ -1,12 +1,13 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.MappersTestConfig;
-import com.foxminded.foxuniversity.dao.implementation.GroupDaoPostgres;
+import com.foxminded.foxuniversity.AppConfig;
+import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
@@ -22,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class StudentMapperTest {
     @Mock
     private static ResultSet resultSet;
-    private static GroupDaoPostgres groupDao;
+    @Mock
+    private static GroupDao groupDao;
+    @InjectMocks
     private static StudentMapper studentMapper;
     private static ApplicationContext context;
     private static Group group = new Group(1, "C-Name");
@@ -30,9 +33,8 @@ class StudentMapperTest {
 
     @BeforeAll
     public static void setUp() {
-        context = new AnnotationConfigApplicationContext(MappersTestConfig.class);
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
         studentMapper = context.getBean(StudentMapper.class);
-        groupDao = context.getBean(GroupDaoPostgres.class);
     }
 
     @Test
@@ -56,7 +58,6 @@ class StudentMapperTest {
         when(resultSet.getString("first_name")).thenReturn("Name");
         when(resultSet.getString("last_name")).thenReturn("LastName");
         when(resultSet.getInt("group_id")).thenReturn(0);
-        when(groupDao.getById(0)).thenReturn(group);
 
         Student student = studentMapper.mapRow(resultSet, 1);
 
