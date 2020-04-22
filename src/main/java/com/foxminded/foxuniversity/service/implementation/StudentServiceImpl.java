@@ -4,6 +4,7 @@ import com.foxminded.foxuniversity.dao.StudentDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Student;
+import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,21 @@ public class StudentServiceImpl implements StudentService {
     private StudentDao studentDao;
     @Autowired
     private LessonService lessonService;
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public List<Student> getAll() {
-        return studentDao.getAll();
+        List<Student> students = studentDao.getAll();
+        setGroup(students);
+        return students;
     }
 
     @Override
     public Student getById(int id) {
-        return studentDao.getById(id);
+        Student student = studentDao.getById(id);
+        setGroup(student);
+        return student;
     }
 
     @Override
@@ -45,7 +52,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getByGroup(Group group) {
-        return studentDao.getByGroup(group);
+        List<Student> students = studentDao.getByGroup(group);
+        setGroup(students, group);
+        return students;
     }
 
     @Override
@@ -86,5 +95,25 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Lesson> getTimetable(Student student) {
         return lessonService.getByStudent(student);
+    }
+
+    private void setGroup(Student student) {
+        student.setGroup(groupService.getById(student.getGroup().getId()));
+    }
+
+    private void setGroup(List<Student> students) {
+        for (Student student : students) {
+            setGroup(student);
+        }
+    }
+
+    private void setGroup(Student student, Group group) {
+        student.setGroup(group);
+    }
+
+    private void setGroup(List<Student> students, Group group) {
+        for (Student student : students) {
+            setGroup(student, group);
+        }
     }
 }

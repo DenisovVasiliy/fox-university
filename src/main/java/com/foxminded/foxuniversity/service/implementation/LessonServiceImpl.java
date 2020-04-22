@@ -6,6 +6,7 @@ import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Student;
 import com.foxminded.foxuniversity.domain.Teacher;
+import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +20,43 @@ public class LessonServiceImpl implements LessonService {
     private LessonDao lessonDao;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private CourseService courseService;
 
     @Override
     public List<Lesson> getAll() {
-        return fillGroups(lessonDao.getAll());
+        List<Lesson> lessons = fillGroups(lessonDao.getAll());
+        setCourse(lessons);
+        return lessons;
     }
 
     @Override
     public Lesson getById(int id) {
-        return fillGroups(lessonDao.getById(id));
+        Lesson lesson = fillGroups(lessonDao.getById(id));
+        setCourse(lesson);
+        return lesson;
     }
 
     @Override
     public List<Lesson> getByCourse(Course course) {
-        return fillGroups(lessonDao.getByCourse(course));
+        List<Lesson> lessons = fillGroups(lessonDao.getByCourse(course));
+        setCourse(lessons, course);
+        return lessons;
     }
 
     @Override
     public List<Lesson> getByStudent(Student student) {
-        return fillGroups(lessonDao.getByStudent(student));
+        List<Lesson> lessons = fillGroups(lessonDao.getByStudent(student));
+        setCourse(lessons);
+        return lessons;
     }
 
     @Override
     public List<Lesson> getByTeacher(Teacher teacher) {
-        return fillGroups(lessonDao.getByTeacher(teacher));
+        List<Lesson> lessons = fillGroups(lessonDao.getByTeacher(teacher));
+        setTeacher(lessons, teacher);
+        setCourse(lessons, teacher.getCourse());
+        return lessons;
     }
 
     @Override
@@ -88,5 +102,35 @@ public class LessonServiceImpl implements LessonService {
             fillGroups(lesson);
         }
         return lessons;
+    }
+
+    private void setTeacher(List<Lesson> lessons, Teacher teacher) {
+        for (Lesson lesson : lessons) {
+            lesson.setTeacher(teacher);
+        }
+    }
+
+    private void setCourse(Lesson lesson, Course course) {
+        lesson.setCourse(course);
+        lesson.getTeacher().setCourse(course);
+    }
+
+    private void setCourse(List<Lesson> lessons, Course course) {
+        for (Lesson lesson : lessons) {
+            setCourse(lesson, course);
+        }
+    }
+
+    private void setCourse(Lesson lesson) {
+        Course course = courseService.getById(lesson.getCourse().getId());
+        lesson.setCourse(course);
+        lesson.getTeacher().setCourse(course);
+    }
+
+    private void setCourse(List<Lesson> lessons) {
+        for (Lesson lesson : lessons) {
+            Course course = courseService.getById(lesson.getCourse().getId());
+            setCourse(lesson, course);
+        }
     }
 }
