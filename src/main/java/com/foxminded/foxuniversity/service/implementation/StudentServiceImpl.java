@@ -98,7 +98,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private void setGroup(Student student) {
-        student.setGroup(groupService.getById(student.getGroup().getId()));
+        if (student.getGroup() != null) {
+            student.setGroup(groupService.getById(student.getGroup().getId()));
+        }
     }
 
     private void setGroup(List<Student> students) {
