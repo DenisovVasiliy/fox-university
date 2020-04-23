@@ -5,7 +5,6 @@ import java.util.List;
 public class Group {
     private int id;
     private String name;
-    private List<Course> courses;
     private List<Student> students;
 
     public Group (String name) {
@@ -31,14 +30,6 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
     }
 
     public List<Student> getStudents() {
