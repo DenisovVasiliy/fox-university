@@ -20,6 +20,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -94,9 +95,10 @@ class StudentDaoPostgresTest {
     public void shouldAssignStudentToGroup() {
         Student expected = studentDao.getById(4);
         assertNull(expected.getGroup());
-        if (studentDao.assignToGroup(expected, groups.get(2))) {
-            expected.setGroup(groups.get(2));
-        }
+
+        assertTrue(studentDao.assignToGroup(expected, groups.get(2)));
+
+        expected.setGroup(groups.get(2));
         Student actual = studentDao.getById(expected.getId());
         assertEquals(expected, actual);
         assertEquals(expected.getGroup(), actual.getGroup());
@@ -112,7 +114,7 @@ class StudentDaoPostgresTest {
         updatedStudent.setLastName("Updated Student");
         updatedStudent.setGroup(groups.get(1));
 
-        studentDao.update(updatedStudent);
+        assertTrue(studentDao.update(updatedStudent));
 
         Student actual = studentDao.getById(updatedStudent.getId());
         assertEquals(updatedStudent, actual);
@@ -127,7 +129,7 @@ class StudentDaoPostgresTest {
 
         updatedStudent.setGroup(groups.get(1));
 
-        studentDao.update(updatedStudent);
+        assertTrue(studentDao.update(updatedStudent));
 
         Student actual = studentDao.getById(updatedStudent.getId());
         assertEquals(updatedStudent, actual);
@@ -139,7 +141,7 @@ class StudentDaoPostgresTest {
         List<Student> actual = studentDao.getAll();
         assertEquals(students, actual);
 
-        studentDao.delete(students.get(0));
+        assertTrue(studentDao.delete(students.get(0)));
 
         actual = studentDao.getAll();
         List<Student> expected = students.subList(1, 4);
@@ -151,14 +153,13 @@ class StudentDaoPostgresTest {
         Student updatedStudent = studentDao.getById(1);
         assertNotNull(updatedStudent.getGroup());
 
-        if (studentDao.deleteAssignment(updatedStudent)) {
-            updatedStudent.setGroup(null);
-        }
+        assertTrue(studentDao.deleteAssignment(updatedStudent));
+
+        updatedStudent.setGroup(null);
 
         Student actual = studentDao.getById(updatedStudent.getId());
         assertEquals(updatedStudent, actual);
-        assertNull(updatedStudent.getGroup());
-        assertNull(actual.getGroup());
+        assertEquals(updatedStudent.getGroup(), actual.getGroup());
     }
 
     @AfterEach

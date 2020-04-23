@@ -20,6 +20,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -95,7 +96,7 @@ class TeacherDaoPostgresTest {
         updatedTeacher.setLastName("Updated");
         updatedTeacher.setCourse(courses.get(2));
 
-        teacherDao.update(updatedTeacher);
+        assertTrue(teacherDao.update(updatedTeacher));
 
         Teacher actual = teacherDao.getById(updatedTeacher.getId());
         assertEquals(updatedTeacher, actual);
@@ -107,7 +108,7 @@ class TeacherDaoPostgresTest {
         List<Teacher> actual = teacherDao.getAll();
         assertEquals(teachers, actual);
 
-        teacherDao.delete(teachers.get(2));
+        assertTrue(teacherDao.delete(teachers.get(2)));
 
         actual = teacherDao.getAll();
         List<Teacher> expected = teachers.subList(0, 2);

@@ -26,6 +26,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -123,9 +124,9 @@ class LessonDaoPostgresTest {
         Lesson expected = lessonDao.getById(3);
         assertEquals(groups.subList(1, 2), expected.getGroups());
 
-        if (lessonDao.assignGroups(expected, groups.subList(0, 1))) {
-            expected.setGroups(groups.subList(0, 2));
-        }
+        assertTrue(lessonDao.assignGroups(expected, groups.subList(0, 1)));
+
+        expected.setGroups(groups.subList(0, 2));
         List<Group> actual = groupDao.getByLesson(expected);
         assertEquals(expected.getGroups(), actual);
     }
@@ -136,7 +137,7 @@ class LessonDaoPostgresTest {
         assertEquals(lessons.get(0), updatedLesson);
 
         updatedLesson.setCourse(courses.get(2));
-        lessonDao.update(updatedLesson);
+        assertTrue(lessonDao.update(updatedLesson));
         Lesson actual = lessonDao.getById(updatedLesson.getId());
 
         assertEquals(updatedLesson, actual);
@@ -148,11 +149,10 @@ class LessonDaoPostgresTest {
         assertEquals(lessons.get(0), updatedLesson);
         List<Group> emptyGroups = new ArrayList<>();
 
-        if (lessonDao.deleteGroup(updatedLesson, updatedLesson.getGroups().get(0))) {
-            updatedLesson.setGroups(emptyGroups);
-        }
+        assertTrue(lessonDao.deleteGroup(updatedLesson, updatedLesson.getGroups().get(0)));
+
         List<Group> actual = groupDao.getByLesson(updatedLesson);
-        assertEquals(updatedLesson.getGroups(), actual);
+        assertEquals(emptyGroups, actual);
     }
 
     @Test
