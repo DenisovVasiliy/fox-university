@@ -102,7 +102,6 @@ public class GroupDaoPostgres implements GroupDao {
         Number generatedId = jdbcInsert.withTableName("groups").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
         group.setId(generatedId.intValue());
-
     }
 
     @Override
