@@ -118,7 +118,7 @@ public class Lesson {
     public String toString() {
         return "\nLesson{" +
                 "id=" + id +
-                ", course=" + course.getName() +
+                ", course=" + course +
                 ", groups=" + groups +
                 ", teacher=" + teacher +
                 ", classroom=" + classroom +
