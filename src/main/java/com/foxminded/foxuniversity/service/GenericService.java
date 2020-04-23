@@ -10,7 +10,7 @@ public interface GenericService<T> {
 
     T getById(int id);
 
-    boolean save(T object);
+    void save(T object);
 
     boolean update(T object);
 

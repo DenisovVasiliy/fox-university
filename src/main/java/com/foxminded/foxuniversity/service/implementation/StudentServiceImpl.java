@@ -36,8 +36,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean save(Student student) {
-        return studentDao.save(student);
+    public void save(Student student) {
+        studentDao.save(student);
     }
 
     @Override

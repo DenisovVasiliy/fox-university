@@ -23,27 +23,31 @@ public class GroupServiceImpl implements GroupService {
 
     public List<Group> getAll() {
         List<Group> groups = groupDao.getAll();
-        fillCourses(groups);
         fillStudents(groups);
         return groups;
     }
 
     public Group getById(int id) {
         Group group = groupDao.getById(id);
-        fillCourses(group);
         fillStudents(group);
         return group;
     }
 
     public List<Group> getByLesson(Lesson lesson) {
         List<Group> groups = groupDao.getByLesson(lesson);
-        fillCourses(groups);
         fillStudents(groups);
         return groups;
     }
 
-    public boolean save(Group group) {
-        return groupDao.save(group);
+    @Override
+    public List<Group> getByCourse(Course course) {
+        List<Group> groups = groupDao.getByCourse(course);
+        fillStudents(groups);
+        return groups;
+    }
+
+    public void save(Group group) {
+        groupDao.save(group);
     }
 
     public boolean update(Group group) {
@@ -56,7 +60,9 @@ public class GroupServiceImpl implements GroupService {
 
     public boolean assignToCourses(Group group, List<Course> courses) {
         if (groupDao.assignToCourses(group, courses)) {
-            group.setCourses(courses);
+            for (Course course : courses) {
+                course.getGroups().add(group);
+            }
             return true;
         }
         return false;
@@ -64,7 +70,7 @@ public class GroupServiceImpl implements GroupService {
 
     public boolean deleteFromCourse(Group group, Course course) {
         if (groupDao.deleteFromCourse(group, course)) {
-            group.getCourses().remove(course);
+            course.getGroups().remove(group);
             return true;
         }
         return false;
@@ -73,21 +79,11 @@ public class GroupServiceImpl implements GroupService {
     public boolean deleteFromCourse(Group group, List<Course> courses) {
         if (groupDao.deleteFromCourse(group, courses)) {
             for (Course course : courses) {
-                group.getCourses().remove(course);
+                course.getGroups().remove(group);
             }
             return true;
         }
         return false;
-    }
-
-    private void fillCourses(Group group) {
-        group.setCourses(courseService.getByGroup(group));
-    }
-
-    private void fillCourses(List<Group> groups) {
-        for (Group group : groups) {
-            fillCourses(group);
-        }
     }
 
     private void fillStudents(Group group) {

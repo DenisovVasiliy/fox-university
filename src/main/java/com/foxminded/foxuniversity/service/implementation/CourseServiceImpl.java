@@ -4,6 +4,7 @@ import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.service.CourseService;
+import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +20,36 @@ public class CourseServiceImpl implements CourseService {
     private LessonService lessonService;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public List<Course> getAll() {
-        return fillCoursesLessons(courseDao.getAll());
+        List<Course> courses = courseDao.getAll();
+        fillLessons(courses);
+        fillGroups(courses);
+        return courses;
     }
 
     @Override
     public Course getById(int id) {
-        return fillCoursesLessons(courseDao.getById(id));
+        Course course = courseDao.getById(id);
+        fillLessons(course);
+        fillGroups(course);
+        return course;
     }
 
     @Override
     public List<Course> getByGroup(Group group) {
-        return fillCoursesLessons(courseDao.getByGroup(group));
+        List<Course> courses = courseDao.getByGroup(group);
+        fillLessons(courses);
+        fillGroups(courses);
+        return courses;
     }
 
     @Override
-    public boolean save(Course course) {
-        return courseDao.save(course);
+    public void save(Course course) {
+        courseDao.save(course);
     }
 
     @Override
@@ -53,15 +65,23 @@ public class CourseServiceImpl implements CourseService {
         return false;
     }
 
-    private Course fillCoursesLessons(Course course) {
+    private void fillLessons(Course course) {
         course.setLessons(lessonService.getByCourse(course));
-        return course;
     }
 
-    private List<Course> fillCoursesLessons(List<Course> courses) {
+    private void fillLessons(List<Course> courses) {
         for (Course course : courses) {
-            fillCoursesLessons(course);
+            fillLessons(course);
         }
-        return courses;
+    }
+
+    private void fillGroups(Course course) {
+        course.setGroups(groupService.getByCourse(course));
+    }
+
+    private void fillGroups(List<Course> courses) {
+        for (Course course : courses) {
+            fillGroups(course);
+        }
     }
 }

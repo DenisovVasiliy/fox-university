@@ -36,8 +36,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public boolean save(Teacher teacher) {
-        return teacherDao.save(teacher);
+    public void save(Teacher teacher) {
+        teacherDao.save(teacher);
     }
 
     @Override

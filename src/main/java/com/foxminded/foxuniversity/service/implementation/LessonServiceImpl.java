@@ -60,8 +60,8 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public boolean save(Lesson lesson) {
-        return lessonDao.save(lesson);
+    public void save(Lesson lesson) {
+        lessonDao.save(lesson);
     }
 
     @Override
