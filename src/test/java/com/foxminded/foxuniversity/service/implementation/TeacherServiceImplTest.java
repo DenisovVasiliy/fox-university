@@ -56,6 +56,7 @@ class TeacherServiceImplTest {
 
     @Test
     public void shouldCallGetAllTeachersAndReturnResult() {
+        teacher.setCourse(course);
         when(teacherDao.getAll()).thenReturn(teachers);
         when(courseService.getById(1)).thenReturn(filledCourse);
 
@@ -70,6 +71,7 @@ class TeacherServiceImplTest {
 
     @Test
     public void shouldCallGetTeacherByIdAndReturnResult() {
+        teacher.setCourse(course);
         when(teacherDao.getById(1)).thenReturn(teacher);
         when(courseService.getById(1)).thenReturn(filledCourse);
 
@@ -84,6 +86,7 @@ class TeacherServiceImplTest {
 
     @Test
     public void shouldCallGetTeacherByCourseAndReturnResult() {
+        teacher.setCourse(course);
         when(teacherDao.getByCourse(filledCourse)).thenReturn(teachers);
 
         List<Teacher> actual = teacherService.getByCourse(filledCourse);
