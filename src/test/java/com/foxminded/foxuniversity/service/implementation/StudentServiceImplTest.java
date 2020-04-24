@@ -5,6 +5,7 @@ import com.foxminded.foxuniversity.dao.StudentDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Student;
+import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.StudentService;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,65 +17,89 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static java.util.Collections.singletonList;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceImplTest {
-    @Mock
-    private Group group;
     @Mock
     private Lesson lesson;
     @Mock
     private static StudentDao studentDao;
     @Mock
     private static LessonService lessonService;
+    @Mock
+    private static GroupService groupService;
     @InjectMocks
     private static StudentService studentService;
 
-    private static Student student = new Student(1, "Test", "Student");
+    private static Student student = new Student(1, "Test", "With-Group");
+    private static List<Student> students = new ArrayList<>();
+    private static Group group = new Group(1, "TestGroup");
+    private static Group groupWithStudents = new Group(1, "TestGroup");
 
     @BeforeAll
     public static void setUp() {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         studentService = context.getBean(StudentServiceImpl.class);
+        student.setGroup(group);
+        students.add(student);
+        students.add(new Student(2, "Test", "WithOut-Group"));
+        groupWithStudents.setStudents(students.subList(0, 1));
     }
 
     @Test
     public void shouldCallGetAllStudentsAndReturnResult() {
-        when(studentDao.getAll()).thenReturn(singletonList(student));
+        when(studentDao.getAll()).thenReturn(students);
+        when(groupService.getById(1)).thenReturn(groupWithStudents);
+
         List<Student> actual = studentService.getAll();
+
         verify(studentDao).getAll();
-        assertEquals(singletonList(student), actual);
+        verify(groupService, times(1)).getById(1);
+        assertEquals(students, actual);
+        assertEquals(groupWithStudents, actual.get(0).getGroup());
+        assertNull(actual.get(1).getGroup());
+        assertEquals(groupWithStudents.getStudents(), actual.get(0).getGroup().getStudents());
     }
 
     @Test
     public void shouldCallGetStudentByIdAndReturnResult() {
         when(studentDao.getById(1)).thenReturn(student);
+        when(groupService.getById(1)).thenReturn(groupWithStudents);
+
         Student actual = studentService.getById(1);
+
         verify(studentDao).getById(1);
+        verify(groupService).getById(1);
         assertEquals(student, actual);
+        assertEquals(groupWithStudents, actual.getGroup());
+        assertEquals(groupWithStudents.getStudents(), actual.getGroup().getStudents());
     }
 
     @Test
     public void shouldCallGetStudentByGroupAndReturnResult() {
-        when(studentDao.getByGroup(group)).thenReturn(singletonList(student));
-        List<Student> actual = studentService.getByGroup(group);
+        when(studentDao.getByGroup(groupWithStudents)).thenReturn(singletonList(student));
+
+        List<Student> actual = studentService.getByGroup(groupWithStudents);
+
         verify(studentDao).getByGroup(group);
+        verifyZeroInteractions(groupService);
         assertEquals(singletonList(student), actual);
+        assertEquals(groupWithStudents, actual.get(0).getGroup());
+        assertEquals(groupWithStudents.getStudents(), actual.get(0).getGroup().getStudents());
     }
 
     @Test
-    public void shouldCallSaveStudentAndReturnResult() {
-        when(studentDao.save(student)).thenReturn(true);
-        assertTrue(studentService.save(student));
+    public void shouldCallSaveStudent() {
+        studentService.save(student);
         verify(studentDao).save(student);
     }
 
