@@ -109,7 +109,7 @@ class CourseServiceImplTest {
     }
 
     @Test
-    public void shouldCallSaveCourseAndReturnResult() {
+    public void shouldCallSaveCourse() {
         courseService.save(course);
         verify(courseDao).save(course);
     }
