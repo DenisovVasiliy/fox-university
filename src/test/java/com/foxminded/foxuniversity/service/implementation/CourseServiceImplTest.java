@@ -7,6 +7,7 @@ import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Teacher;
 import com.foxminded.foxuniversity.service.CourseService;
+import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.TeacherService;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,48 +39,78 @@ class CourseServiceImplTest {
     @Mock
     private static TeacherService teacherService;
     @Mock
-    private Lesson lesson;
-
+    private static GroupService groupService;
+    @Mock
+    private static Lesson lesson;
+    @Mock
+    private static Group group;
     @InjectMocks
     private static CourseService courseService;
 
-    private Course course = new Course(1, "name", "Desc.");
+    private static Course course = new Course(1, "name", "Desc.");
+    private static List<Course> courses = singletonList(course);
+    private static List<Group> groups = singletonList(group);
+    private static List<Lesson> lessons = singletonList(lesson);
 
     @BeforeAll
     public static void setUp() {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         courseService = context.getBean(CourseServiceImpl.class);
+        course.setLessons(lessons);
+        course.setGroups(groups);
     }
 
     @Test
     public void shouldCallGetAllCoursesAndReturnResult() {
-        when(courseDao.getAll()).thenReturn(singletonList(course));
+        when(courseDao.getAll()).thenReturn(courses);
+        when(lessonService.getByCourse(course)).thenReturn(lessons);
+        when(groupService.getByCourse(course)).thenReturn(groups);
+
         List<Course> actual = courseService.getAll();
+
         verify(courseDao).getAll();
-        assertEquals(singletonList(course), actual);
+        verify(lessonService).getByCourse(course);
+        verify(groupService).getByCourse(course);
+        assertEquals(courses, actual);
+        assertEquals(lessons, actual.get(0).getLessons());
+        assertEquals(groups, actual.get(0).getGroups());
     }
 
     @Test
     public void shouldCallGetCourseByIdAndReturnResult() {
         when(courseDao.getById(1)).thenReturn(course);
+        when(lessonService.getByCourse(course)).thenReturn(lessons);
+        when(groupService.getByCourse(course)).thenReturn(groups);
+
         Course actual = courseService.getById(1);
+
         verify(courseDao).getById(1);
+        verify(lessonService).getByCourse(course);
+        verify(groupService).getByCourse(course);
         assertEquals(course, actual);
+        assertEquals(course.getLessons(), actual.getLessons());
+        assertEquals(groups, actual.getGroups());
     }
 
     @Test
     public void shouldCallGetCoursesByGroupAndReturnResult() {
-        Group group = new Group(1, "123");
-        when(courseDao.getByGroup(group)).thenReturn(singletonList(course));
+        when(courseDao.getByGroup(group)).thenReturn(courses);
+        when(lessonService.getByCourse(course)).thenReturn(lessons);
+        when(groupService.getByCourse(course)).thenReturn(groups);
+
         List<Course> actual = courseService.getByGroup(group);
+
         verify(courseDao).getByGroup(group);
-        assertEquals(singletonList(course), actual);
+        verify(lessonService).getByCourse(course);
+        verify(groupService).getByCourse(course);
+        assertEquals(courses, actual);
+        assertEquals(lessons, actual.get(0).getLessons());
+        assertEquals(groups, actual.get(0).getGroups());
     }
 
     @Test
     public void shouldCallSaveCourseAndReturnResult() {
-        when(courseDao.save(course)).thenReturn(true);
-        assertTrue(courseService.save(course));
+        courseService.save(course);
         verify(courseDao).save(course);
     }
 
@@ -104,13 +135,5 @@ class CourseServiceImplTest {
         when(teacherService.getByCourse(course)).thenReturn(singletonList(teacher));
         assertFalse(courseService.delete(course));
         verifyZeroInteractions(courseDao);
-    }
-
-    @Test
-    public void shouldCallLessonServiceAndFillLessonsInTheCourse() {
-        when(lessonService.getByCourse(course)).thenReturn(singletonList(lesson));
-        courseService.fillCoursesLessons(course);
-        verify(lessonService).getByCourse(course);
-        assertEquals(singletonList(lesson), course.getLessons());
     }
 }
