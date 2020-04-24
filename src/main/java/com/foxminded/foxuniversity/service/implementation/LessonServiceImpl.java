@@ -9,6 +9,7 @@ import com.foxminded.foxuniversity.domain.Teacher;
 import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
+import com.foxminded.foxuniversity.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +23,14 @@ public class LessonServiceImpl implements LessonService {
     private GroupService groupService;
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private TeacherService teacherService;
 
     @Override
     public List<Lesson> getAll() {
         List<Lesson> lessons = fillGroups(lessonDao.getAll());
         setCourse(lessons);
+        setTeacher(lessons);
         return lessons;
     }
 
@@ -34,6 +38,7 @@ public class LessonServiceImpl implements LessonService {
     public Lesson getById(int id) {
         Lesson lesson = fillGroups(lessonDao.getById(id));
         setCourse(lesson);
+        setTeacher(lesson);
         return lesson;
     }
 
@@ -41,6 +46,7 @@ public class LessonServiceImpl implements LessonService {
     public List<Lesson> getByCourse(Course course) {
         List<Lesson> lessons = fillGroups(lessonDao.getByCourse(course));
         setCourse(lessons, course);
+        setTeacher(lessons);
         return lessons;
     }
 
@@ -48,6 +54,7 @@ public class LessonServiceImpl implements LessonService {
     public List<Lesson> getByStudent(Student student) {
         List<Lesson> lessons = fillGroups(lessonDao.getByStudent(student));
         setCourse(lessons);
+        setTeacher(lessons);
         return lessons;
     }
 
@@ -108,6 +115,16 @@ public class LessonServiceImpl implements LessonService {
         for (Lesson lesson : lessons) {
             lesson.setTeacher(teacher);
         }
+    }
+
+    private void setTeacher(List<Lesson> lessons) {
+        for (Lesson lesson : lessons) {
+            setTeacher(lesson);
+        }
+    }
+
+    private void setTeacher(Lesson lesson) {
+        lesson.setTeacher(teacherService.getById(lesson.getTeacher().getId()));
     }
 
     private void setCourse(Lesson lesson, Course course) {
