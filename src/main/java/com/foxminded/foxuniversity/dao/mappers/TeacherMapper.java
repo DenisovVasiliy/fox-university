@@ -1,6 +1,6 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.dao.implementation.CourseDaoPostgres;
+import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.domain.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @Component
 public class TeacherMapper implements RowMapper<Teacher> {
     @Autowired
-    CourseDaoPostgres courseDAO;
+    CourseDao courseDAO;
 
     @Override
     public Teacher mapRow(ResultSet set, int i) throws SQLException {

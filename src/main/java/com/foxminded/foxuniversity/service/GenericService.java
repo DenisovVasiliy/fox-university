@@ -1,11 +1,11 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.service;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Repository
-public interface GenericDao<T> {
+@Component
+public interface GenericService<T> {
     List<T> getAll();
 
     T getById(int id);

@@ -58,15 +58,11 @@ public class CourseDaoPostgres implements CourseDao {
     }
 
     @Override
-    public boolean save(Course course) {
+    public void save(Course course) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(course);
         Number id = jdbcInsert.withTableName("courses").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
-        if (id != null) {
-            course.setId(id.intValue());
-            return true;
-        }
-        return false;
+        course.setId(id.intValue());
     }
 
     @Override

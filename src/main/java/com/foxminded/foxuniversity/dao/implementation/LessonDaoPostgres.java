@@ -78,7 +78,7 @@ public class LessonDaoPostgres implements LessonDao {
     }
 
     @Override
-    public boolean save(Lesson lesson) {
+    public void save(Lesson lesson) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("course_id", lesson.getCourse().getId())
                 .addValue("teacher_id", lesson.getTeacher().getId())
@@ -88,14 +88,10 @@ public class LessonDaoPostgres implements LessonDao {
                 .addValue("type", lesson.getType().toString());
         Number generatedId = jdbcInsert.withTableName("lessons").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
-        if (generatedId != null) {
-            lesson.setId(generatedId.intValue());
-            if (lesson.getGroups() != null) {
-                return assignGroups(lesson, lesson.getGroups());
-            }
-            return true;
+        lesson.setId(generatedId.intValue());
+        if (lesson.getGroups() != null) {
+            assignGroups(lesson, lesson.getGroups());
         }
-        return false;
     }
 
     @Override

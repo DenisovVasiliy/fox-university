@@ -3,7 +3,12 @@ package com.foxminded.foxuniversity.dao.implementation;
 import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.dao.GroupDao;
-import com.foxminded.foxuniversity.domain.*;
+import com.foxminded.foxuniversity.domain.Course;
+import com.foxminded.foxuniversity.domain.Group;
+import com.foxminded.foxuniversity.domain.Day;
+import com.foxminded.foxuniversity.domain.Teacher;
+import com.foxminded.foxuniversity.domain.LessonsType;
+import com.foxminded.foxuniversity.domain.Lesson;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,6 +25,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -81,6 +87,13 @@ class GroupDaoPostgresTest {
     }
 
     @Test
+    public void shouldGetGroupsByCourse() {
+        List<Group> actual = groupDao.getByCourse(courses.get(1));
+        List<Group> expected = groups.subList(0, 2);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void shouldSaveGroupAndSetId() {
         groupDao.save(group);
         assertNotEquals(0, group.getId());
@@ -94,7 +107,7 @@ class GroupDaoPostgresTest {
         assertEquals(updatedGroup, groups.get(0));
 
         updatedGroup.setName("New name");
-        groupDao.update(updatedGroup);
+        assertTrue(groupDao.update(updatedGroup));
 
         Group actual = groupDao.getById(1);
         assertEquals(updatedGroup, actual);
@@ -103,37 +116,37 @@ class GroupDaoPostgresTest {
     @Test
     public void shouldAssignGroupToCourse() {
         Group updatedGroup = groups.get(2);
-        updatedGroup.setCourses(courseDao.getByGroup(updatedGroup));
-        assertEquals(0, updatedGroup.getCourses().size());
+        List<Course> actualCourses = courseDao.getByGroup(updatedGroup);
+        assertEquals(0, actualCourses.size());
 
-        groupDao.assignToCourses(updatedGroup, courses);
+        assertTrue(groupDao.assignToCourses(updatedGroup, courses));
 
-        updatedGroup.setCourses(courseDao.getByGroup(updatedGroup));
-        assertEquals(courses, updatedGroup.getCourses());
+        actualCourses = courseDao.getByGroup(updatedGroup);
+        assertEquals(courses, actualCourses);
     }
 
     @Test
     public void shouldDeleteGroupFromCourse() {
         Group updatedGroup = groups.get(0);
-        updatedGroup.setCourses(courseDao.getByGroup(updatedGroup));
-        assertEquals(courses.subList(0, 2), updatedGroup.getCourses());
+        List<Course> actualCourses = courseDao.getByGroup(updatedGroup);
+        assertEquals(courses.subList(0, 2), actualCourses);
 
-        groupDao.deleteFromCourse(updatedGroup, courses.get(1));
+        assertTrue(groupDao.deleteFromCourse(updatedGroup, courses.get(1)));
 
-        updatedGroup.setCourses(courseDao.getByGroup(updatedGroup));
-        assertEquals(courses.subList(0, 1), updatedGroup.getCourses());
+        actualCourses = courseDao.getByGroup(updatedGroup);
+        assertEquals(courses.subList(0, 1), actualCourses);
     }
 
     @Test
     public void shouldDeleteGroupFromCourses() {
         Group updatedGroup = groups.get(0);
-        updatedGroup.setCourses(courseDao.getByGroup(updatedGroup));
-        assertEquals(courses.subList(0, 2), updatedGroup.getCourses());
+        List<Course> actualCourses = courseDao.getByGroup(updatedGroup);
+        assertEquals(courses.subList(0, 2), actualCourses);
 
-        groupDao.deleteFromCourse(updatedGroup, courses.subList(0, 2));
+        assertTrue(groupDao.deleteFromCourse(updatedGroup, courses.subList(0, 2)));
 
-        updatedGroup.setCourses(courseDao.getByGroup(updatedGroup));
-        assertEquals(0, updatedGroup.getCourses().size());
+        actualCourses = courseDao.getByGroup(updatedGroup);
+        assertEquals(0, actualCourses.size());
     }
 
     @Test
@@ -141,7 +154,7 @@ class GroupDaoPostgresTest {
         List<Group> actual = groupDao.getAll();
         assertEquals(groups, actual);
 
-        groupDao.delete(groups.get(2));
+        assertTrue(groupDao.delete(groups.get(2)));
 
         actual = groupDao.getAll();
         List<Group> expected = groups.subList(0, 2);

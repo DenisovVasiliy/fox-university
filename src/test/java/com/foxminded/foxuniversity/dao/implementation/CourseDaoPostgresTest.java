@@ -19,9 +19,9 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 
 class CourseDaoPostgresTest {
     private static ApplicationContext context;
@@ -79,7 +79,7 @@ class CourseDaoPostgresTest {
         List<Course> actual = courseDAO.getAll();
         assertEquals(courses, actual);
 
-        courseDAO.delete(courses.get(2));
+        assertTrue(courseDAO.delete(courses.get(2)));
 
         actual = courseDAO.getAll();
         List<Course> expected = courses.subList(0, 2);
@@ -100,7 +100,7 @@ class CourseDaoPostgresTest {
         updatedCourse.setName("New name");
         updatedCourse.setDescription("New Desc.");
 
-        courseDAO.update(updatedCourse);
+        assertTrue(courseDAO.update(updatedCourse));
 
         Course actual = courseDAO.getById(updatedCourse.getId());
 

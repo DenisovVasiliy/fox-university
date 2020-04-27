@@ -37,6 +37,8 @@ public class GroupDaoPostgres implements GroupDao {
     private String getById;
     @Value("${group.getByLesson}")
     private String getByLesson;
+    @Value("${group.getByCourse}")
+    private String getByCourse;
     @Value("${group.update}")
     private String update;
     @Value("${group.delete}")
@@ -59,6 +61,11 @@ public class GroupDaoPostgres implements GroupDao {
     @Override
     public List<Group> getByLesson(Lesson lesson) {
         return jdbcTemplate.query(getByLesson, new Object[]{lesson.getId()}, groupMapper);
+    }
+
+    @Override
+    public List<Group> getByCourse(Course course) {
+        return jdbcTemplate.query(getByCourse, new Object[]{course.getId()}, groupMapper);
     }
 
     @Override
@@ -89,19 +96,12 @@ public class GroupDaoPostgres implements GroupDao {
     }
 
     @Override
-    public boolean save(Group group) {
+    public void save(Group group) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", group.getName());
         Number generatedId = jdbcInsert.withTableName("groups").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
-        if (generatedId != null) {
-            group.setId(generatedId.intValue());
-            if (group.getCourses() != null) {
-                return assignToCourses(group, group.getCourses());
-            }
-            return true;
-        }
-        return false;
+        group.setId(generatedId.intValue());
     }
 
     @Override

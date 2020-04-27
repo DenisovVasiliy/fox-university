@@ -7,6 +7,7 @@ public class Course {
     private String name;
     private String description;
     private List<Lesson> lessons;
+    private List<Group> groups;
 
     public Course(int id, String name, String description) {
         this.id = id;
@@ -51,6 +52,14 @@ public class Course {
         this.lessons = lessons;
     }
 
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
     public  void addLessons(List<Lesson> lessons) {
         for (Lesson lesson : lessons) {
             if (!this.lessons.contains(lesson)) {
@@ -85,7 +94,6 @@ public class Course {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", lessons=" + lessons +
                 '}';
     }
 }

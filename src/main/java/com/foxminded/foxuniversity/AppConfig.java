@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan({"com.foxminded.foxuniversity"})
+@ComponentScan
 @PropertySource("classpath:database.properties")
 public class AppConfig {
 

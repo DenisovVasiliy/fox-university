@@ -1,16 +1,16 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.service;
 
 import com.foxminded.foxuniversity.domain.Student;
-import com.foxminded.foxuniversity.domain.Group;
+import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Teacher;
-import com.foxminded.foxuniversity.domain.Lesson;
-import org.springframework.stereotype.Repository;
+import com.foxminded.foxuniversity.domain.Group;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Repository
-public interface LessonDao extends GenericDao<Lesson> {
+@Component
+public interface LessonService extends GenericService<Lesson> {
     List<Lesson> getByCourse(Course course);
 
     List<Lesson> getByStudent(Student student);

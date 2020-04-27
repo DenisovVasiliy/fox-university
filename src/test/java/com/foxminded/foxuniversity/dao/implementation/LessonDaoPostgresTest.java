@@ -3,8 +3,13 @@ package com.foxminded.foxuniversity.dao.implementation;
 import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.dao.LessonDao;
-import com.foxminded.foxuniversity.dao.StudentDao;
-import com.foxminded.foxuniversity.domain.*;
+import com.foxminded.foxuniversity.domain.Course;
+import com.foxminded.foxuniversity.domain.Group;
+import com.foxminded.foxuniversity.domain.Day;
+import com.foxminded.foxuniversity.domain.Teacher;
+import com.foxminded.foxuniversity.domain.LessonsType;
+import com.foxminded.foxuniversity.domain.Lesson;
+import com.foxminded.foxuniversity.domain.Student;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +26,9 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class LessonDaoPostgresTest {
     private static ApplicationContext context;
@@ -117,9 +124,9 @@ class LessonDaoPostgresTest {
         Lesson expected = lessonDao.getById(3);
         assertEquals(groups.subList(1, 2), expected.getGroups());
 
-        if (lessonDao.assignGroups(expected, groups.subList(0, 1))) {
-            expected.setGroups(groups.subList(0, 2));
-        }
+        assertTrue(lessonDao.assignGroups(expected, groups.subList(0, 1)));
+
+        expected.setGroups(groups.subList(0, 2));
         List<Group> actual = groupDao.getByLesson(expected);
         assertEquals(expected.getGroups(), actual);
     }
@@ -130,7 +137,7 @@ class LessonDaoPostgresTest {
         assertEquals(lessons.get(0), updatedLesson);
 
         updatedLesson.setCourse(courses.get(2));
-        lessonDao.update(updatedLesson);
+        assertTrue(lessonDao.update(updatedLesson));
         Lesson actual = lessonDao.getById(updatedLesson.getId());
 
         assertEquals(updatedLesson, actual);
@@ -142,11 +149,10 @@ class LessonDaoPostgresTest {
         assertEquals(lessons.get(0), updatedLesson);
         List<Group> emptyGroups = new ArrayList<>();
 
-        if (lessonDao.deleteGroup(updatedLesson, updatedLesson.getGroups().get(0))) {
-            updatedLesson.setGroups(emptyGroups);
-        }
+        assertTrue(lessonDao.deleteGroup(updatedLesson, updatedLesson.getGroups().get(0)));
+
         List<Group> actual = groupDao.getByLesson(updatedLesson);
-        assertEquals(updatedLesson.getGroups(), actual);
+        assertEquals(emptyGroups, actual);
     }
 
     @Test

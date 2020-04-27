@@ -66,17 +66,13 @@ public class TeacherDaoPostgres implements TeacherDao {
     }
 
     @Override
-    public boolean save(Teacher teacher) {
+    public void save(Teacher teacher) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("first_name", teacher.getFirstName())
                 .addValue("last_name", teacher.getLastName())
                 .addValue("course_id", teacher.getCourse().getId());
         Number generatedId = jdbcInsert.withTableName("teachers").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameters);
-        if (generatedId != null) {
-            teacher.setId(generatedId.intValue());
-            return true;
-        }
-        return false;
+        teacher.setId(generatedId.intValue());
     }
 }

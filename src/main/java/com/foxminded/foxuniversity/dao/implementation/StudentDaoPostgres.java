@@ -59,19 +59,16 @@ public class StudentDaoPostgres implements StudentDao {
     }
 
     @Override
-    public boolean save(Student student) {
+    public void save(Student student) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("first_name", student.getFirstName())
                 .addValue("last_name", student.getLastName());
         Number generatedId = jdbcInsert.withTableName("students").usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(parameterSource);
-        if (generatedId != null) {
-            student.setId(generatedId.intValue());
-            if (student.getGroup() != null) {
-                return assignToGroup(student, student.getGroup());
-            } else return true;
+        student.setId(generatedId.intValue());
+        if (student.getGroup() != null) {
+            assignToGroup(student, student.getGroup());
         }
-        return false;
     }
 
     @Override

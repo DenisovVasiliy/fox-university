@@ -1,13 +1,14 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.service;
 
 import com.foxminded.foxuniversity.domain.Group;
+import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Student;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Repository
-public interface StudentDao extends GenericDao<Student> {
+@Component
+public interface StudentService extends GenericService<Student> {
     List<Student> getByGroup(Group group);
 
     boolean assignToGroup(Student student, Group group);
@@ -15,4 +16,6 @@ public interface StudentDao extends GenericDao<Student> {
     boolean updateAssignment(Student student);
 
     boolean deleteAssignment(Student student);
+
+    List<Lesson> getTimetable(Student student);
 }

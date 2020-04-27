@@ -1,6 +1,6 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.dao.implementation.GroupDaoPostgres;
+import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class StudentMapper implements RowMapper<Student> {
 
     @Autowired
-    private GroupDaoPostgres groupDAO;
+    private GroupDao groupDAO;
 
     @Override
     public Student mapRow(ResultSet resultSet, int i) throws SQLException {

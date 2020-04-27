@@ -1,14 +1,12 @@
-package com.foxminded.foxuniversity.dao;
+package com.foxminded.foxuniversity.service;
 
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface GroupDao extends GenericDao<Group> {
+public interface GroupService extends GenericService<Group> {
     boolean assignToCourses(Group group, List<Course> courses);
 
     boolean deleteFromCourse(Group group, Course course);
