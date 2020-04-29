@@ -1,12 +1,13 @@
 package com.foxminded.foxuniversity.domain;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Lesson {
     private int id;
     private Course course;
-    private List<Group> groups;
+    private List<Group> groups = new ArrayList<>();
     private Teacher teacher;
     private int classroom;
     private Day day;
