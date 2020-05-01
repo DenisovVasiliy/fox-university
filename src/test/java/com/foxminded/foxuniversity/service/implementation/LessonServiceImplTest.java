@@ -72,14 +72,14 @@ class LessonServiceImplTest {
         when(lessonDao.getAll()).thenReturn(lessons);
         when(groupService.getByLesson(lesson)).thenReturn(groups);
         when(courseService.getById(1)).thenReturn(filledCourse);
-        when(teacherService.getById(1)).thenReturn(filledTeacher);
+        when(teacherService.getByLesson(lesson)).thenReturn(filledTeacher);
 
         List<Lesson> actual = lessonService.getAll();
 
         verify(lessonDao).getAll();
         verify(groupService).getByLesson(lesson);
         verify(courseService).getById(1);
-        verify(teacherService).getById(1);
+        verify(teacherService).getByLesson(lesson);
         assertEquals(lessons, actual);
         assertSame(filledCourse, actual.get(0).getCourse());
         assertSame(filledTeacher, actual.get(0).getTeacher());
@@ -91,14 +91,14 @@ class LessonServiceImplTest {
         when(lessonDao.getById(1)).thenReturn(lesson);
         when(groupService.getByLesson(lesson)).thenReturn(groups);
         when(courseService.getById(1)).thenReturn(filledCourse);
-        when(teacherService.getById(1)).thenReturn(filledTeacher);
+        when(teacherService.getByLesson(lesson)).thenReturn(filledTeacher);
 
         Lesson actual = lessonService.getById(1);
 
         verify(lessonDao).getById(1);
         verify(groupService).getByLesson(lesson);
         verify(courseService).getById(1);
-        verify(teacherService).getById(1);
+        verify(teacherService).getByLesson(lesson);
         assertEquals(lesson, actual);
         assertSame(filledCourse, actual.getCourse());
         assertSame(filledTeacher, actual.getTeacher());
@@ -109,14 +109,14 @@ class LessonServiceImplTest {
     public void shouldCallGetLessonsByCourseAndReturnResult() {
         when(lessonDao.getByCourse(filledCourse)).thenReturn(lessons);
         when(groupService.getByLesson(lesson)).thenReturn(groups);
-        when(teacherService.getById(1)).thenReturn(filledTeacher);
+        when(teacherService.getByLesson(lesson)).thenReturn(filledTeacher);
 
         List<Lesson> actual = lessonService.getByCourse(filledCourse);
 
         verify(lessonDao).getByCourse(course);
         verify(groupService).getByLesson(lesson);
         verifyZeroInteractions(courseService);
-        verify(teacherService).getById(1);
+        verify(teacherService).getByLesson(lesson);
         assertEquals(lessons, actual);
         assertSame(filledCourse, actual.get(0).getCourse());
         assertSame(filledTeacher, actual.get(0).getTeacher());
@@ -128,14 +128,14 @@ class LessonServiceImplTest {
         when(lessonDao.getByStudent(student)).thenReturn(lessons);
         when(groupService.getByLesson(lesson)).thenReturn(groups);
         when(courseService.getById(1)).thenReturn(filledCourse);
-        when(teacherService.getById(1)).thenReturn(filledTeacher);
+        when(teacherService.getByLesson(lesson)).thenReturn(filledTeacher);
 
         List<Lesson> actual = lessonService.getByStudent(student);
 
         verify(lessonDao).getByStudent(student);
         verify(groupService).getByLesson(lesson);
         verify(courseService).getById(1);
-        verify(teacherService).getById(1);
+        verify(teacherService).getByLesson(lesson);
         assertEquals(lessons, actual);
         assertSame(filledCourse, actual.get(0).getCourse());
         assertSame(filledTeacher, actual.get(0).getTeacher());

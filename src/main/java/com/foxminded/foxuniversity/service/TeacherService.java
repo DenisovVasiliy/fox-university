@@ -12,4 +12,6 @@ public interface TeacherService extends GenericService<Teacher> {
     List<Teacher> getByCourse(Course course);
 
     List<Lesson> getTimetable(Teacher teacher);
+
+    Teacher getByLesson(Lesson lesson);
 }

@@ -124,7 +124,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private void setTeacher(Lesson lesson) {
-        lesson.setTeacher(teacherService.getById(lesson.getTeacher().getId()));
+        lesson.setTeacher(teacherService.getByLesson(lesson));
     }
 
     private void setCourse(Lesson lesson, Course course) {

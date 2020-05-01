@@ -61,6 +61,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public Teacher getByLesson(Lesson lesson) {
+        Teacher teacher = teacherDao.getById(lesson.getTeacher().getId());
+        setCourse(teacher, lesson.getCourse());
+        return teacher;
+    }
+
+    @Override
     public List<Lesson> getTimetable(Teacher teacher) {
         return lessonService.getByTeacher(teacher);
     }

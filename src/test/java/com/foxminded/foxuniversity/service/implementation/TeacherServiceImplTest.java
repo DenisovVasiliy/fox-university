@@ -99,6 +99,21 @@ class TeacherServiceImplTest {
     }
 
     @Test
+    public void shouldCallGetTeacherByLessonAndReturnResult() {
+        teacher.setCourse(course);
+        when(lesson.getTeacher()).thenReturn(teacher);
+        when(lesson.getCourse()).thenReturn(filledCourse);
+        when(teacherDao.getById(1)).thenReturn(teacher);
+
+        Teacher actual = teacherService.getByLesson(lesson);
+
+        verify(teacherDao).getById(1);
+        verifyZeroInteractions(courseService);
+        assertEquals(teacher, actual);
+        assertSame(filledCourse, actual.getCourse());
+    }
+
+    @Test
     public void shouldCallSaveTeacher() {
         teacherService.save(teacher);
         verify(teacherDao).save(teacher);
