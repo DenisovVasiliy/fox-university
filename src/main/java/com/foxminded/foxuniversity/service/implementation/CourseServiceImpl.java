@@ -56,29 +56,30 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        logger.info("CourseService calls courseDao.save(course{id = " + course.getId() + "}).");
+        logger.info("CourseService calls courseDao.save(Course{id = " + course.getId() + "}).");
         courseDao.save(course);
     }
 
     @Override
     public boolean update(Course course) {
-        logger.info("CourseService calls courseDao.update(course{id = " + course.getId() + "}).");
+        logger.info("CourseService calls courseDao.update(Course{id = " + course.getId() + "}).");
         return courseDao.update(course);
     }
 
     @Override
     public boolean delete(Course course) {
-        logger.info("Checking for teachers in the course{id = " + course.getId() + "}).");
+        logger.info("Checking for teachers in the Course{id = " + course.getId() + "}).");
         if (teacherService.getByCourse(course).isEmpty()) {
-            logger.info("There are no teachers in the course{id = " + course.getId() + "}). Call courseDao.delete().");
+            logger.info("There are no teachers in the course. " +
+                    "Call courseDao.delete(Course{id = " + course.getId() + "}).");
             return courseDao.delete(course);
         }
-        logger.info("There are some teachers in the course{id = " + course.getId() + "}). Deletion canceled.");
+        logger.info("There are some teachers in the Course{id = " + course.getId() + "}). Deletion canceled.");
         return false;
     }
 
     private void fillLessons(Course course) {
-        logger.info("Set lessons to course(id = " + course.getId() + "): call lessonService.getByCourse().");
+        logger.info("Set lessons to course: call lessonService.getByCourse(Course{id = " + course.getId() + "}).");
         course.setLessons(lessonService.getByCourse(course));
     }
 
@@ -89,7 +90,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void fillGroups(Course course) {
-        logger.info("Set lessons to course(id = " + course.getId() + "): call groupService.getByCourse().");
+        logger.info("Set lessons to course: call groupService.getByCourse(Course{id = " + course.getId() + "}).");
         course.setGroups(groupService.getByCourse(course));
     }
 
