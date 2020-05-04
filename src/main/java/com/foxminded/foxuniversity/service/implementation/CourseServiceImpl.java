@@ -7,6 +7,8 @@ import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.TeacherService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +25,11 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private GroupService groupService;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public List<Course> getAll() {
+        logger.info("CourseService calls courseDao.getAll().");
         List<Course> courses = courseDao.getAll();
         fillLessons(courses);
         fillGroups(courses);
@@ -33,6 +38,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getById(int id) {
+        logger.info("CourseService calls courseDao.getById(" + id + ").");
         Course course = courseDao.getById(id);
         fillLessons(course);
         fillGroups(course);
@@ -41,6 +47,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getByGroup(Group group) {
+        logger.info("CourseService calls courseDao.getByGroup(" + group + ").");
         List<Course> courses = courseDao.getByGroup(group);
         fillLessons(courses);
         fillGroups(courses);
@@ -49,23 +56,29 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
+        logger.info("CourseService calls courseDao.save(course{id = " + course.getId() + "}).");
         courseDao.save(course);
     }
 
     @Override
     public boolean update(Course course) {
+        logger.info("CourseService calls courseDao.update(course{id = " + course.getId() + "}).");
         return courseDao.update(course);
     }
 
     @Override
     public boolean delete(Course course) {
+        logger.info("Checking for teachers in the course{id = " + course.getId() + "}).");
         if (teacherService.getByCourse(course).isEmpty()) {
+            logger.info("There are no teachers in the course{id = " + course.getId() + "}). Call courseDao.delete().");
             return courseDao.delete(course);
         }
+        logger.info("There are some teachers in the course{id = " + course.getId() + "}). Deletion canceled.");
         return false;
     }
 
     private void fillLessons(Course course) {
+        logger.info("Set lessons to course(id = " + course.getId() + "): call lessonService.getByCourse().");
         course.setLessons(lessonService.getByCourse(course));
     }
 
@@ -76,6 +89,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void fillGroups(Course course) {
+        logger.info("Set lessons to course(id = " + course.getId() + "): call groupService.getByCourse().");
         course.setGroups(groupService.getByCourse(course));
     }
 
