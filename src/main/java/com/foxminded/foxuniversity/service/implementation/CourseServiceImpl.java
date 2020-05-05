@@ -74,7 +74,7 @@ public class CourseServiceImpl implements CourseService {
                     "Call courseDao.delete(Course{id = " + course.getId() + "}).");
             return courseDao.delete(course);
         }
-        logger.info("There are some teachers in the Course{id = " + course.getId() + "}). Deletion canceled.");
+        logger.warn("There are some teachers in the Course{id = " + course.getId() + "}). Deletion canceled.");
         return false;
     }
 
