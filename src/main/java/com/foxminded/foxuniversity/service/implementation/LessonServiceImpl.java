@@ -32,9 +32,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getAll() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.getAll().");
-        }
+        logger.debug("LessonService calls lessonDao.getAll().");
         List<Lesson> lessons = fillGroups(lessonDao.getAll());
         setCourse(lessons);
         setTeacher(lessons);
@@ -43,9 +41,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public Lesson getById(int id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.getById(" + id + ").");
-        }
+        logger.debug("LessonService calls lessonDao.getById(" + id + ").");
         Lesson lesson = fillGroups(lessonDao.getById(id));
         setCourse(lesson);
         setTeacher(lesson);
@@ -54,9 +50,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getByCourse(Course course) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.getByCourse(Course{id = " + course.getId() + "}).");
-        }
+        logger.debug("LessonService calls lessonDao.getByCourse(Course{id = " + course.getId() + "}).");
         List<Lesson> lessons = fillGroups(lessonDao.getByCourse(course));
         setCourse(lessons, course);
         setTeacher(lessons);
@@ -65,9 +59,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getByStudent(Student student) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.getByStudent(Student{id = " + student.getId() + "}).");
-        }
+        logger.debug("LessonService calls lessonDao.getByStudent(Student{id = " + student.getId() + "}).");
         List<Lesson> lessons = fillGroups(lessonDao.getByStudent(student));
         setCourse(lessons);
         setTeacher(lessons);
@@ -76,9 +68,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getByTeacher(Teacher teacher) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.getByTeacher(Teacher{id = " + teacher.getId() + "}).");
-        }
+        logger.debug("LessonService calls lessonDao.getByTeacher(Teacher{id = " + teacher.getId() + "}).");
         List<Lesson> lessons = fillGroups(lessonDao.getByTeacher(teacher));
         setTeacher(lessons, teacher);
         setCourse(lessons, teacher.getCourse());
@@ -87,38 +77,28 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public void save(Lesson lesson) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.save(Lesson{id = " + lesson.getId() + "}).");
-        }
+        logger.debug("LessonService calls lessonDao.save(Lesson{id = " + lesson.getId() + "}).");
         lessonDao.save(lesson);
     }
 
     @Override
     public boolean update(Lesson lesson) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.update(Lesson{id = " + lesson.getId() + "}).");
-        }
+        logger.debug("LessonService calls lessonDao.update(Lesson{id = " + lesson.getId() + "}).");
         return lessonDao.update(lesson);
     }
 
     @Override
     public boolean delete(Lesson lesson) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.delete(Lesson{id = " + lesson.getId() + "}).");
-        }
+        logger.debug("LessonService calls lessonDao.delete(Lesson{id = " + lesson.getId() + "}).");
         return lessonDao.delete(lesson);
     }
 
     @Override
     public boolean assignGroups(Lesson lesson, List<Group> groups) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.assignGroups(Lesson{id = " + lesson.getId() + "}, " +
-                    "List<Group>[" + groups.size() + "]).");
-        }
+        logger.debug("LessonService calls lessonDao.assignGroups(Lesson{id = " + lesson.getId() + "}, " +
+                "List<Group>[" + groups.size() + "]).");
         if (lessonDao.assignGroups(lesson, groups)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Assignment was successful. Set groups to the lesson.");
-            }
+            logger.debug("Assignment was successful. Set groups to the lesson.");
             lesson.setGroups(groups);
             return true;
         }
@@ -128,14 +108,10 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public boolean deleteGroup(Lesson lesson, Group group) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("LessonService calls lessonDao.assignGroups(" +
-                    "Lesson{id = " + lesson.getId() + "}, " + group + ").");
-        }
+        logger.debug("LessonService calls lessonDao.assignGroups(" +
+                "Lesson{id = " + lesson.getId() + "}, " + group + ").");
         if (lessonDao.deleteGroup(lesson, group)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Deletion was successful. Remove group from the lesson.");
-            }
+            logger.debug("Deletion was successful. Remove group from the lesson.");
             lesson.getGroups().remove(group);
             return true;
         }
@@ -144,10 +120,8 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private Lesson fillGroups(Lesson lesson) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Set groups to the lesson: call groupService.getByLesson(" +
-                    "Lesson{id = " + lesson.getId() + "})");
-        }
+        logger.debug("Set groups to the lesson: call groupService.getByLesson(" +
+                "Lesson{id = " + lesson.getId() + "})");
         lesson.setGroups(groupService.getByLesson(lesson));
         return lesson;
     }
@@ -161,10 +135,8 @@ public class LessonServiceImpl implements LessonService {
 
     private void setTeacher(List<Lesson> lessons, Teacher teacher) {
         for (Lesson lesson : lessons) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Set inputted Teacher{id = " + teacher.getId() + "} " +
-                        "to Lesson{id = " + lesson.getId() + "}.");
-            }
+            logger.debug("Set inputted Teacher{id = " + teacher.getId() + "} " +
+                    "to Lesson{id = " + lesson.getId() + "}.");
             lesson.setTeacher(teacher);
         }
     }
@@ -176,23 +148,17 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private void setTeacher(Lesson lesson) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Call teacherService.getByLesson(Lesson{id = " + lesson.getId() + "}) " +
-                    "and set result to the lesson.");
-        }
+        logger.debug("Call teacherService.getByLesson(Lesson{id = " + lesson.getId() + "}) " +
+                "and set result to the lesson.");
         lesson.setTeacher(teacherService.getByLesson(lesson));
     }
 
     private void setCourse(Lesson lesson, Course course) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Set inputted Course{id = " + course.getId() + "} " +
-                    "to Lesson{id = " + lesson.getId() + "}.");
-        }
+        logger.debug("Set inputted Course{id = " + course.getId() + "} " +
+                "to Lesson{id = " + lesson.getId() + "}.");
         lesson.setCourse(course);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Set inputted Course{id = " + course.getId() + "} " +
-                    "to lesson's Teacher{id = " + lesson.getTeacher().getId() + "}.");
-        }
+        logger.debug("Set inputted Course{id = " + course.getId() + "} " +
+                "to lesson's Teacher{id = " + lesson.getTeacher().getId() + "}.");
         lesson.getTeacher().setCourse(course);
     }
 
@@ -203,27 +169,19 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private void setCourse(Lesson lesson) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Call courseService.getById(" + lesson.getCourse().getId() + ").");
-        }
+        logger.debug("Call courseService.getById(" + lesson.getCourse().getId() + ").");
         Course course = courseService.getById(lesson.getCourse().getId());
-        if (logger.isDebugEnabled()) {
-            logger.debug("Set returned Course{id = " + course.getId() + "} " +
-                    "to Lesson{id = " + lesson.getId() + "}.");
-        }
+        logger.debug("Set returned Course{id = " + course.getId() + "} " +
+                "to Lesson{id = " + lesson.getId() + "}.");
         lesson.setCourse(course);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Set returned Course{id = " + course.getId() + "} " +
-                    "to lesson's Teacher{id = " + lesson.getTeacher().getId() + "}.");
-        }
+        logger.debug("Set returned Course{id = " + course.getId() + "} " +
+                "to lesson's Teacher{id = " + lesson.getTeacher().getId() + "}.");
         lesson.getTeacher().setCourse(course);
     }
 
     private void setCourse(List<Lesson> lessons) {
         for (Lesson lesson : lessons) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Call courseService.getById(" + lesson.getCourse().getId() + ").");
-            }
+            logger.debug("Call courseService.getById(" + lesson.getCourse().getId() + ").");
             Course course = courseService.getById(lesson.getCourse().getId());
             setCourse(lesson, course);
         }

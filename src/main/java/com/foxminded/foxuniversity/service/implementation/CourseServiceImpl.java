@@ -29,9 +29,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getAll() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("CourseService calls courseDao.getAll().");
-        }
+        logger.debug("CourseService calls courseDao.getAll().");
         List<Course> courses = courseDao.getAll();
         fillLessons(courses);
         fillGroups(courses);
@@ -40,9 +38,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getById(int id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("CourseService calls courseDao.getById(" + id + ").");
-        }
+        logger.debug("CourseService calls courseDao.getById(" + id + ").");
         Course course = courseDao.getById(id);
         fillLessons(course);
         fillGroups(course);
@@ -51,9 +47,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getByGroup(Group group) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("CourseService calls courseDao.getByGroup(" + group + ").");
-        }
+        logger.debug("CourseService calls courseDao.getByGroup(" + group + ").");
         List<Course> courses = courseDao.getByGroup(group);
         fillLessons(courses);
         fillGroups(courses);
@@ -62,30 +56,22 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("CourseService calls courseDao.save(Course{id = " + course.getId() + "}).");
-        }
+        logger.debug("CourseService calls courseDao.save(Course{id = " + course.getId() + "}).");
         courseDao.save(course);
     }
 
     @Override
     public boolean update(Course course) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("CourseService calls courseDao.update(Course{id = " + course.getId() + "}).");
-        }
+        logger.debug("CourseService calls courseDao.update(Course{id = " + course.getId() + "}).");
         return courseDao.update(course);
     }
 
     @Override
     public boolean delete(Course course) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Checking for teachers in the Course{id = " + course.getId() + "}).");
-        }
+        logger.debug("Checking for teachers in the Course{id = " + course.getId() + "}).");
         if (teacherService.getByCourse(course).isEmpty()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("There are no teachers in the course. " +
-                        "Call courseDao.delete(Course{id = " + course.getId() + "}).");
-            }
+            logger.debug("There are no teachers in the course. " +
+                    "Call courseDao.delete(Course{id = " + course.getId() + "}).");
             return courseDao.delete(course);
         }
         logger.warn("There are some teachers in the Course{id = " + course.getId() + "}). Deletion canceled.");
@@ -93,9 +79,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void fillLessons(Course course) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Set lessons to course: call lessonService.getByCourse(Course{id = " + course.getId() + "}).");
-        }
+        logger.debug("Set lessons to course: call lessonService.getByCourse(Course{id = " + course.getId() + "}).");
         course.setLessons(lessonService.getByCourse(course));
     }
 
@@ -106,9 +90,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void fillGroups(Course course) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Set lessons to course: call groupService.getByCourse(Course{id = " + course.getId() + "}).");
-        }
+        logger.debug("Set lessons to course: call groupService.getByCourse(Course{id = " + course.getId() + "}).");
         course.setGroups(groupService.getByCourse(course));
     }
 
