@@ -1,6 +1,7 @@
 <configuration debug="true">
 
     <property name = "LOGS" value = "./logs" />
+    <property name = "ARCHIVE" value = "${LOGS}/archived" />
 
     <appender name="Console"
               class="ch.qos.logback.core.ConsoleAppender">
@@ -20,7 +21,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOGS}/archived/spring-logger-%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${ARCHIVE}/spring/spring-logger-%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <!-- each file should be at most 1MB, keep 7 days worth of history, but at most 10MB -->
             <maxFileSize>1MB</maxFileSize>
@@ -38,7 +39,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOGS}/archived/service-logger-%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${ARCHIVE}/service/service-logger-%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <!-- each file should be at most 1MB, keep 7 days worth of history, but at most 10MB -->
             <maxFileSize>1MB</maxFileSize>
