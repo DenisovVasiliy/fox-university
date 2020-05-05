@@ -24,7 +24,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> getAll() {
-        logger.debug("GroupService calls groupDao.getAll().");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.getAll().");
+        }
         List<Group> groups = groupDao.getAll();
         fillStudents(groups);
         return groups;
@@ -32,7 +34,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group getById(int id) {
-        logger.debug("GroupService calls groupDao.getById(" + id + ").");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.getById(" + id + ").");
+        }
         Group group = groupDao.getById(id);
         fillStudents(group);
         return group;
@@ -40,7 +44,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> getByLesson(Lesson lesson) {
-        logger.debug("GroupService calls groupDao.getByLesson(Lesson{id = " + lesson.getId() + "}).");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.getByLesson(Lesson{id = " + lesson.getId() + "}).");
+        }
         List<Group> groups = groupDao.getByLesson(lesson);
         fillStudents(groups);
         return groups;
@@ -48,7 +54,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> getByCourse(Course course) {
-        logger.debug("GroupService calls groupDao.getByCourse(Course{id = " + course.getId() + "}).");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.getByCourse(Course{id = " + course.getId() + "}).");
+        }
         List<Group> groups = groupDao.getByCourse(course);
         fillStudents(groups);
         return groups;
@@ -56,42 +64,56 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void save(Group group) {
-        logger.debug("GroupService calls groupDao.save(" + group + ").");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.save(" + group + ").");
+        }
         groupDao.save(group);
     }
 
     @Override
     public boolean update(Group group) {
-        logger.debug("GroupService calls groupDao.update(" + group + ").");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.update(" + group + ").");
+        }
         return groupDao.update(group);
     }
 
     @Override
     public boolean delete(Group group) {
-        logger.debug("GroupService calls groupDao.delete(" + group + ").");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.delete(" + group + ").");
+        }
         return groupDao.delete(group);
     }
 
     @Override
     public boolean assignToCourses(Group group, List<Course> courses) {
-        logger.debug("GroupService calls groupDao.assignToCourses(" + group + ", List<Course>[" + courses.size() + "])");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GroupService calls groupDao.assignToCourses(" + group + ", List<Course>[" + courses.size() + "])");
+        }
         if (groupDao.assignToCourses(group, courses)) {
-            logger.debug("Assignment was successful. Set group to each course in the list.");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Assignment was successful. Set group to each course in the list.");
+            }
             for (Course course : courses) {
                 course.getGroups().add(group);
             }
             return true;
         }
-        logger.debug("Assignment was cancelled.");
+        logger.warn("Assignment was cancelled.");
         return false;
     }
 
     @Override
     public boolean deleteFromCourse(Group group, Course course) {
         if (course.getGroups().contains(group)) {
-            logger.debug("Call groupDao.deleteFromCourse(" + group + ", Course{id = " + course.getId() + "}).");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Call groupDao.deleteFromCourse(" + group + ", Course{id = " + course.getId() + "}).");
+            }
             if (groupDao.deleteFromCourse(group, course)) {
-                logger.debug("Deletion was successful. Remove group from course.");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Deletion was successful. Remove group from course.");
+                }
                 course.getGroups().remove(group);
                 return true;
             }
@@ -106,14 +128,20 @@ public class GroupServiceImpl implements GroupService {
     public boolean deleteFromCourse(Group group, List<Course> courses) {
         for (Course course : courses) {
             if (!course.getGroups().contains(group)) {
-                logger.warn("Deletion was cancelled: " + group +
-                        " isn't assigned to the Course{id = " + course.getId() + "}.");
+                if (logger.isDebugEnabled()) {
+                    logger.warn("Deletion was cancelled: " + group +
+                            " isn't assigned to the Course{id = " + course.getId() + "}.");
+                }
                 return false;
             }
         }
-        logger.debug("Call groupDao.deleteFromCourse(" + group + ", Courses[" + courses.size() + "]).");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Call groupDao.deleteFromCourse(" + group + ", Courses[" + courses.size() + "]).");
+        }
         if (groupDao.deleteFromCourse(group, courses)) {
-            logger.debug("Deletion was successful. Remove group from courses.");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Deletion was successful. Remove group from courses.");
+            }
             for (Course course : courses) {
                 course.getGroups().remove(group);
             }
@@ -124,7 +152,9 @@ public class GroupServiceImpl implements GroupService {
     }
 
     private void fillStudents(Group group) {
-        logger.debug("Set students to group: call studentService.getByGroup(" + group + ")");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Set students to group: call studentService.getByGroup(" + group + ")");
+        }
         group.setStudents(studentService.getByGroup(group));
     }
 
