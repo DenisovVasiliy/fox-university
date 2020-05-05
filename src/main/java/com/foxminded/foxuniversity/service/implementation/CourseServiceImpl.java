@@ -30,7 +30,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getAll() {
         if (logger.isDebugEnabled()) {
-            logger.info("CourseService calls courseDao.getAll().");
+            logger.debug("CourseService calls courseDao.getAll().");
         }
         List<Course> courses = courseDao.getAll();
         fillLessons(courses);
@@ -41,7 +41,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course getById(int id) {
         if (logger.isDebugEnabled()) {
-            logger.info("CourseService calls courseDao.getById(" + id + ").");
+            logger.debug("CourseService calls courseDao.getById(" + id + ").");
         }
         Course course = courseDao.getById(id);
         fillLessons(course);
