@@ -122,7 +122,7 @@ public class LessonServiceImpl implements LessonService {
             lesson.setGroups(groups);
             return true;
         }
-        logger.warn("Assignment was cancelled.");
+        logger.warn("Assignment groups to lesson was cancelled. (Lesson{id = " + lesson.getId() + "}, " + groups);
         return false;
     }
 
@@ -139,7 +139,7 @@ public class LessonServiceImpl implements LessonService {
             lesson.getGroups().remove(group);
             return true;
         }
-        logger.warn("Deletion was cancelled in DAO-layer.");
+        logger.warn("Deletion " + group + " from Lesson{id = " + lesson.getId() + " was cancelled in DAO-layer.");
         return false;
     }
 

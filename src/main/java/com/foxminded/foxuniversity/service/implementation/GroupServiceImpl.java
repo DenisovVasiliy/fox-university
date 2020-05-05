@@ -100,7 +100,7 @@ public class GroupServiceImpl implements GroupService {
             }
             return true;
         }
-        logger.warn("Assignment was cancelled.");
+        logger.warn("Assignment " + group + " to courses was cancelled.");
         return false;
     }
 
@@ -117,7 +117,7 @@ public class GroupServiceImpl implements GroupService {
                 course.getGroups().remove(group);
                 return true;
             }
-            logger.warn("Deletion was cancelled in DAO-layer.");
+            logger.warn("Deletion " + group + " from Course{id = " + course.getId() + " was cancelled in DAO-layer.");
             return false;
         }
         logger.warn("Deletion was cancelled: " + group + " isn't assigned to the Course{id = " + course.getId() + "}.");
@@ -147,7 +147,7 @@ public class GroupServiceImpl implements GroupService {
             }
             return true;
         }
-        logger.warn("Deletion was cancelled in DAO-layer.");
+        logger.warn("Deletion " + group + " from courses was cancelled in DAO-layer.");
         return false;
     }
 
