@@ -47,7 +47,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getByGroup(Group group) {
-        logger.info("CourseService calls courseDao.getByGroup(" + group + ").");
+        logger.debug("CourseService calls courseDao.getByGroup(" + group + ").");
         List<Course> courses = courseDao.getByGroup(group);
         fillLessons(courses);
         fillGroups(courses);
@@ -56,21 +56,21 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        logger.info("CourseService calls courseDao.save(Course{id = " + course.getId() + "}).");
+        logger.debug("CourseService calls courseDao.save(Course{id = " + course.getId() + "}).");
         courseDao.save(course);
     }
 
     @Override
     public boolean update(Course course) {
-        logger.info("CourseService calls courseDao.update(Course{id = " + course.getId() + "}).");
+        logger.debug("CourseService calls courseDao.update(Course{id = " + course.getId() + "}).");
         return courseDao.update(course);
     }
 
     @Override
     public boolean delete(Course course) {
-        logger.info("Checking for teachers in the Course{id = " + course.getId() + "}).");
+        logger.debug("Checking for teachers in the Course{id = " + course.getId() + "}).");
         if (teacherService.getByCourse(course).isEmpty()) {
-            logger.info("There are no teachers in the course. " +
+            logger.debug("There are no teachers in the course. " +
                     "Call courseDao.delete(Course{id = " + course.getId() + "}).");
             return courseDao.delete(course);
         }
@@ -79,7 +79,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void fillLessons(Course course) {
-        logger.info("Set lessons to course: call lessonService.getByCourse(Course{id = " + course.getId() + "}).");
+        logger.debug("Set lessons to course: call lessonService.getByCourse(Course{id = " + course.getId() + "}).");
         course.setLessons(lessonService.getByCourse(course));
     }
 
@@ -90,7 +90,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void fillGroups(Course course) {
-        logger.info("Set lessons to course: call groupService.getByCourse(Course{id = " + course.getId() + "}).");
+        logger.debug("Set lessons to course: call groupService.getByCourse(Course{id = " + course.getId() + "}).");
         course.setGroups(groupService.getByCourse(course));
     }
 
