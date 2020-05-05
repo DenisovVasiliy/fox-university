@@ -9,6 +9,7 @@
         <spring.framework>5.2.4.RELEASE</spring.framework>
         <postgres.version>42.2.9</postgres.version>
         <h2.version>1.4.200</h2.version>
+        <mockito.version>2.28.2</mockito.version>
     </properties>
 
     <groupId>com.foxminded</groupId>
@@ -39,13 +40,13 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>2.28.2</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.28.2</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -74,12 +75,25 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.framework}</version>
         </dependency>
-
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.4.5</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
     </dependencies>
 </project>

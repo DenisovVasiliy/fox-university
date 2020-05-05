@@ -10,6 +10,8 @@ import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.TeacherService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +28,11 @@ public class LessonServiceImpl implements LessonService {
     @Autowired
     private TeacherService teacherService;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public List<Lesson> getAll() {
+        logger.debug("LessonService calls lessonDao.getAll().");
         List<Lesson> lessons = fillGroups(lessonDao.getAll());
         setCourse(lessons);
         setTeacher(lessons);
@@ -36,6 +41,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public Lesson getById(int id) {
+        logger.debug("LessonService calls lessonDao.getById(" + id + ").");
         Lesson lesson = fillGroups(lessonDao.getById(id));
         setCourse(lesson);
         setTeacher(lesson);
@@ -44,6 +50,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getByCourse(Course course) {
+        logger.debug("LessonService calls lessonDao.getByCourse(Course{id = " + course.getId() + "}).");
         List<Lesson> lessons = fillGroups(lessonDao.getByCourse(course));
         setCourse(lessons, course);
         setTeacher(lessons);
@@ -52,6 +59,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getByStudent(Student student) {
+        logger.debug("LessonService calls lessonDao.getByStudent(Student{id = " + student.getId() + "}).");
         List<Lesson> lessons = fillGroups(lessonDao.getByStudent(student));
         setCourse(lessons);
         setTeacher(lessons);
@@ -60,6 +68,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> getByTeacher(Teacher teacher) {
+        logger.debug("LessonService calls lessonDao.getByTeacher(Teacher{id = " + teacher.getId() + "}).");
         List<Lesson> lessons = fillGroups(lessonDao.getByTeacher(teacher));
         setTeacher(lessons, teacher);
         setCourse(lessons, teacher.getCourse());
@@ -68,38 +77,51 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public void save(Lesson lesson) {
+        logger.debug("LessonService calls lessonDao.save(Lesson{id = " + lesson.getId() + "}).");
         lessonDao.save(lesson);
     }
 
     @Override
     public boolean update(Lesson lesson) {
+        logger.debug("LessonService calls lessonDao.update(Lesson{id = " + lesson.getId() + "}).");
         return lessonDao.update(lesson);
     }
 
     @Override
     public boolean delete(Lesson lesson) {
+        logger.debug("LessonService calls lessonDao.delete(Lesson{id = " + lesson.getId() + "}).");
         return lessonDao.delete(lesson);
     }
 
     @Override
     public boolean assignGroups(Lesson lesson, List<Group> groups) {
+        logger.debug("LessonService calls lessonDao.assignGroups(Lesson{id = " + lesson.getId() + "}, " +
+                "List<Group>[" + groups.size() + "]).");
         if (lessonDao.assignGroups(lesson, groups)) {
+            logger.debug("Assignment was successful. Set groups to the lesson.");
             lesson.setGroups(groups);
             return true;
         }
+        logger.warn("Assignment groups to lesson was cancelled. (Lesson{id = " + lesson.getId() + "}, " + groups);
         return false;
     }
 
     @Override
     public boolean deleteGroup(Lesson lesson, Group group) {
+        logger.debug("LessonService calls lessonDao.assignGroups(" +
+                "Lesson{id = " + lesson.getId() + "}, " + group + ").");
         if (lessonDao.deleteGroup(lesson, group)) {
+            logger.debug("Deletion was successful. Remove group from the lesson.");
             lesson.getGroups().remove(group);
             return true;
         }
+        logger.warn("Deletion " + group + " from Lesson{id = " + lesson.getId() + " was cancelled in DAO-layer.");
         return false;
     }
 
     private Lesson fillGroups(Lesson lesson) {
+        logger.debug("Set groups to the lesson: call groupService.getByLesson(" +
+                "Lesson{id = " + lesson.getId() + "})");
         lesson.setGroups(groupService.getByLesson(lesson));
         return lesson;
     }
@@ -113,6 +135,8 @@ public class LessonServiceImpl implements LessonService {
 
     private void setTeacher(List<Lesson> lessons, Teacher teacher) {
         for (Lesson lesson : lessons) {
+            logger.debug("Set inputted Teacher{id = " + teacher.getId() + "} " +
+                    "to Lesson{id = " + lesson.getId() + "}.");
             lesson.setTeacher(teacher);
         }
     }
@@ -124,11 +148,17 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private void setTeacher(Lesson lesson) {
-        lesson.setTeacher(teacherService.getById(lesson.getTeacher().getId()));
+        logger.debug("Call teacherService.getByLesson(Lesson{id = " + lesson.getId() + "}) " +
+                "and set result to the lesson.");
+        lesson.setTeacher(teacherService.getByLesson(lesson));
     }
 
     private void setCourse(Lesson lesson, Course course) {
+        logger.debug("Set inputted Course{id = " + course.getId() + "} " +
+                "to Lesson{id = " + lesson.getId() + "}.");
         lesson.setCourse(course);
+        logger.debug("Set inputted Course{id = " + course.getId() + "} " +
+                "to lesson's Teacher{id = " + lesson.getTeacher().getId() + "}.");
         lesson.getTeacher().setCourse(course);
     }
 
@@ -139,13 +169,19 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private void setCourse(Lesson lesson) {
+        logger.debug("Call courseService.getById(" + lesson.getCourse().getId() + ").");
         Course course = courseService.getById(lesson.getCourse().getId());
+        logger.debug("Set returned Course{id = " + course.getId() + "} " +
+                "to Lesson{id = " + lesson.getId() + "}.");
         lesson.setCourse(course);
+        logger.debug("Set returned Course{id = " + course.getId() + "} " +
+                "to lesson's Teacher{id = " + lesson.getTeacher().getId() + "}.");
         lesson.getTeacher().setCourse(course);
     }
 
     private void setCourse(List<Lesson> lessons) {
         for (Lesson lesson : lessons) {
+            logger.debug("Call courseService.getById(" + lesson.getCourse().getId() + ").");
             Course course = courseService.getById(lesson.getCourse().getId());
             setCourse(lesson, course);
         }

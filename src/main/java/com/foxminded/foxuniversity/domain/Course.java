@@ -1,13 +1,14 @@
 package com.foxminded.foxuniversity.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
     private int id;
     private String name;
     private String description;
-    private List<Lesson> lessons;
-    private List<Group> groups;
+    private List<Lesson> lessons = new ArrayList<>();
+    private List<Group> groups = new ArrayList<>();
 
     public Course(int id, String name, String description) {
         this.id = id;
