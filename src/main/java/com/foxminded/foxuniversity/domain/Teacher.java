@@ -17,6 +17,10 @@ public class Teacher {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -29,6 +33,18 @@ public class Teacher {
         return course;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,8 +54,7 @@ public class Teacher {
 
         if (id != teacher.id) return false;
         if (!firstName.equals(teacher.firstName)) return false;
-        if (!lastName.equals(teacher.lastName)) return false;
-        return course.equals(teacher.course);
+        return lastName.equals(teacher.lastName);
     }
 
     @Override

@@ -1,12 +1,14 @@
 package com.foxminded.foxuniversity.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
     private int id;
     private String name;
     private String description;
-    private List<Lesson> lessons;
+    private List<Lesson> lessons = new ArrayList<>();
+    private List<Group> groups = new ArrayList<>();
 
     public Course(int id, String name, String description) {
         this.id = id;
@@ -21,6 +23,14 @@ public class Course {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getDescription() {
@@ -41,6 +51,14 @@ public class Course {
 
     public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     public  void addLessons(List<Lesson> lessons) {
@@ -73,11 +91,10 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course{" +
+        return "\nCourse{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", lessons=" + lessons +
                 '}';
     }
 }

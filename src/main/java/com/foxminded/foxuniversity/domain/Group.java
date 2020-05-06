@@ -1,11 +1,12 @@
 package com.foxminded.foxuniversity.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
     private int id;
     private String name;
-    private List<Course> courses;
+    private List<Student> students = new ArrayList<>();
 
     public Group (String name) {
         this.name = name;
@@ -28,12 +29,16 @@ public class Group {
         return name;
     }
 
-    public List<Course> getCourses() {
-        return courses;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     @Override
