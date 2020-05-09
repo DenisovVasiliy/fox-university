@@ -1,10 +1,11 @@
 package com.foxminded.foxuniversity.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -12,7 +13,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan("com.foxminded.foxuniversity")
+@ComponentScan(basePackages = "com.foxminded.foxuniversity",
+        excludeFilters = @ComponentScan.Filter(type= FilterType.REGEX,
+                pattern="com\\.foxminded\\.foxuniversity\\.controllers\\..*"))
 @PropertySource("classpath:database.properties")
 public class AppConfig {
 
