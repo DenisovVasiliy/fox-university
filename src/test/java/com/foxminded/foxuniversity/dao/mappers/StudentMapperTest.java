@@ -1,17 +1,17 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.AppConfig;
+import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,22 +20,18 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoTestConfig.class})
 class StudentMapperTest {
     @Mock
-    private static ResultSet resultSet;
+    private ResultSet resultSet;
     @Mock
-    private static GroupDao groupDao;
+    private GroupDao groupDao;
     @InjectMocks
-    private static StudentMapper studentMapper;
-    private static ApplicationContext context;
-    private static Group group = new Group(1, "C-Name");
-    private static Student expectedStudent = new Student(1, "Name", "LastName");
-
-    @BeforeAll
-    public static void setUp() {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-        studentMapper = context.getBean(StudentMapper.class);
-    }
+    @Autowired
+    private StudentMapper studentMapper;
+    private Group group = new Group(1, "C-Name");
+    private Student expectedStudent = new Student(1, "Name", "LastName");
 
     @Test
     public void shouldReturnStudentWithCorrectSettings() throws SQLException {

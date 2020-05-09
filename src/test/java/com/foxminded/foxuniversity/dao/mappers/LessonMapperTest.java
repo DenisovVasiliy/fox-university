@@ -1,7 +1,7 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.CourseDao;
+import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.dao.TeacherDao;
 import com.foxminded.foxuniversity.domain.Group;
@@ -16,8 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,18 +30,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static java.util.Collections.singletonList;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoTestConfig.class})
 class LessonMapperTest {
     @Mock
-    private static ResultSet resultSet;
+    private ResultSet resultSet;
     @Mock
-    private static CourseDao courseDAO;
+    private CourseDao courseDAO;
     @Mock
-    private static GroupDao groupDao;
+    private GroupDao groupDao;
     @Mock
-    private static TeacherDao teacherDao;
+    private TeacherDao teacherDao;
     @InjectMocks
-    private static LessonMapper lessonMapper;
-    private static ApplicationContext context;
+    @Autowired
+    private LessonMapper lessonMapper;
     private static Group group = new Group(4, "C-Name");
     private static List<Group> groups = singletonList(group);
     private static Course course = new Course(2, "Name", "Desc.");
@@ -50,8 +53,6 @@ class LessonMapperTest {
 
     @BeforeAll
     public static void setUp() {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-        lessonMapper = context.getBean(LessonMapper.class);
         expectedLesson.setGroups(groups);
     }
 
