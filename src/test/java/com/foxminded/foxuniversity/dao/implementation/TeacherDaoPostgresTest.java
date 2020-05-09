@@ -1,7 +1,6 @@
 package com.foxminded.foxuniversity.dao.implementation;
 
-
-import com.foxminded.foxuniversity.AppConfig;
+import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.TeacherDao;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Teacher;
@@ -10,8 +9,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
@@ -24,10 +26,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoTestConfig.class})
 class TeacherDaoPostgresTest {
-    private static ApplicationContext context;
-    private static TeacherDao teacherDao;
-    private static ScriptRunner runner;
+    @Autowired
+    private ApplicationContext context;
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private TeacherDao teacherDao;
+    private ScriptRunner runner;
 
     private static List<Teacher> teachers = new ArrayList<>();
     private static List<Course> courses = new ArrayList<>();
@@ -35,13 +43,6 @@ class TeacherDaoPostgresTest {
 
     @BeforeAll
     public static void initDatabase() throws Exception {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-        teacherDao = context.getBean(TeacherDaoPostgres.class);
-        runner = new ScriptRunner(context.getBean(DataSource.class).getConnection());
-        Reader reader = new BufferedReader(
-                new FileReader(context.getClassLoader().getResource("createTables.sql").getFile()));
-        runner.runScript(reader);
-
         for (int i = 0; i < 3; i++) {
             courses.add(new Course(i + 1, "C-0" + (i + 1), "C-0" + (i + 1) + " course"));
             teachers.add(new Teacher(i + 1, "T-0" + (i + 1), "Teacher", courses.get(i)));
@@ -52,6 +53,7 @@ class TeacherDaoPostgresTest {
 
     @BeforeEach
     public void fillDatabase() throws Exception {
+        runner = new ScriptRunner(dataSource.getConnection());
         Reader reader = new BufferedReader(
                 new FileReader(context.getClassLoader().getResource("fillDatabase.sql").getFile()));
         runner.runScript(reader);
