@@ -1,7 +1,7 @@
 package com.foxminded.foxuniversity.dao.implementation;
 
-import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.CourseDao;
+import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
@@ -14,8 +14,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
@@ -29,10 +32,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoTestConfig.class})
 class GroupDaoPostgresTest {
-    private static ApplicationContext context;
-    private static GroupDao groupDao;
-    private static CourseDao courseDao;
+    @Autowired
+    private ApplicationContext context;
+    @Autowired
+    private CourseDao courseDao;
+    @Autowired
+    private GroupDao groupDao;
+    @Autowired
+    private DataSource dataSource;
     private static ScriptRunner runner;
     private static Lesson lesson;
 
@@ -40,17 +50,8 @@ class GroupDaoPostgresTest {
     private static List<Course> courses = new ArrayList<>();
     private Group group = new Group(0, "test");
 
-
     @BeforeAll
     public static void setUp() throws Exception {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-        groupDao = context.getBean(GroupDaoPostgres.class);
-        courseDao = context.getBean(CourseDaoPostgres.class);
-        runner = new ScriptRunner(context.getBean(DataSource.class).getConnection());
-        Reader reader = new BufferedReader(
-                new FileReader(context.getClassLoader().getResource("createTables.sql").getFile()));
-        runner.runScript(reader);
-
         for (int i = 0; i < 3; i++) {
             courses.add(new Course(i + 1, "C-0" + (i + 1), "C-0" + (i + 1) + " course"));
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
@@ -62,6 +63,7 @@ class GroupDaoPostgresTest {
 
     @BeforeEach
     public void fillDatabase() throws Exception {
+        runner = new ScriptRunner(dataSource.getConnection());
         Reader reader = new BufferedReader(
                 new FileReader(context.getClassLoader().getResource("fillDatabase.sql").getFile()));
         runner.runScript(reader);
