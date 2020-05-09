@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { DaoTestConfig.class })
+@ContextConfiguration(classes = {DaoTestConfig.class})
 class CourseDaoPostgresTest {
     @Autowired
     private ApplicationContext context;
