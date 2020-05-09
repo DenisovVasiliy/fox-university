@@ -1,4 +1,4 @@
-package com.foxminded.foxuniversity;
+package com.foxminded.foxuniversity.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan
+@ComponentScan("com.foxminded.foxuniversity")
 @PropertySource("classpath:database.properties")
 public class AppConfig {
 
