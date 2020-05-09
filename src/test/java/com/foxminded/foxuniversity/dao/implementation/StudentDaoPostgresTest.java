@@ -1,7 +1,6 @@
 package com.foxminded.foxuniversity.dao.implementation;
 
-
-import com.foxminded.foxuniversity.AppConfig;
+import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.StudentDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
@@ -10,8 +9,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
@@ -26,9 +28,15 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { DaoTestConfig.class })
 class StudentDaoPostgresTest {
-    private static ApplicationContext context;
-    private static StudentDao studentDao;
+    @Autowired
+    private ApplicationContext context;
+    @Autowired
+    private StudentDao studentDao;
+    @Autowired
+    private DataSource dataSource;
     private static ScriptRunner runner;
 
     private static Student student = new Student(0, "New", "Student");
@@ -37,13 +45,6 @@ class StudentDaoPostgresTest {
 
     @BeforeAll
     public static void initDatabase() throws Exception {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-        studentDao = context.getBean(StudentDaoPostgres.class);
-        runner = new ScriptRunner(context.getBean(DataSource.class).getConnection());
-        Reader reader = new BufferedReader(
-                new FileReader(context.getClassLoader().getResource("createTables.sql").getFile()));
-        runner.runScript(reader);
-
         for (int i = 0; i < 3; i++) {
             students.add(new Student(i + 1, "S-0" + (i + 1), "Student"));
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
@@ -57,6 +58,7 @@ class StudentDaoPostgresTest {
 
     @BeforeEach
     public void fillDatabase() throws Exception {
+        runner = new ScriptRunner(dataSource.getConnection());
         Reader reader = new BufferedReader(
                 new FileReader(context.getClassLoader().getResource("fillDatabase.sql").getFile()));
         runner.runScript(reader);
