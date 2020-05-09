@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -44,6 +45,7 @@ public class AppConfig {
     }
 
     @Bean()
+    @Scope("prototype")
     public SimpleJdbcInsert jdbcInsert() {
         return new SimpleJdbcInsert(dataSource());
     }

@@ -3,6 +3,7 @@ package com.foxminded.foxuniversity.dao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -28,6 +29,7 @@ public class DaoTestConfig {
     }
 
     @Bean()
+    @Scope("prototype")
     public SimpleJdbcInsert jdbcInsert() {
         return new SimpleJdbcInsert(dataSource());
     }
