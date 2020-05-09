@@ -1,12 +1,12 @@
 package com.foxminded.foxuniversity.service.implementation;
 
-import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.StudentDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Student;
 import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
+import com.foxminded.foxuniversity.service.ServiceTestConfig;
 import com.foxminded.foxuniversity.service.StudentService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +29,20 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ServiceTestConfig.class})
 class StudentServiceImplTest {
     @Mock
     private Lesson lesson;
     @Mock
-    private static StudentDao studentDao;
+    private StudentDao studentDao;
     @Mock
-    private static LessonService lessonService;
+    private LessonService lessonService;
     @Mock
-    private static GroupService groupService;
+    private GroupService groupService;
     @InjectMocks
-    private static StudentService studentService;
+    @Autowired
+    private StudentService studentService;
 
     private static Student student = new Student(1, "Test", "With-Group");
     private static List<Student> students = new ArrayList<>();
@@ -47,8 +51,6 @@ class StudentServiceImplTest {
 
     @BeforeAll
     public static void setUp() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        studentService = context.getBean(StudentServiceImpl.class);
         student.setGroup(group);
         students.add(student);
         students.add(new Student(2, "Test", "WithOut-Group"));
