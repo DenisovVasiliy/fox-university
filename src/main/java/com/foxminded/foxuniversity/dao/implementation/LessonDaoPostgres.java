@@ -1,6 +1,7 @@
 package com.foxminded.foxuniversity.dao.implementation;
 
 import com.foxminded.foxuniversity.dao.LessonDao;
+import com.foxminded.foxuniversity.dao.mappers.GroupMapper;
 import com.foxminded.foxuniversity.dao.mappers.LessonMapper;
 import com.foxminded.foxuniversity.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,9 @@ import static java.util.stream.IntStream.of;
 @Repository
 @PropertySource("classpath:queries.properties")
 public class LessonDaoPostgres implements LessonDao {
-    @Autowired
+
     private JdbcTemplate jdbcTemplate;
-    @Autowired
     private SimpleJdbcInsert jdbcInsert;
-    @Autowired
     private LessonMapper lessonMapper;
 
     @Value("${lesson.getAll}")
@@ -48,6 +47,13 @@ public class LessonDaoPostgres implements LessonDao {
     private String delete;
     @Value("${lesson.deleteGroup}")
     private String deleteGroup;
+
+    @Autowired
+    public LessonDaoPostgres(JdbcTemplate jdbcTemplate, SimpleJdbcInsert jdbcInsert, LessonMapper lessonMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcInsert = jdbcInsert.withTableName("lessons").usingGeneratedKeyColumns("id");
+        this.lessonMapper = lessonMapper;
+    }
 
     @Override
     public List<Lesson> getAll() {
@@ -86,8 +92,7 @@ public class LessonDaoPostgres implements LessonDao {
                 .addValue("day", lesson.getDay().toString())
                 .addValue("time", lesson.getStartTime())
                 .addValue("type", lesson.getType().toString());
-        Number generatedId = jdbcInsert.withTableName("lessons").usingGeneratedKeyColumns("id")
-                .executeAndReturnKey(parameterSource);
+        Number generatedId = jdbcInsert.executeAndReturnKey(parameterSource);
         lesson.setId(generatedId.intValue());
         if (lesson.getGroups() != null) {
             assignGroups(lesson, lesson.getGroups());

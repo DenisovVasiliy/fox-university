@@ -19,11 +19,8 @@ import java.util.List;
 @PropertySource("classpath:queries.properties")
 public class CourseDaoPostgres implements CourseDao {
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
     private SimpleJdbcInsert jdbcInsert;
-    @Autowired
     private CourseMapper courseMapper;
 
     @Value("${course.getAll}")
@@ -36,6 +33,13 @@ public class CourseDaoPostgres implements CourseDao {
     private String update;
     @Value("${course.delete}")
     private String delete;
+
+    @Autowired
+    public CourseDaoPostgres(JdbcTemplate jdbcTemplate, SimpleJdbcInsert jdbcInsert, CourseMapper courseMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcInsert = jdbcInsert.withTableName("courses").usingGeneratedKeyColumns("id");
+        this.courseMapper = courseMapper;
+    }
 
     @Override
     public List<Course> getAll() {
@@ -60,8 +64,7 @@ public class CourseDaoPostgres implements CourseDao {
     @Override
     public void save(Course course) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(course);
-        Number id = jdbcInsert.withTableName("courses").usingGeneratedKeyColumns("id")
-                .executeAndReturnKey(parameterSource);
+        Number id = jdbcInsert.executeAndReturnKey(parameterSource);
         course.setId(id.intValue());
     }
 

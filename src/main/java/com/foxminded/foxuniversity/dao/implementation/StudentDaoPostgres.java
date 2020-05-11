@@ -1,6 +1,7 @@
 package com.foxminded.foxuniversity.dao.implementation;
 
 import com.foxminded.foxuniversity.dao.StudentDao;
+import com.foxminded.foxuniversity.dao.mappers.LessonMapper;
 import com.foxminded.foxuniversity.dao.mappers.StudentMapper;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
@@ -19,11 +20,8 @@ import java.util.List;
 @PropertySource("classpath:queries.properties")
 public class StudentDaoPostgres implements StudentDao {
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
     private SimpleJdbcInsert jdbcInsert;
-    @Autowired
     private StudentMapper studentMapper;
 
     @Value("${student.getAll}")
@@ -42,6 +40,13 @@ public class StudentDaoPostgres implements StudentDao {
     private String updateAssignment;
     @Value("${student.deleteAssignment}")
     private String deleteAssignment;
+
+    @Autowired
+    public StudentDaoPostgres(JdbcTemplate jdbcTemplate, SimpleJdbcInsert jdbcInsert, StudentMapper studentMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcInsert = jdbcInsert.withTableName("students").usingGeneratedKeyColumns("id");
+        this.studentMapper = studentMapper;
+    }
 
     @Override
     public List<Student> getAll() {
@@ -63,8 +68,7 @@ public class StudentDaoPostgres implements StudentDao {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("first_name", student.getFirstName())
                 .addValue("last_name", student.getLastName());
-        Number generatedId = jdbcInsert.withTableName("students").usingGeneratedKeyColumns("id")
-                .executeAndReturnKey(parameterSource);
+        Number generatedId = jdbcInsert.executeAndReturnKey(parameterSource);
         student.setId(generatedId.intValue());
         if (student.getGroup() != null) {
             assignToGroup(student, student.getGroup());

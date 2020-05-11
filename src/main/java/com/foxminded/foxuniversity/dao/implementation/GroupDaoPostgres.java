@@ -24,11 +24,9 @@ import static java.util.stream.IntStream.of;
 @Repository
 @PropertySource("classpath:queries.properties")
 public class GroupDaoPostgres implements GroupDao {
-    @Autowired
+
     private JdbcTemplate jdbcTemplate;
-    @Autowired
     private SimpleJdbcInsert jdbcInsert;
-    @Autowired
     private GroupMapper groupMapper;
 
     @Value("${group.getAll}")
@@ -47,6 +45,13 @@ public class GroupDaoPostgres implements GroupDao {
     private String deleteFromCourse;
     @Value("${group.assignToCourse}")
     private String assignToCourse;
+
+    @Autowired
+    public GroupDaoPostgres(JdbcTemplate jdbcTemplate, SimpleJdbcInsert jdbcInsert, GroupMapper groupMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcInsert = jdbcInsert.withTableName("groups").usingGeneratedKeyColumns("id");
+        this.groupMapper = groupMapper;
+    }
 
     @Override
     public List<Group> getAll() {
@@ -99,8 +104,7 @@ public class GroupDaoPostgres implements GroupDao {
     public void save(Group group) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", group.getName());
-        Number generatedId = jdbcInsert.withTableName("groups").usingGeneratedKeyColumns("id")
-                .executeAndReturnKey(parameterSource);
+        Number generatedId = jdbcInsert.executeAndReturnKey(parameterSource);
         group.setId(generatedId.intValue());
     }
 
