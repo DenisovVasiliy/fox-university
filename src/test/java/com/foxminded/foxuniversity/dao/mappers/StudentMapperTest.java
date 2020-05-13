@@ -1,7 +1,6 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
-import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
 import org.junit.jupiter.api.Test;

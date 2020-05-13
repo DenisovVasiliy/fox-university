@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { DaoTestConfig.class })
+@ContextConfiguration(classes = {DaoTestConfig.class})
 class StudentDaoPostgresTest {
     @Autowired
     private ApplicationContext context;
