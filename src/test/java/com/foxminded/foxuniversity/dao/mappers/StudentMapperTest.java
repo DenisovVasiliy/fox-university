@@ -25,12 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class StudentMapperTest {
     @Mock
     private ResultSet resultSet;
-    @Mock
-    private GroupDao groupDao;
+
     @InjectMocks
     @Autowired
     private StudentMapper studentMapper;
-    private Group group = new Group(1, "C-Name");
+    private Group group = new Group(1);
     private Student expectedStudent = new Student(1, "Name", "LastName");
 
     @Test
@@ -40,7 +39,6 @@ class StudentMapperTest {
         when(resultSet.getString("first_name")).thenReturn("Name");
         when(resultSet.getString("last_name")).thenReturn("LastName");
         when(resultSet.getInt("group_id")).thenReturn(1);
-        when(groupDao.getById(1)).thenReturn(group);
 
         Student student = studentMapper.mapRow(resultSet, 1);
 

@@ -44,10 +44,10 @@ class StudentDaoPostgresTest {
     private static List<Group> groups = new ArrayList<>();
 
     @BeforeAll
-    public static void initDatabase() throws Exception {
+    public static void initDatabase() {
         for (int i = 0; i < 3; i++) {
             students.add(new Student(i + 1, "S-0" + (i + 1), "Student"));
-            groups.add(new Group(i + 1, "gr-0" + (i + 1)));
+            groups.add(new Group(i + 1));
         }
         students.add(new Student(4, "S-04", "Student"));
         students.get(0).setGroup(groups.get(0));
