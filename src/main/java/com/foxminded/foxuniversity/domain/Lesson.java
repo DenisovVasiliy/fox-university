@@ -117,7 +117,7 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return "\nLesson{" +
+        return "Lesson{" +
                 "id=" + id +
                 ", course=" + course +
                 ", groups=" + groups +

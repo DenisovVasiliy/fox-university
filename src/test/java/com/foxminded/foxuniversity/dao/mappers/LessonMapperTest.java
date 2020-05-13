@@ -1,16 +1,11 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
-import com.foxminded.foxuniversity.dao.GroupDao;
-import com.foxminded.foxuniversity.dao.TeacherDao;
-import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Teacher;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.LessonsType;
 import com.foxminded.foxuniversity.domain.Day;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,11 +18,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static java.util.Collections.singletonList;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -35,26 +28,13 @@ import static java.util.Collections.singletonList;
 class LessonMapperTest {
     @Mock
     private ResultSet resultSet;
-    @Mock
-    private CourseDao courseDAO;
-    @Mock
-    private GroupDao groupDao;
-    @Mock
-    private TeacherDao teacherDao;
     @InjectMocks
     @Autowired
     private LessonMapper lessonMapper;
-    private static Group group = new Group(4, "C-Name");
-    private static List<Group> groups = singletonList(group);
     private static Course course = new Course(2, "Name", "Desc.");
     private static Teacher teacher = new Teacher(3, "Name", "LastName", course);
     private static Lesson expectedLesson = new Lesson(1, course, teacher, 10, Day.MONDAY,
             new Time(9, 30, 0), LessonsType.LECTURE);
-
-    @BeforeAll
-    public static void setUp() {
-        expectedLesson.setGroups(groups);
-    }
 
     @Test
     public void shouldReturnStudentWithCorrectSettings() throws SQLException {
@@ -65,9 +45,6 @@ class LessonMapperTest {
         when(resultSet.getString("day")).thenReturn(Day.MONDAY.toString());
         when(resultSet.getTime("time")).thenReturn(new Time(9, 30, 0));
         when(resultSet.getString("type")).thenReturn(LessonsType.LECTURE.toString());
-        when(courseDAO.getById(2)).thenReturn(course);
-        when(teacherDao.getById(3)).thenReturn(teacher);
-        when(groupDao.getByLesson(expectedLesson)).thenReturn(groups);
 
         Lesson lesson = lessonMapper.mapRow(resultSet, 1);
 

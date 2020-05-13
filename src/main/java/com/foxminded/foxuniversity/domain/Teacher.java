@@ -6,7 +6,11 @@ public class Teacher {
     private String lastName;
     private Course course;
 
-    public Teacher (int id, String firstName, String lastName, Course course) {
+    public Teacher(int id) {
+        this.id = id;
+    }
+
+    public Teacher(int id, String firstName, String lastName, Course course) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,18 +56,12 @@ public class Teacher {
 
         Teacher teacher = (Teacher) o;
 
-        if (id != teacher.id) return false;
-        if (!firstName.equals(teacher.firstName)) return false;
-        return lastName.equals(teacher.lastName);
+        return id == teacher.id;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + course.hashCode();
-        return result;
+        return id;
     }
 
     @Override

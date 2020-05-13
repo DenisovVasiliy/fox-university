@@ -57,7 +57,7 @@ class LessonServiceImplTest {
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
         }
     }
-
+    
     @BeforeEach
     public void rollbackLesson() {
         lesson.setTeacher(teacher);

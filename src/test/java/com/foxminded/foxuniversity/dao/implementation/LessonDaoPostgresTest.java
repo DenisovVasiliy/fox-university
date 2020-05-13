@@ -3,6 +3,7 @@ package com.foxminded.foxuniversity.dao.implementation;
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.dao.LessonDao;
+import com.foxminded.foxuniversity.dao.TeacherDao;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Day;
@@ -34,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { DaoTestConfig.class })
+@ContextConfiguration(classes = {DaoTestConfig.class})
 class LessonDaoPostgresTest {
     @Autowired
     private ApplicationContext context;
@@ -54,7 +55,7 @@ class LessonDaoPostgresTest {
     private static List<Group> groups = new ArrayList<>();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         for (int i = 0; i < 3; i++) {
             courses.add(new Course(i + 1, "C-0" + (i + 1), "C-0" + (i + 1) + " course"));
             teachers.add(new Teacher(i + 1, "T-0" + (i + 1), "Teacher", courses.get(i)));
@@ -73,6 +74,7 @@ class LessonDaoPostgresTest {
         lessons.get(1).setGroups(groups.subList(0, 2));
         lessons.get(2).setGroups(groups.subList(1, 2));
         lesson.setGroups(groups.subList(2, 3));
+
         student.setGroup(groups.get(0));
     }
 
@@ -124,14 +126,15 @@ class LessonDaoPostgresTest {
 
     @Test
     public void shouldAssignGroupsToLesson() {
-        Lesson expected = lessonDao.getById(3);
-        assertEquals(groups.subList(1, 2), expected.getGroups());
+        Lesson operatedLesson = lessonDao.getById(3);
+        List<Group> actualGroups = groupDao.getByLesson(operatedLesson);
+        assertEquals(groups.subList(1, 2), actualGroups);
 
-        assertTrue(lessonDao.assignGroups(expected, groups.subList(0, 1)));
+        assertTrue(lessonDao.assignGroups(operatedLesson, groups.subList(0, 1)));
 
-        expected.setGroups(groups.subList(0, 2));
-        List<Group> actual = groupDao.getByLesson(expected);
-        assertEquals(expected.getGroups(), actual);
+        List<Group> expectedGroups = groups.subList(0, 2);
+        List<Group> actual = groupDao.getByLesson(operatedLesson);
+        assertEquals(expectedGroups, actual);
     }
 
     @Test
@@ -139,17 +142,21 @@ class LessonDaoPostgresTest {
         Lesson updatedLesson = lessonDao.getById(1);
         assertEquals(lessons.get(0), updatedLesson);
 
+        updatedLesson.setTeacher(teachers.get(2));
         updatedLesson.setCourse(courses.get(2));
-        assertTrue(lessonDao.update(updatedLesson));
-        Lesson actual = lessonDao.getById(updatedLesson.getId());
 
-        assertEquals(updatedLesson, actual);
+        assertTrue(lessonDao.update(updatedLesson));
+
+        Lesson actualLesson = lessonDao.getById(updatedLesson.getId());
+
+        assertEquals(updatedLesson, actualLesson);
     }
 
     @Test
     public void shouldDeleteGroupFromLesson() {
         Lesson updatedLesson = lessonDao.getById(1);
         assertEquals(lessons.get(0), updatedLesson);
+        updatedLesson.setGroups(groupDao.getByLesson(updatedLesson));
         List<Group> emptyGroups = new ArrayList<>();
 
         assertTrue(lessonDao.deleteGroup(updatedLesson, updatedLesson.getGroups().get(0)));
