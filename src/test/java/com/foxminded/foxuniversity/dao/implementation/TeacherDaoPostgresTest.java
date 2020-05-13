@@ -42,9 +42,9 @@ class TeacherDaoPostgresTest {
     private static Teacher teacher;
 
     @BeforeAll
-    public static void initDatabase() throws Exception {
+    public static void initDatabase() {
         for (int i = 0; i < 3; i++) {
-            courses.add(new Course(i + 1, "C-0" + (i + 1), "C-0" + (i + 1) + " course"));
+            courses.add(new Course(i + 1));
             teachers.add(new Teacher(i + 1, "T-0" + (i + 1), "Teacher", courses.get(i)));
         }
         teachers.get(2).setCourse(courses.get(1));

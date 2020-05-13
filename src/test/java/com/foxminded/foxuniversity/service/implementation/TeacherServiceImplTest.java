@@ -66,8 +66,7 @@ class TeacherServiceImplTest {
         verify(teacherDao).getAll();
         verify(courseService).getById(1);
         assertEquals(teachers, actual);
-        assertEquals(filledCourse, actual.get(0).getCourse());
-        assertEquals(filledCourse.getLessons(), actual.get(0).getCourse().getLessons());
+        assertSame(filledCourse, actual.get(0).getCourse());
     }
 
     @Test
@@ -81,8 +80,7 @@ class TeacherServiceImplTest {
         verify(teacherDao).getById(1);
         verify(courseService).getById(1);
         assertEquals(teacher, actual);
-        assertEquals(filledCourse, actual.getCourse());
-        assertEquals(filledCourse.getLessons(), actual.getCourse().getLessons());
+        assertSame(filledCourse, actual.getCourse());
     }
 
     @Test
@@ -95,8 +93,7 @@ class TeacherServiceImplTest {
         verify(teacherDao).getByCourse(course);
         verifyZeroInteractions(courseService);
         assertEquals(teachers, actual);
-        assertEquals(filledCourse, actual.get(0).getCourse());
-        assertEquals(filledCourse.getLessons(), actual.get(0).getCourse().getLessons());
+        assertSame(filledCourse, actual.get(0).getCourse());
     }
 
     @Test

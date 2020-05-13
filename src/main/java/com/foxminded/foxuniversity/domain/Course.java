@@ -21,6 +21,10 @@ public class Course {
         this.description = description;
     }
 
+    public Course(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -61,7 +65,7 @@ public class Course {
         this.groups = groups;
     }
 
-    public  void addLessons(List<Lesson> lessons) {
+    public void addLessons(List<Lesson> lessons) {
         for (Lesson lesson : lessons) {
             if (!this.lessons.contains(lesson)) {
                 this.lessons.add(lesson);
@@ -76,17 +80,12 @@ public class Course {
 
         Course course = (Course) o;
 
-        if (id != course.id) return false;
-        if (!name.equals(course.name)) return false;
-        return description.equals(course.description);
+        return id == course.id;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + description.hashCode();
-        return result;
+        return id;
     }
 
     @Override

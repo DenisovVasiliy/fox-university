@@ -1,6 +1,5 @@
 package com.foxminded.foxuniversity.dao.mappers;
 
-import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Teacher;
@@ -25,12 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TeacherMapperTest {
     @Mock
     private ResultSet resultSet;
-    @Mock
-    private CourseDao courseDao;
+
     @InjectMocks
     @Autowired
     private TeacherMapper teacherMapper;
-    private Course course = new Course(1, "C-Name", "Desc.");
+    private Course course = new Course(1);
     private Teacher expectedTeacher = new Teacher(1, "Name", "LastName", course);
 
     @Test
@@ -39,7 +37,7 @@ class TeacherMapperTest {
         when(resultSet.getString("first_name")).thenReturn("Name");
         when(resultSet.getString("last_name")).thenReturn("LastName");
         when(resultSet.getInt("course_id")).thenReturn(1);
-        when(courseDao.getById(1)).thenReturn(course);
+
         Teacher teacher = teacherMapper.mapRow(resultSet, 1);
 
         assertEquals(expectedTeacher, teacher);
