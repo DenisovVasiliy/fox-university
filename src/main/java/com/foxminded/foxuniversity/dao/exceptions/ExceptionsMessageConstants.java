@@ -10,4 +10,6 @@ public class ExceptionsMessageConstants {
     public static final String UNABLE_DELETE = "Unable to delete '%s'";
     public static final String UNABLE_SAVE = "Unable to save '%s'";
     public static final String UNABLE_UPDATE  = "Unable to update '%s'";
+    public static final String UNABLE_ASSIGN = "Unable assign %s to %s";
+    public static final String UNABLE_DELETE_FROM = "Unable delete %s from %s";
 }
