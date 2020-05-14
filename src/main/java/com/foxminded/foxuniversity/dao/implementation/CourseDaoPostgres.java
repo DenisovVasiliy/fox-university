@@ -6,6 +6,8 @@ import com.foxminded.foxuniversity.dao.exceptions.QueryNotExecuteException;
 import com.foxminded.foxuniversity.dao.mappers.CourseMapper;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -42,6 +44,7 @@ public class CourseDaoPostgres implements CourseDao {
     private String delete;
 
     private String entity = "Course";
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public CourseDaoPostgres(JdbcTemplate jdbcTemplate, SimpleJdbcInsert jdbcInsert, CourseMapper courseMapper) {
@@ -52,66 +55,95 @@ public class CourseDaoPostgres implements CourseDao {
 
     @Override
     public List<Course> getAll() {
+        LOGGER.debug("getAll()");
+        List<Course> courses;
         try {
-            return jdbcTemplate.query(getAll, courseMapper);
+            courses = jdbcTemplate.query(getAll, courseMapper);
         } catch (DataAccessException e) {
             String msg = format(UNABLE_GET_ALL, entity);
+            LOGGER.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
+        LOGGER.trace("Found {} courses", courses.size());
+        return courses;
     }
 
     @Override
     public Course getById(int id) {
+        LOGGER.debug("getById({})", id);
+        Course course;
         try {
-            return jdbcTemplate.queryForObject(getById, new Object[]{id}, courseMapper);
+            course = jdbcTemplate.queryForObject(getById, new Object[]{id}, courseMapper);
         } catch (EmptyResultDataAccessException e) {
             String msg = format(ENTITY_NOT_FOUND, entity, id);
+            LOGGER.warn(msg);
             throw new EntityNotFoundException(msg);
         } catch (DataAccessException e) {
             String msg = format(UNABLE_GET_BY_ID, entity, id);
+            LOGGER.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
+        LOGGER.trace("Found {}", course);
+        return course;
     }
 
     @Override
     public List<Course> getByGroup(Group group) {
+        LOGGER.debug("getByGroup({})", group);
+        List<Course> courses;
         try {
-            return jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, courseMapper);
+            courses = jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, courseMapper);
         } catch (DataAccessException e) {
             String msg = format(UNABLE_GET_BY_ENTITY, entity, group.toString());
+            LOGGER.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
+        LOGGER.trace("Found {} courses", courses.size());
+        return courses;
     }
 
     @Override
     public boolean delete(Course course) {
+        LOGGER.debug("delete({})", course);
+        int counter;
         try {
-            return jdbcTemplate.update(delete, course.getId()) > 0;
+            counter = jdbcTemplate.update(delete, course.getId());
         } catch (DataAccessException e) {
             String msg = format(UNABLE_DELETE, course.toString());
+            LOGGER.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
+        LOGGER.trace("Deleted '{}' {}", counter, course);
+        return counter > 0;
     }
 
     @Override
     public void save(Course course) {
+        LOGGER.debug("save({})", course);
         try {
             SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(course);
             Number id = jdbcInsert.executeAndReturnKey(parameterSource);
             course.setId(id.intValue());
         } catch (DataAccessException e) {
             String msg = format(UNABLE_SAVE, course.toString());
+            LOGGER.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
+        LOGGER.trace("{} saved.", course);
     }
 
     @Override
     public boolean update(Course course) {
+        LOGGER.debug("update({})", course);
+        int counter;
         try {
-            return jdbcTemplate.update(update, course.getName(), course.getDescription(), course.getId()) > 0;
+            counter = jdbcTemplate.update(update, course.getName(), course.getDescription(), course.getId());
         } catch (DataAccessException e) {
             String msg = format(UNABLE_UPDATE, course.toString());
+            LOGGER.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
+        LOGGER.trace("Updated '{}' {}", counter, course);
+        return counter > 0;
     }
 }
