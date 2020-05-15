@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -63,7 +64,7 @@ public class CourseDaoPostgres implements CourseDao {
             log.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
-        log.trace("Found {} courses", courses.size());
+        log.trace("Found {} {}s", courses.size(), entity);
         return courses;
     }
 
@@ -93,7 +94,7 @@ public class CourseDaoPostgres implements CourseDao {
         try {
             courses = jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, courseMapper);
         } catch (DataAccessException e) {
-            String msg = format(UNABLE_GET_BY_ENTITY, entity, group.toString());
+            String msg = format(UNABLE_GET_BY_ENTITY, entity, group);
             log.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
@@ -107,8 +108,12 @@ public class CourseDaoPostgres implements CourseDao {
         int counter;
         try {
             counter = jdbcTemplate.update(delete, course.getId());
+        } catch (DataIntegrityViolationException e) {
+            String msg = format(DELETION_RESTRICTED, course, "teachers");
+            log.warn(msg);
+            throw new QueryNotExecuteException(msg, e);
         } catch (DataAccessException e) {
-            String msg = format(UNABLE_DELETE, course.toString());
+            String msg = format(UNABLE_DELETE, course);
             log.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
@@ -124,7 +129,7 @@ public class CourseDaoPostgres implements CourseDao {
             Number id = jdbcInsert.executeAndReturnKey(parameterSource);
             course.setId(id.intValue());
         } catch (DataAccessException e) {
-            String msg = format(UNABLE_SAVE, course.toString());
+            String msg = format(UNABLE_SAVE, course);
             log.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
@@ -138,7 +143,7 @@ public class CourseDaoPostgres implements CourseDao {
         try {
             counter = jdbcTemplate.update(update, course.getName(), course.getDescription(), course.getId());
         } catch (DataAccessException e) {
-            String msg = format(UNABLE_UPDATE, course.toString());
+            String msg = format(UNABLE_UPDATE, course);
             log.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
