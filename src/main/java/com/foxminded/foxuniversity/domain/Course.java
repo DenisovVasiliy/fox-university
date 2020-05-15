@@ -90,7 +90,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return "\nCourse{" +
+        return "Course{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
