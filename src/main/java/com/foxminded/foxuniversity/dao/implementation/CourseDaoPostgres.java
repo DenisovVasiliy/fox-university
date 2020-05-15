@@ -3,6 +3,7 @@ package com.foxminded.foxuniversity.dao.implementation;
 import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.dao.exceptions.EntityNotFoundException;
 import com.foxminded.foxuniversity.dao.exceptions.QueryNotExecuteException;
+import com.foxminded.foxuniversity.dao.exceptions.QueryRestrictedException;
 import com.foxminded.foxuniversity.dao.mappers.CourseMapper;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
@@ -111,7 +112,7 @@ public class CourseDaoPostgres implements CourseDao {
         } catch (DataIntegrityViolationException e) {
             String msg = format(DELETION_RESTRICTED, course, "teachers");
             log.warn(msg);
-            throw new QueryNotExecuteException(msg, e);
+            throw new QueryRestrictedException(msg, e);
         } catch (DataAccessException e) {
             String msg = format(UNABLE_DELETE, course);
             log.error(msg);
