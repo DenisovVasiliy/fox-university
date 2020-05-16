@@ -2,6 +2,8 @@ package com.foxminded.foxuniversity.dao.implementation;
 
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.StudentDao;
+import com.foxminded.foxuniversity.dao.exceptions.EntityNotFoundException;
+import com.foxminded.foxuniversity.dao.exceptions.QueryRestrictedException;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Student;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -22,11 +24,9 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static com.foxminded.foxuniversity.dao.exceptions.ExceptionsMessageConstants.*;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoTestConfig.class})
@@ -78,6 +78,15 @@ class StudentDaoPostgresTest {
     }
 
     @Test
+    public void shouldThrowEntityNotFoundExceptionWhenCantFindEntity() {
+        int id = 10;
+        Throwable thrown = assertThrows(EntityNotFoundException.class, () -> studentDao.getById(id));
+        String actualMessage = thrown.getMessage();
+        String expectedMessage = format(ENTITY_NOT_FOUND, "Student", id);
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
     public void shouldGetStudentsByGroup() {
         List<Student> actual = studentDao.getByGroup(groups.get(0));
         List<Student> expected = students.subList(0, 2);
@@ -104,6 +113,34 @@ class StudentDaoPostgresTest {
         Student actual = studentDao.getById(expected.getId());
         assertEquals(expected, actual);
         assertEquals(expected.getGroup(), actual.getGroup());
+    }
+
+    @Test
+    public void shouldThrowQueryRestrictedExceptionWhenSuchRecordAlreadyExist() {
+        Throwable thrown = assertThrows(QueryRestrictedException.class,
+                () -> studentDao.assignToGroup(students.get(0), groups.get(0)));
+        String actualMessage = thrown.getMessage();
+        assertEquals(QUERY_RESTRICTED_DUPLICATE_KEY, actualMessage);
+    }
+
+    @Test
+    public void shouldThrowQueryRestrictedExceptionWhenNoStudentsWithSuchId() {
+        Student unsavedStudent = new Student(100, "1", "2");
+        Throwable thrown = assertThrows(QueryRestrictedException.class,
+                () -> studentDao.assignToGroup(unsavedStudent, groups.get(0)));
+        String actualMessage = thrown.getMessage();
+        String expectedMessage = format(QUERY_RESTRICTED_NO_SUCH_ID, unsavedStudent, groups.get(0));
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void shouldThrowQueryRestrictedExceptionWhenNoGroupsWithSuchId() {
+        Group unsavedGroup = new Group(100);
+        Throwable thrown = assertThrows(QueryRestrictedException.class,
+                () -> studentDao.assignToGroup(students.get(3), unsavedGroup));
+        String actualMessage = thrown.getMessage();
+        String expectedMessage = format(QUERY_RESTRICTED_NO_SUCH_ID, students.get(3), unsavedGroup);
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
