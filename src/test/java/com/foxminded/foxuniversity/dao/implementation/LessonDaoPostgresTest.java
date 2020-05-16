@@ -4,6 +4,7 @@ import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.dao.LessonDao;
 import com.foxminded.foxuniversity.dao.TeacherDao;
+import com.foxminded.foxuniversity.dao.exceptions.EntityNotFoundException;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Day;
@@ -30,9 +31,9 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static com.foxminded.foxuniversity.dao.exceptions.ExceptionsMessageConstants.ENTITY_NOT_FOUND;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoTestConfig.class})
@@ -96,6 +97,15 @@ class LessonDaoPostgresTest {
     public void shouldGetLessonById() {
         Lesson actual = lessonDao.getById(1);
         assertEquals(lessons.get(0), actual);
+    }
+
+    @Test
+    public void shouldThrowEntityNotFoundExceptionWhenCantFindEntity() {
+        int id = 10;
+        Throwable thrown = assertThrows(EntityNotFoundException.class, () -> lessonDao.getById(id));
+        String actualMessage = thrown.getMessage();
+        String expectedMessage = format(ENTITY_NOT_FOUND, "Lesson", id);
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
