@@ -97,7 +97,7 @@ public class StudentDaoPostgres implements StudentDao {
 
     @Override
     public List<Student> getByGroup(Group group) {
-        log.debug("getByLesson({})", group);
+        log.debug("getByGroup({})", group);
         List<Student> students;
         try {
             students = jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, studentMapper);
