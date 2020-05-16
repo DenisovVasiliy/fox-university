@@ -3,6 +3,7 @@ package com.foxminded.foxuniversity.dao.implementation;
 import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
+import com.foxminded.foxuniversity.dao.exceptions.EntityNotFoundException;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Day;
@@ -28,9 +29,9 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static com.foxminded.foxuniversity.dao.exceptions.ExceptionsMessageConstants.ENTITY_NOT_FOUND;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoTestConfig.class})
@@ -51,7 +52,7 @@ class GroupDaoPostgresTest {
     private Group group = new Group(0, "test");
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         for (int i = 0; i < 3; i++) {
             courses.add(new Course(i + 1, "C-0" + (i + 1), "C-0" + (i + 1) + " course"));
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
@@ -79,6 +80,15 @@ class GroupDaoPostgresTest {
     public void shouldGetGroupById() {
         Group actual = groupDao.getById(1);
         assertEquals(groups.get(0), actual);
+    }
+
+    @Test
+    public void shouldThrowEntityNotFoundExceptionWhenCantFindEntity() {
+        int id = 10;
+        Throwable thrown = assertThrows(EntityNotFoundException.class, () -> groupDao.getById(id));
+        String actualMessage = thrown.getMessage();
+        String expectedMessage = format(ENTITY_NOT_FOUND, "Group", id);
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
