@@ -2,6 +2,8 @@ package com.foxminded.foxuniversity.dao.implementation;
 
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.TeacherDao;
+import com.foxminded.foxuniversity.dao.exceptions.EntityNotFoundException;
+import com.foxminded.foxuniversity.dao.exceptions.QueryRestrictedException;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Teacher;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -22,9 +24,10 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static com.foxminded.foxuniversity.dao.exceptions.ExceptionsMessageConstants.DELETION_RESTRICTED;
+import static com.foxminded.foxuniversity.dao.exceptions.ExceptionsMessageConstants.ENTITY_NOT_FOUND;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoTestConfig.class})
@@ -73,7 +76,16 @@ class TeacherDaoPostgresTest {
     }
 
     @Test
-    public void shouldGetCourse() {
+    public void shouldThrowEntityNotFoundExceptionWhenCantFindEntity() {
+        int id = 10;
+        Throwable thrown = assertThrows(EntityNotFoundException.class, () -> teacherDao.getById(id));
+        String actualMessage = thrown.getMessage();
+        String expectedMessage = format(ENTITY_NOT_FOUND, "Teacher", id);
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void shouldGetTeacherByCourse() {
         List<Teacher> actual = teacherDao.getByCourse(courses.get(1));
         List<Teacher> expected = teachers.subList(1, 3);
         assertEquals(expected, actual);
@@ -115,6 +127,14 @@ class TeacherDaoPostgresTest {
         actual = teacherDao.getAll();
         List<Teacher> expected = teachers.subList(0, 2);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldThrowQueryRestrictedExceptionWhenCantDeleteEntity() {
+        Throwable thrown = assertThrows(QueryRestrictedException.class, () -> teacherDao.delete(teachers.get(0)));
+        String actualMessage = thrown.getMessage();
+        String expectedMessage = format(DELETION_RESTRICTED, teachers.get(0), "lessons");
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @AfterEach
