@@ -118,7 +118,6 @@ public class LessonDaoPostgres implements LessonDao {
     public List<Lesson> getByStudent(Student student) {
         log.debug("getByStudent({})", student);
         List<Lesson> lessons = new ArrayList<>();
-        ;
         try {
             if (student.getGroup() != null) {
                 lessons = jdbcTemplate.query(getByStudent, new Object[]{student.getGroup().getId()}, lessonMapper);
@@ -135,8 +134,7 @@ public class LessonDaoPostgres implements LessonDao {
     @Override
     public List<Lesson> getByTeacher(Teacher teacher) {
         log.debug("getByTeacher({})", teacher);
-        List<Lesson> lessons = new ArrayList<>();
-        ;
+        List<Lesson> lessons;
         try {
             lessons = jdbcTemplate.query(getByTeacher, new Object[]{teacher.getId()}, lessonMapper);
         } catch (DataAccessException e) {
