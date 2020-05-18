@@ -6,12 +6,12 @@
 <div th:replace="fragments/fragments :: menu"></div>
 
 <div class="container-lg">
-    <h1>Courses:</h1>
+    <h1>Groups:</h1>
     <table class="table table-striped">
         <tbody>
-        <tr th:each="course: ${courses}">
+        <tr th:each="group: ${groups}">
             <td>
-                <a th:href="@{/courses/info/(id=${course.id})}" th:text="${course.name}"></a>
+                <a th:href="@{/groups/info/(id=${group.id})}" th:text="${group.name}"></a>
             </td>
         </tr>
         </tbody>
