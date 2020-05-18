@@ -6,12 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-
-import static java.lang.Integer.parseInt;
 
 @Controller
 @RequestMapping("/courses")
@@ -32,12 +29,18 @@ public class CourseController {
         return "courses/courses";
     }
 
-    @GetMapping("/{id}")
-    public String showCourseById(Model model, @PathVariable String id) {
-        Course course = courseService.getById(parseInt(id));
-        List<Teacher> teachers = teacherService.getByCourse(course);
-        model.addAttribute("course", course);
-        model.addAttribute("teachers", teachers);
-        return "courses/oneCourse";
+    @GetMapping("/info")
+    public String showCourseById(Model model, int id) {
+        Course course = courseService.getById(id);
+        if (course != null) {
+            List<Teacher> teachers = teacherService.getByCourse(course);
+            model.addAttribute("course", course);
+            model.addAttribute("teachers", teachers);
+            return "courses/courseInfo";
+        }
+        model.addAttribute("entity", "course");
+        model.addAttribute("id", id);
+        return "notFound";
     }
+
 }
