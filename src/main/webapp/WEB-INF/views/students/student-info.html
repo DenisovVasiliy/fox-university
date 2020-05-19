@@ -6,12 +6,7 @@
 <div th:replace="fragments/fragments :: menu"></div>
 
 <div class="container-lg">
-    <h1 th:text="|${student.firstName} ${student.lastName}|"></h1>
-    <p>Group:
-        <a th:unless="${student.group}==null"
-           th:href="@{/groups/info/(id=${student.group.id})}" th:text="| ${student.group.name}|"></a>
-    <i th:if="${student.group}==null">Not assigned</i>
-    </p>
+    <div th:insert="fragments/fragments :: student-info"></div>
 </div>
 </body>
 </html>

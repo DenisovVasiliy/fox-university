@@ -2,41 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments/fragments :: header(${group.name})"></head>
 
-
 <body>
 <div th:replace="fragments/fragments :: menu"></div>
-
-<div class="container-lg">
-    <h1 th:text="|Group ${group.name}|"></h1>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h4>Group's courses:</h4>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr th:each="course: ${courses}">
-                        <td>
-                            <a th:href="@{/courses/info/(id=${course.id})}" th:text="${course.name}"></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col">
-                <h4>Group's students:</h4>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr th:each="student: ${group.students}">
-                        <td>
-                            <a th:href="@{/students/info/(id=${student.id})}"
-                               th:text="| ${student.firstName} ${student.lastName} |"></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="container-lg" th:insert="fragments/fragments :: group-info"></div>
 </body>
 </html>

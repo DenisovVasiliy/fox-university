@@ -5,11 +5,6 @@
 <body>
 <div th:replace="fragments/fragments :: menu"></div>
 
-<div class="container-lg">
-    <h1 th:text="|${teacher.firstName} ${teacher.lastName}|"></h1>
-    <p>Course:
-        <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="${teacher.course.name}"></a>
-    </p>
-</div>
+<div class="container-lg" th:insert="fragments/fragments :: teacher-info"></div>
 </body>
 </html>

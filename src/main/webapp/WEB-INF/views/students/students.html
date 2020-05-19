@@ -6,29 +6,8 @@
 <div th:replace="fragments/fragments :: menu"></div>
 
 <div class="container-lg">
-    <h1>Students:</h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Student</th>
-            <th scope="col">Group</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="student: ${students}">
-            <td>
-                <a th:href="@{/students/info/(id=${student.id})}"
-                   th:text="| ${student.firstName} ${student.lastName} |"></a>
-            </td>
-            <td th:unless="${student.group}==null">
-                <a th:href="@{/groups/info/(id=${student.group.id})}" th:text="| ${student.group.name} |"></a>
-            </td>
-            <td th:if="${student.group}==null">
-                Not assigned
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <h4>Students:</h4>
+    <div th:replace="fragments/fragments :: students"></div>
 </div>
 
 <div th:insert="fragments/fragments :: notification"></div>

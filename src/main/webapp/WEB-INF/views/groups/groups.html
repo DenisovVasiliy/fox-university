@@ -4,18 +4,7 @@
 
 <body>
 <div th:replace="fragments/fragments :: menu"></div>
-
-<div class="container-lg">
-    <h1>Groups:</h1>
-    <table class="table table-striped">
-        <tbody>
-        <tr th:each="group: ${groups}">
-            <td>
-                <a th:href="@{/groups/info/(id=${group.id})}" th:text="${group.name}"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div class="container-lg" th:insert="fragments/fragments :: groups">
 </div>
 </body>
 </html>
