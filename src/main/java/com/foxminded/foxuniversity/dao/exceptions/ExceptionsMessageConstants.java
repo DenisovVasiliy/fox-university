@@ -10,7 +10,7 @@ public class ExceptionsMessageConstants {
     public static final String UNABLE_DELETE = "Unable to delete '%s'";
     public static final String DELETION_RESTRICTED = "Deletion was restricted: %s has relations to the %s";
     public static final String QUERY_RESTRICTED_DUPLICATE_KEY = "Operation was restricted: %s is already assigned.";
-    public static final String QUERY_RESTRICTED_NO_SUCH_ID = "Query was restricted: " +
+    public static final String QUERY_RESTRICTED_NO_SUCH_ID = "Operation was restricted: " +
             "There is no such %s or %s";
     public static final String UNABLE_SAVE = "Unable to save '%s'";
     public static final String UNABLE_UPDATE  = "Unable to update '%s'";
