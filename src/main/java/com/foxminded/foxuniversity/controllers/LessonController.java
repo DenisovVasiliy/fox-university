@@ -2,7 +2,6 @@ package com.foxminded.foxuniversity.controllers;
 
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Lesson;
-import com.foxminded.foxuniversity.domain.Teacher;
 import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
