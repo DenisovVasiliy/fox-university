@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:fragment="header (title)">
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div th:fragment="menu">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffc966;">
+        <a class="navbar-brand" href="/foxUniversity/">Fox-University</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/foxUniversity/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/courses/">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/groups/">Groups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/students/">Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/teachers/">Teachers</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/foxUniversity/timetable/"
+                       id="LessonsDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Lessons
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="LessonsDropdown">
+                        <a class="dropdown-item" href="/foxUniversity/lessons/">All lessons</a>
+                        <a class="dropdown-item" href="/foxUniversity/courses/">By course</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle disabled" href="/foxUniversity/timetable/"
+                       id="TimetableDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Timetable
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="TimetableDropdown">
+                        <a class="dropdown-item" href="/foxUniversity/timetable/">Teacher's</a>
+                        <a class="dropdown-item" href="/foxUniversity/timetable/">Student's</a>
+                    </div>
+                </li>
+            </ul>
+            <span class="navbar-text">
+        "From Fox with love"
+        </span>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="courses">
+    <h4>Courses:</h4>
+    <table class="table table-striped">
+        <tbody>
+        <tr th:each="course: ${courses}">
+            <td>
+                <a th:href="@{/courses/info/(id=${course.id})}" th:text="${course.name}"></a>
+            </td>
+            <td>
+                <div class="text-right">
+                    <a class="btn btn-secondary"
+                       th:href="@{/lessons/by-course/(courseId=${course.id})}" role="button">Show course's lessons</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="course-info">
+    <h4 th:text="${course.name}"></h4>
+    <p th:text="${course.description}"></p>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Our teachers:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher: ${teachers}">
+            <td>
+                <a th:href="@{/teachers/info/(id=${teacher.id})}"
+                   th:text="|${teacher.firstName} ${teacher.lastName}|"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="teachers">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Teacher</th>
+            <th scope="col">Course</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher: ${teachers}">
+            <td>
+                <a th:href="@{/teachers/info/(id=${teacher.id})}"
+                   th:text="| ${teacher.firstName} ${teacher.lastName} |"></a>
+            </td>
+            <td>
+                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="| ${teacher.course.name} |"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="teacher-info">
+    <table class="table table-striped">
+        <thead>
+        <th colspan="2">
+            <h4 class="text-center mb-0">here will be buttons</h4>
+        </th>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="col">Name</th>
+            <td>
+                <p class="mb-0" th:text="${teacher.firstName}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Surname</th>
+            <td>
+                <p class="mb-0" th:text="${teacher.lastName}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Course</th>
+            <td>
+                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="${teacher.course.name}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="groups">
+    <table class="table table-striped">
+        <thead>
+        <th>
+            <h4 class="mb-0">Groups:</h4>
+        </th>
+        </thead>
+        <tbody>
+        <tr th:each="group: ${groups}">
+            <td>
+                <a th:href="@{/groups/info/(id=${group.id})}" th:text="${group.name}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="group-info">
+    <h4 th:text="|Group ${group.name}|"></h4>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h5>Group's courses:</h5>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr th:each="course: ${courses}">
+                        <td>
+                            <a th:href="@{/courses/info/(id=${course.id})}" th:text="${course.name}"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <h5>Group's students:</h5>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr th:each="student: ${group.students}">
+                        <td>
+                            <a th:href="@{/students/info/(id=${student.id})}"
+                               th:text="| ${student.firstName} ${student.lastName} |"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="students">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Student</th>
+            <th scope="col">Group</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student: ${students}">
+            <td>
+                <a th:href="@{/students/info/(id=${student.id})}"
+                   th:text="| ${student.firstName} ${student.lastName} |"></a>
+            </td>
+            <td th:unless="${student.group}==null">
+                <a th:href="@{/groups/info/(id=${student.group.id})}" th:text="| ${student.group.name} |"></a>
+            </td>
+            <td th:if="${student.group}==null">
+                Not assigned
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="student-info">
+    <table class="table table-striped">
+        <thead>
+        <th colspan="2">
+            <h4 class="text-center mb-0">here will be buttons</h4>
+        </th>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="col">Name</th>
+            <td>
+                <p class="mb-0" th:text="${student.firstName}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Surname</th>
+            <td>
+                <p class="mb-0" th:text="${student.lastName}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Group</th>
+            <td>
+                <a th:unless="${student.group}==null" th:href="@{/groups/info/(id=${student.group.id})}"
+                   th:text="| ${student.group.name} |"></a>
+                <p class="mb-0" th:if="${student.group}==null" th:text="|Not assigned|"></p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="lessons">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Day</th>
+            <th scope="col">Time</th>
+            <th scope="col">Class #</th>
+            <th scope="col">Course</th>
+            <th scope="col">Teacher</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lesson: ${lessons}">
+            <td>
+                <p th:text="${lesson.day}"></p>
+            </td>
+            <td>
+                <p th:text="${lesson.startTime}"></p>
+            </td>
+            <td>
+                <p th:text="${lesson.classroom}"></p>
+            </td>
+            <td>
+                <a th:href="@{/courses/info/(id=${lesson.course.id})}"
+                   th:text="| ${lesson.course.name} |"></a>
+                <p class="mb-0" th:text="|(${lesson.type})|"></p>
+            </td>
+            <td>
+                <a th:href="@{/teachers/info/(id=${lesson.teacher.id})}"
+                   th:text="| ${lesson.teacher.firstName} ${lesson.teacher.lastName} |"></a>
+            </td>
+            <td>
+                <a class="btn btn-outline-info"
+                   th:href="@{/lessons/info/(id=${lesson.id})}" role="button">Info</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="lesson-info">
+    <table class="table table-striped">
+        <thead>
+        <th colspan="2">
+            <h4 class="text-center mb-0">Info</h4>
+        </th>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="col">Day</th>
+            <td>
+                <p class="mb-0" th:text="${lesson.day}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Time</th>
+            <td>
+                <p class="mb-0" th:text="${lesson.startTime}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Class #</th>
+            <td>
+                <p class="mb-0" th:text="${lesson.classroom}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Course</th>
+            <td>
+                <a th:href="@{/courses/info/(id=${lesson.course.id})}"
+                   th:text="| ${lesson.course.name} |"></a>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Lesson's type</th>
+            <td>
+                <p class="mb-0" th:text="|${lesson.type}|"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Teacher</th>
+            <td>
+                <a th:href="@{/teachers/info/(id=${lesson.teacher.id})}"
+                   th:text="| ${lesson.teacher.firstName} ${lesson.teacher.lastName} |"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="notification">
+    <div th:unless="${warnMessage==null}">
+        <div class="alert alert-warning" role="alert">
+            <p class="text-center mb-0" th:text="${warnMessage}">Sorry, page not found...</p>
+        </div>
+    </div>
+    <div th:unless="${errorMessage==null}">
+        <div class="alert alert-danger" role="alert">
+            <p class="text-center mb-0" th:text="${errorMessage}">Sorry, something went wrong...</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

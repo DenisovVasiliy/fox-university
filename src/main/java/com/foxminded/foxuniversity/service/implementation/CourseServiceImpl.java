@@ -7,15 +7,16 @@ import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.TeacherService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Slf4j
 public class CourseServiceImpl implements CourseService {
+
     @Autowired
     private CourseDao courseDao;
     @Autowired
@@ -25,11 +26,9 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private GroupService groupService;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Override
     public List<Course> getAll() {
-        logger.debug("CourseService calls courseDao.getAll().");
+        log.debug("CourseService calls courseDao.getAll().");
         List<Course> courses = courseDao.getAll();
         fillLessons(courses);
         fillGroups(courses);
@@ -38,7 +37,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getById(int id) {
-        logger.debug("CourseService calls courseDao.getById(" + id + ").");
+        log.debug("CourseService calls courseDao.getById({}).", id);
         Course course = courseDao.getById(id);
         fillLessons(course);
         fillGroups(course);
@@ -47,7 +46,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getByGroup(Group group) {
-        logger.debug("CourseService calls courseDao.getByGroup(" + group + ").");
+        log.debug("CourseService calls courseDao.getByGroup({}).", group);
         List<Course> courses = courseDao.getByGroup(group);
         fillLessons(courses);
         fillGroups(courses);
@@ -56,30 +55,30 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        logger.debug("CourseService calls courseDao.save(Course{id = " + course.getId() + "}).");
+        log.debug("CourseService calls courseDao.save(Course{id = {}}).", course.getId());
         courseDao.save(course);
     }
 
     @Override
     public boolean update(Course course) {
-        logger.debug("CourseService calls courseDao.update(Course{id = " + course.getId() + "}).");
+        log.debug("CourseService calls courseDao.update(Course{id = {}}).", course.getId());
         return courseDao.update(course);
     }
 
     @Override
     public boolean delete(Course course) {
-        logger.debug("Checking for teachers in the Course{id = " + course.getId() + "}).");
+        log.debug("Checking for teachers in the Course{id = {}}).", course.getId());
         if (teacherService.getByCourse(course).isEmpty()) {
-            logger.debug("There are no teachers in the course. " +
-                    "Call courseDao.delete(Course{id = " + course.getId() + "}).");
+            log.debug("There are no teachers in the course. " +
+                    "Call courseDao.delete(Course{id = '{}'}).", course.getId());
             return courseDao.delete(course);
         }
-        logger.warn("There are some teachers in the Course{id = " + course.getId() + "}). Deletion canceled.");
+        log.warn("There are some teachers in the Course{id = {}}). Deletion canceled.", course.getId());
         return false;
     }
 
     private void fillLessons(Course course) {
-        logger.debug("Set lessons to course: call lessonService.getByCourse(Course{id = " + course.getId() + "}).");
+        log.debug("Set lessons to course: call lessonService.getByCourse(Course{id = {}}).", course.getId());
         course.setLessons(lessonService.getByCourse(course));
     }
 
@@ -90,7 +89,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void fillGroups(Course course) {
-        logger.debug("Set lessons to course: call groupService.getByCourse(Course{id = " + course.getId() + "}).");
+        log.debug("Set lessons to course: call groupService.getByCourse(Course{id = {}}).", course.getId());
         course.setGroups(groupService.getByCourse(course));
     }
 
