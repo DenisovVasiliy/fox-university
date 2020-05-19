@@ -120,7 +120,8 @@ class StudentDaoPostgresTest {
         Throwable thrown = assertThrows(QueryRestrictedException.class,
                 () -> studentDao.assignToGroup(students.get(0), groups.get(0)));
         String actualMessage = thrown.getMessage();
-        assertEquals(QUERY_RESTRICTED_DUPLICATE_KEY, actualMessage);
+        String expectedMessage = format(QUERY_RESTRICTED_DUPLICATE_KEY, students.get(0));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test

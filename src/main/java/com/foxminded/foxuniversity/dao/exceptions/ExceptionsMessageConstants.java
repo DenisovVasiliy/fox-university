@@ -9,8 +9,7 @@ public class ExceptionsMessageConstants {
     public static final String UNABLE_GET_BY_ENTITY = "Unable to get %s by '%s'";
     public static final String UNABLE_DELETE = "Unable to delete '%s'";
     public static final String DELETION_RESTRICTED = "Deletion was restricted: %s has relations to the %s";
-    public static final String QUERY_RESTRICTED_DUPLICATE_KEY = "Query was restricted: " +
-            "Unique index or primary key violation";
+    public static final String QUERY_RESTRICTED_DUPLICATE_KEY = "Operation was restricted: %s is already assigned.";
     public static final String QUERY_RESTRICTED_NO_SUCH_ID = "Query was restricted: " +
             "There is no such %s or %s";
     public static final String UNABLE_SAVE = "Unable to save '%s'";

@@ -172,7 +172,7 @@ public class StudentDaoPostgres implements StudentDao {
         try {
             counter = jdbcTemplate.update(assignToGroup, student.getId(), group.getId());
         } catch (DuplicateKeyException e) {
-            String msg = QUERY_RESTRICTED_DUPLICATE_KEY;
+            String msg = format(QUERY_RESTRICTED_DUPLICATE_KEY, student);
             log.warn(msg);
             throw new QueryRestrictedException(msg, e);
         } catch (DataIntegrityViolationException e) {
