@@ -32,15 +32,10 @@ public class CourseController {
     @GetMapping("/info")
     public String showCourseById(Model model, int id) {
         Course course = courseService.getById(id);
-        if (course != null) {
-            List<Teacher> teachers = teacherService.getByCourse(course);
-            model.addAttribute("course", course);
-            model.addAttribute("teachers", teachers);
-            return "courses/courseInfo";
-        }
-        model.addAttribute("entity", "course");
-        model.addAttribute("id", id);
-        return "notFound";
+        List<Teacher> teachers = teacherService.getByCourse(course);
+        model.addAttribute("course", course);
+        model.addAttribute("teachers", teachers);
+        return "courses/course-info";
     }
 
 }

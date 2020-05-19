@@ -31,6 +31,6 @@ public class TeacherController {
     public String showTeacherById(Model model, int id) {
         Teacher teacher = teacherService.getById(id);
         model.addAttribute(teacher);
-        return "teachers/teacherInfo";
+        return "teachers/teacher-info";
     }
 }

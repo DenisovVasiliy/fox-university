@@ -37,6 +37,6 @@ public class GroupController {
         List<Course> courses = courseService.getByGroup(group);
         model.addAttribute("group", group);
         model.addAttribute("courses", courses);
-        return "groups/groupInfo";
+        return "groups/group-info";
     }
 }

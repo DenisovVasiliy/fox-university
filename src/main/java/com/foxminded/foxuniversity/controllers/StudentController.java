@@ -31,6 +31,6 @@ public class StudentController {
     public String showCourseById(Model model, int id) {
         Student student = studentService.getById(id);
         model.addAttribute("student", student);
-        return "students/studentInfo";
+        return "students/student-info";
     }
 }
