@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="fragments/fragments :: header"></head>
+<head th:replace="fragments/fragments :: header('Teacher: info')"></head>
 
 <body>
 <div th:replace="fragments/fragments :: menu"></div>
 
 <div class="container-lg">
     <h1 th:text="|${teacher.firstName} ${teacher.lastName}|"></h1>
-    <a th:href="@{|/courses/info/(id=${teacher.course.id})}" th:text="|Course: ${teacher.course.name}|"></a>
+    <p>Course:
+        <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="${teacher.course.name}"></a>
+    </p>
 </div>
 </body>
 </html>

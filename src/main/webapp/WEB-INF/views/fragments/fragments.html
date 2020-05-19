@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:fragment="header">
+<head th:fragment="header (title)">
     <meta charset="UTF-8">
-    <title>Fox-University</title>
+    <title th:text="${title}"></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -52,6 +52,18 @@
     </nav>
 </div>
 
+<div th:fragment="notification">
+    <div th:unless="${warnMessage==null}">
+        <div class="alert alert-warning" role="alert">
+            <p class="text-center mb-0" th:text="${warnMessage}">Sorry, page not found...</p>
+        </div>
+    </div>
+    <div th:unless="${errorMessage==null}">
+        <div class="alert alert-danger" role="alert">
+            <p class="text-center mb-0" th:text="${errorMessage}">Sorry, something went wrong...</p>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
