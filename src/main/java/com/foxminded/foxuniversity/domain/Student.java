@@ -6,8 +6,17 @@ public class Student {
     private String lastName;
     private Group group;
 
+    public Student() {
+
+    }
+
     public Student(int id, String firstName, String lastName) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public Student(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
