@@ -10,6 +10,10 @@ public class Student {
 
     }
 
+    public Student(int id) {
+        this.id = id;
+    }
+
     public Student(int id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
