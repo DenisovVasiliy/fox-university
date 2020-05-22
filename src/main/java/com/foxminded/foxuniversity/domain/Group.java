@@ -8,6 +8,8 @@ public class Group {
     private String name;
     private List<Student> students = new ArrayList<>();
 
+    public Group() {}
+
     public Group(int id) {
         this.id = id;
     }
