@@ -40,7 +40,6 @@ public class StudentController {
     public String showStudentById(Model model, int id) {
         Student student = studentService.getById(id);
         model.addAttribute("student", student);
-        model.addAttribute("editStudent", student);
         return "students/student-info";
     }
 
@@ -68,9 +67,12 @@ public class StudentController {
     }
 
     @PostMapping("/delete")
-    public ModelAndView deleteStudent(@ModelAttribute("editStudent") Student student) {
-        studentService.delete(student);
-        return new ModelAndView("redirect:/students/");
+    public ModelAndView deleteStudent(@ModelAttribute("student") Student student) {
+        if (studentService.delete(student)) {
+            return new ModelAndView("redirect:/students/");
+        }
+        String redirect = format(REDIRECT_TO_INFO_PAGE, student.getId());
+        return new ModelAndView(redirect);
     }
 
     @PostMapping("/new")
@@ -81,14 +83,14 @@ public class StudentController {
     }
 
     @PostMapping("/edit")
-    public ModelAndView updateStudent(@ModelAttribute("editStudent") Student student, int id) {
+    public ModelAndView updateStudent(@ModelAttribute("student") Student student, int id) {
         studentService.update(student);
         String redirect = format(REDIRECT_TO_INFO_PAGE, id);
         return new ModelAndView(redirect);
     }
 
     @PostMapping("/delete-from-group/")
-    public ModelAndView deleteStudentFromGroup(@ModelAttribute("editStudent") Student student) {
+    public ModelAndView deleteStudentFromGroup(@ModelAttribute("student") Student student) {
         studentService.deleteAssignment(student);
         String redirect = format(REDIRECT_TO_INFO_PAGE, student.getId());
         return new ModelAndView(redirect);
