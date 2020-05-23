@@ -21,6 +21,8 @@ public class Course {
     @ToString.Exclude
     private List<Group> groups = new ArrayList<>();
 
+    public Course() {}
+
     public Course(String name, String description) {
         this.name = name;
         this.description = description;
