@@ -64,45 +64,6 @@
     </nav>
 </div>
 
-<div th:fragment="courses">
-    <h4>Courses:</h4>
-    <table class="table table-striped">
-        <tbody>
-        <tr th:each="course: ${courses}">
-            <td>
-                <a th:href="@{/courses/info/(id=${course.id})}" th:text="${course.name}"></a>
-            </td>
-            <td>
-                <div class="text-right">
-                    <a class="btn btn-secondary"
-                       th:href="@{/lessons/by-course/(courseId=${course.id})}" role="button">Show course's lessons</a>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<div th:fragment="course-info">
-    <h4 th:text="${course.name}"></h4>
-    <p th:text="${course.description}"></p>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Our teachers:</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="teacher: ${teachers}">
-            <td>
-                <a th:href="@{/teachers/info/(id=${teacher.id})}"
-                   th:text="|${teacher.firstName} ${teacher.lastName}|"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
 <div th:fragment="teachers">
     <table class="table table-striped">
         <thead>
