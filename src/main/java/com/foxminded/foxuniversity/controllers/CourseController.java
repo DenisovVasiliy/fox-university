@@ -61,4 +61,13 @@ public class CourseController {
         String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId());
         return new ModelAndView(redirect);
     }
+
+    @PostMapping("/edit")
+    public ModelAndView updateStudent(@ModelAttribute("course") Course course, int id) {
+        if (course.getId()==id) {
+            courseService.update(course);
+        }
+        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId());
+        return new ModelAndView(redirect);
+    }
 }
