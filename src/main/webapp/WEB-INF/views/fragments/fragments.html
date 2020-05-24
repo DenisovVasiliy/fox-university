@@ -64,58 +64,6 @@
     </nav>
 </div>
 
-<div th:fragment="teachers">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Teacher</th>
-            <th scope="col">Course</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="teacher: ${teachers}">
-            <td>
-                <a th:href="@{/teachers/info/(id=${teacher.id})}"
-                   th:text="| ${teacher.firstName} ${teacher.lastName} |"></a>
-            </td>
-            <td>
-                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="| ${teacher.course.name} |"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<div th:fragment="teacher-info">
-    <table class="table table-striped">
-        <thead>
-        <th colspan="2">
-            <h4 class="text-center mb-0">here will be buttons</h4>
-        </th>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="col">Name</th>
-            <td>
-                <p class="mb-0" th:text="${teacher.firstName}"></p>
-            </td>
-        </tr>
-        <tr>
-            <th scope="col">Surname</th>
-            <td>
-                <p class="mb-0" th:text="${teacher.lastName}"></p>
-            </td>
-        </tr>
-        <tr>
-            <th scope="col">Course</th>
-            <td>
-                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="${teacher.course.name}"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
 <div th:fragment="groups">
     <table class="table table-striped">
         <thead>
@@ -270,9 +218,9 @@
     </div>
 </div>
 
-<div th:fragment="success-hints">
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <p th:text="${message}">
+<div th:fragment="warning-hints">
+    <div th:unless="${message}==null" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p class="text-center mb-0" th:text="${message}"></p>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments/fragments :: header('Courses')"></head>
+
+<body>
+
+
+<div th:fragment="teachers">
+    <p></p>
+    <h4>Teachers:
+        <a role="button" class="btn btn-success" th:href="@{/teachers/new/}">Add NEW</a>
+    </h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Teacher</th>
+            <th scope="col">Course</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher: ${teachers}">
+            <td>
+                <a th:href="@{/teachers/info/(id=${teacher.id})}"
+                   th:text="| ${teacher.firstName} ${teacher.lastName} |"></a>
+            </td>
+            <td>
+                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="| ${teacher.course.name} |"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="teacher-info">
+    <p></p>
+    <p th:replace="fragments/fragments :: warning-hints"></p>
+    <table class="table table-striped">
+        <thead>
+        <th class="text-center" colspan="2">
+            <a role="button" class="btn btn-warning"
+               th:href="@{/teachers/edit/(id=${teacher.id})}">Edit</a>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+        </th>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="col">Name</th>
+            <td>
+                <p class="mb-0" th:text="${teacher.firstName}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Surname</th>
+            <td>
+                <p class="mb-0" th:text="${teacher.lastName}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Course</th>
+            <td>
+                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="${teacher.course.name}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="fragments/teachers-frags :: delete-teacher"></div>
+</div>
+
+<div th:fragment="teacher-new">
+    <p></p>
+    <h4 class="text-center">New teacher</h4>
+    <form th:action="@{/teachers/new/}" th:object="${newTeacher}" method="POST">
+        <div class="form-group row">
+            <label for="newName" class="col-sm-2 col-form-label">Name:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="newName" rows="1" th:field="*{firstName}"
+                       required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="newLastName" class="col-sm-2 col-form-label">Surname:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="newLastName" th:field="*{lastName}"
+                       required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="selectNewCourse" class="col-sm-2 col-form-label">Course:</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="selectNewCourse" name="course.id" required>
+                    <option value="" disabled th:selected="${newTeacher.course==null}">
+                        Choose course
+                    </option>
+                    <option th:each="course: ${courses}" th:value="${course.id}"
+                            th:text="${course.name}"
+                            th:selected="${newTeacher.course!=null} and ${newTeacher.course.id==course.id}">
+                        Course
+                    </option>
+                </select>
+            </div>
+        </div>
+        <a href="#" role="button" class="btn btn-outline-danger" onclick="history.back();">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+<div th:fragment="teacher-edit">
+    <p></p>
+    <h4 class="text-center">Edit teacher</h4>
+    <form th:action="@{/teachers/edit/(id=${teacher.id})}" th:object="${teacher}" method="POST">
+        <div class="form-group row">
+            <label for="firstName" class="col-sm-2 col-form-label">Name:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="firstName" rows="1" th:field="*{firstName}"
+                       required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">Surname:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+                       required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="selectCourse" class="col-sm-2 col-form-label">Course:</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="selectCourse" name="course.id" required>
+                    <option value="" disabled th:selected="${teacher.course==null}">
+                        Choose course
+                    </option>
+                    <option th:each="course: ${courses}" th:value="${course.id}"
+                            th:text="${course.name}"
+                            th:selected="${teacher.course!=null} and ${teacher.course.id==course.id}">
+                        Course
+                    </option>
+                </select>
+            </div>
+        </div>
+        <a href="#" role="button" class="btn btn-outline-danger" onclick="history.back();">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+<div th:fragment="delete-teacher">
+    <div class="modal fade" id="deleteModal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="deleteCourseLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCourseLabel">
+                        Confirm removing the teacher
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/teachers/delete/}" th:object="${teacher}" method="POST">
+                        <div th:replace="fragments/teachers-frags :: modal-teacher-description"></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="modal-teacher-description">
+    <div class="form-group row">
+        <label for="teacherId" class="col-sm-2 col-form-label">ID:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="teacherId" th:field="*{id}"
+                   th:value="${teacher.id}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="teacherNameRead" class="col-sm-2 col-form-label">Name:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="teacherNameRead" th:field="*{firstName}"
+                   th:value="${teacher.firstName}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="teacherLastNameRead" class="col-sm-2 col-form-label">Surname:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="teacherLastNameRead" th:field="*{lastName}"
+                   th:value="${teacher.lastName}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="teacherCourseRead" class="col-sm-2 col-form-label">Course:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="teacherCourseRead"
+                   th:value="${teacher.course.name}">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
