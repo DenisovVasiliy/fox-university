@@ -5,10 +5,7 @@ import com.foxminded.foxuniversity.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -22,6 +19,7 @@ public class CourseController {
     private TeacherService teacherService;
 
     private static final String REDIRECT_TO_INFO_PAGE = "redirect:/courses/info/?id=%s";
+    private static final String DELETION_CANCELLED = "Deletion was cancelled: there are some teachers on the course";
 
     @Autowired
     public CourseController(CourseService courseService, TeacherService teacherService) {
@@ -38,7 +36,11 @@ public class CourseController {
     }
 
     @GetMapping("/info")
-    public String showCourseById(Model model, int id) {
+    public String showCourseById(Model model, int id,
+                                 @RequestParam(value = "deletionWarning", required = false) Boolean deletionWarning) {
+        if (deletionWarning != null && deletionWarning) {
+            model.addAttribute("message", DELETION_CANCELLED);
+        }
         Course course = courseService.getById(id);
         List<Teacher> teachers = teacherService.getByCourse(course);
         model.addAttribute("course", course);
@@ -58,13 +60,13 @@ public class CourseController {
         if (courseService.delete(course)) {
             return new ModelAndView("redirect:/courses/");
         }
-        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId());
+        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId() + "&deletionWarning=true");
         return new ModelAndView(redirect);
     }
 
     @PostMapping("/edit")
     public ModelAndView updateStudent(@ModelAttribute("course") Course course, int id) {
-        if (course.getId()==id) {
+        if (course.getId() == id) {
             courseService.update(course);
         }
         String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId());
