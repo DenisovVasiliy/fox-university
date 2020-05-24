@@ -12,7 +12,7 @@ public class AppExceptionHandler {
 
     private static final String ERROR_PAGE = "error-page";
 
-    @ExceptionHandler(value = {IllegalArgumentException.class})
+    @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
     public ModelAndView illegalArgument(RuntimeException ex) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("warnMessage", "Page not found. Please, check the link.");
