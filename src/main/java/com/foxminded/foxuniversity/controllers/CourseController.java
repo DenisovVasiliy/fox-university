@@ -2,7 +2,6 @@ package com.foxminded.foxuniversity.controllers;
 
 import com.foxminded.foxuniversity.domain.*;
 import com.foxminded.foxuniversity.service.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +15,11 @@ import static java.lang.String.format;
 
 @Controller
 @RequestMapping("/courses")
-@Slf4j
 public class CourseController {
     private CourseService courseService;
     private TeacherService teacherService;
 
     private static final String REDIRECT_TO_INFO_PAGE = "redirect:/courses/info/?id=%s&hint=%s";
-    private static final String HINT = "?hint=%s";
     private static final String DELETION_CANCELLED = "Deletion was cancelled: there are some teachers on the course.";
 
     @Autowired
