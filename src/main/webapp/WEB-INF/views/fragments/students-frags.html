@@ -20,11 +20,12 @@
         <tbody>
         <tr th:each="student: ${students}">
             <td>
-                <a th:href="@{/students/info/(id=${student.id})}"
+                <a type="button" class="btn btn-outline-primary" th:href="@{/students/info/(id=${student.id})}"
                    th:text="| ${student.firstName} ${student.lastName} |"></a>
             </td>
             <td th:unless="${student.group}==null">
-                <a th:href="@{/groups/info/(id=${student.group.id})}" th:text="| ${student.group.name} |"></a>
+                <a type="button" class="btn btn-outline-info" th:href="@{/groups/info/(id=${student.group.id})}"
+                   th:text="| ${student.group.name} |"></a>
             </td>
             <td th:if="${student.group}==null">
                 Not assigned

@@ -21,11 +21,12 @@
         <tbody>
         <tr th:each="teacher: ${teachers}">
             <td>
-                <a th:href="@{/teachers/info/(id=${teacher.id})}"
+                <a type="button" class="btn btn-outline-primary" th:href="@{/teachers/info/(id=${teacher.id})}"
                    th:text="| ${teacher.firstName} ${teacher.lastName} |"></a>
             </td>
             <td>
-                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="| ${teacher.course.name} |"></a>
+                <a type="button" class="btn btn-outline-info" th:href="@{/courses/info/(id=${teacher.course.id})}"
+                   th:text="| ${teacher.course.name} |"></a>
             </td>
         </tr>
         </tbody>
@@ -59,7 +60,8 @@
         <tr>
             <th scope="col">Course</th>
             <td>
-                <a th:href="@{/courses/info/(id=${teacher.course.id})}" th:text="${teacher.course.name}"></a>
+                <a type="button" class="btn btn-outline-primary" th:href="@{/courses/info/(id=${teacher.course.id})}"
+                   th:text="${teacher.course.name}"></a>
             </td>
         </tr>
         </tbody>
