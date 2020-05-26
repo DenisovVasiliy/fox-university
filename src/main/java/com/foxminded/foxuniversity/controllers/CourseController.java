@@ -2,6 +2,7 @@ package com.foxminded.foxuniversity.controllers;
 
 import com.foxminded.foxuniversity.domain.*;
 import com.foxminded.foxuniversity.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,16 +11,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+import static com.foxminded.foxuniversity.controllers.util.Constants.*;
 import static java.lang.String.format;
 
 @Controller
 @RequestMapping("/courses")
+@Slf4j
 public class CourseController {
     private CourseService courseService;
     private TeacherService teacherService;
 
-    private static final String REDIRECT_TO_INFO_PAGE = "redirect:/courses/info/?id=%s";
-    private static final String DELETION_CANCELLED = "Deletion was cancelled: there are some teachers on the course";
+    private static final String REDIRECT_TO_INFO_PAGE = "redirect:/courses/info/?id=%s&hint=%s";
+    private static final String HINT = "?hint=%s";
+    private static final String DELETION_CANCELLED = "Deletion was cancelled: there are some teachers on the course.";
 
     @Autowired
     public CourseController(CourseService courseService, TeacherService teacherService) {
@@ -28,7 +32,10 @@ public class CourseController {
     }
 
     @GetMapping
-    public String showAllCourses(Model model) {
+    public String showAllCourses(Model model, @RequestParam(value = "hint", required = false) String hint) {
+        if (hint != null) {
+            model.addAttribute(hint, format(SUCCESSFULLY_DELETED, "Course"));
+        }
         List<Course> courses = courseService.getAll();
         model.addAttribute("courses", courses);
         model.addAttribute("newCourse", new Course());
@@ -37,9 +44,13 @@ public class CourseController {
 
     @GetMapping("/info")
     public String showCourseById(Model model, int id,
-                                 @RequestParam(value = "deletionWarning", required = false) Boolean deletionWarning) {
-        if (deletionWarning != null && deletionWarning) {
-            model.addAttribute("message", DELETION_CANCELLED);
+                                 @RequestParam(value = "hint", required = false) String hint) {
+        if (hint != null) {
+            if (hint.equals(SUCCESS)) {
+                model.addAttribute(hint, SUCCESSFULLY_SAVED);
+            } else {
+                model.addAttribute(hint, DELETION_CANCELLED);
+            }
         }
         Course course = courseService.getById(id);
         List<Teacher> teachers = teacherService.getByCourse(course);
@@ -51,16 +62,17 @@ public class CourseController {
     @PostMapping("/new")
     public ModelAndView saveCourse(@ModelAttribute("newCourse") Course course) {
         courseService.save(course);
-        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId());
+        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId(), SUCCESS);
         return new ModelAndView(redirect);
     }
 
     @PostMapping("/delete")
     public ModelAndView deleteCourse(@ModelAttribute("course") Course course) {
         if (courseService.delete(course)) {
-            return new ModelAndView("redirect:/courses/");
+            String redirect = "redirect:/courses/" + format(HINT, SUCCESS);
+            return new ModelAndView(redirect);
         }
-        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId() + "&deletionWarning=true");
+        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId(), DANGER);
         return new ModelAndView(redirect);
     }
 
@@ -69,7 +81,7 @@ public class CourseController {
         if (course.getId() == id) {
             courseService.update(course);
         }
-        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId());
+        String redirect = format(REDIRECT_TO_INFO_PAGE, course.getId(), SUCCESS);
         return new ModelAndView(redirect);
     }
 }
