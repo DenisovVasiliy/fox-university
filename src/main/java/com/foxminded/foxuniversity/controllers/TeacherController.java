@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+import static com.foxminded.foxuniversity.controllers.util.Constants.*;
 import static java.lang.String.format;
 
 @Controller
@@ -19,7 +20,7 @@ import static java.lang.String.format;
 public class TeacherController {
     private TeacherService teacherService;
     private CourseService courseService;
-    private static final String REDIRECT_TO_INFO_PAGE = "redirect:/teachers/info/?id=%s";
+    private static final String REDIRECT_TO_INFO_PAGE = "redirect:/teachers/info/?id=%s&hint=%s";
     private static final String DELETION_CANCELLED = "Deletion was cancelled: the teacher is assigned to some classes.";
 
     @Autowired
@@ -29,7 +30,10 @@ public class TeacherController {
     }
 
     @GetMapping
-    public String showAllTeachers(Model model) {
+    public String showAllTeachers(Model model, @RequestParam(value = "hint", required = false) String hint) {
+        if (hint != null) {
+            model.addAttribute(hint, format(SUCCESSFULLY_DELETED, "Teacher"));
+        }
         List<Teacher> teachers = teacherService.getAll();
         model.addAttribute("teachers", teachers);
         return "teachers/teachers";
@@ -37,9 +41,13 @@ public class TeacherController {
 
     @GetMapping("/info")
     public String showTeacherById(Model model, int id,
-                                  @RequestParam(value = "deletionWarning", required = false) Boolean deletionWarning) {
-        if (deletionWarning != null && deletionWarning) {
-            model.addAttribute("message", DELETION_CANCELLED);
+                                  @RequestParam(value = "hint", required = false) String hint) {
+        if (hint != null) {
+            if (hint.equals(SUCCESS)) {
+                model.addAttribute(hint, SUCCESSFULLY_SAVED);
+            } else {
+                model.addAttribute(hint, DELETION_CANCELLED);
+            }
         }
         Teacher teacher = teacherService.getById(id);
         model.addAttribute(teacher);
@@ -66,23 +74,23 @@ public class TeacherController {
     @PostMapping("/new")
     public ModelAndView saveTeacher(@ModelAttribute("newTeacher") Teacher teacher) {
         teacherService.save(teacher);
-        String redirect = format(REDIRECT_TO_INFO_PAGE, teacher.getId());
+        String redirect = format(REDIRECT_TO_INFO_PAGE, teacher.getId(), SUCCESS);
         return new ModelAndView(redirect);
     }
 
     @PostMapping("/edit")
     public ModelAndView updateTeacher(@ModelAttribute("teacher") Teacher teacher) {
         teacherService.update(teacher);
-        String redirect = format(REDIRECT_TO_INFO_PAGE, teacher.getId());
+        String redirect = format(REDIRECT_TO_INFO_PAGE, teacher.getId(), SUCCESS);
         return new ModelAndView(redirect);
     }
 
     @PostMapping("/delete")
     public ModelAndView deleteCourse(@ModelAttribute("teacher") Teacher teacher) {
         if (teacherService.delete(teacher)) {
-            return new ModelAndView("redirect:/teachers/");
+            return new ModelAndView("redirect:/teachers/" + format(HINT, SUCCESS));
         }
-        String redirect = format(REDIRECT_TO_INFO_PAGE, teacher.getId() + "&deletionWarning=true");
+        String redirect = format(REDIRECT_TO_INFO_PAGE, teacher.getId(), DANGER);
         return new ModelAndView(redirect);
     }
 }

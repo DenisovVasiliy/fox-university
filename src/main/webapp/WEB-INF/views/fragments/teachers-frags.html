@@ -7,6 +7,7 @@
 
 <div th:fragment="teachers">
     <p></p>
+    <p th:replace="fragments/fragments :: hints"></p>
     <h4>Teachers:
         <a role="button" class="btn btn-success" th:href="@{/teachers/new/}">Add NEW</a>
     </h4>
@@ -33,7 +34,7 @@
 
 <div th:fragment="teacher-info">
     <p></p>
-    <p th:replace="fragments/fragments :: warning-hints"></p>
+    <p th:replace="fragments/fragments :: hints"></p>
     <table class="table table-striped">
         <thead>
         <th class="text-center" colspan="2">
