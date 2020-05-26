@@ -74,7 +74,7 @@ public class CourseController {
     }
 
     @PostMapping("/edit")
-    public ModelAndView updateStudent(@ModelAttribute("course") Course course, int id) {
+    public ModelAndView updateCourse(@ModelAttribute("course") Course course, int id) {
         if (course.getId() == id) {
             courseService.update(course);
         }
