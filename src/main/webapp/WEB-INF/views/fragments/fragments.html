@@ -64,58 +64,6 @@
     </nav>
 </div>
 
-<div th:fragment="groups">
-    <table class="table table-striped">
-        <thead>
-        <th>
-            <h4 class="mb-0">Groups:</h4>
-        </th>
-        </thead>
-        <tbody>
-        <tr th:each="group: ${groups}">
-            <td>
-                <a th:href="@{/groups/info/(id=${group.id})}" th:text="${group.name}"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<div th:fragment="group-info">
-    <p> </p>
-    <p th:replace="fragments/fragments :: hints"></p>
-    <h4 th:text="|Group ${group.name}|"></h4>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h5>Group's courses:</h5>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr th:each="course: ${courses}">
-                        <td>
-                            <a th:href="@{/courses/info/(id=${course.id})}" th:text="${course.name}"></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col">
-                <h5>Group's students:</h5>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr th:each="student: ${group.students}">
-                        <td>
-                            <a th:href="@{/students/info/(id=${student.id})}"
-                               th:text="| ${student.firstName} ${student.lastName} |"></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div th:fragment="lessons">
     <table class="table table-striped">
         <thead>
@@ -233,6 +181,19 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+</div>
+
+<div th:fragment="deleteConfirmScript">
+    <script>
+        $('document').ready(function() {
+            $('.table #deleteButton').on('click',function(event) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            $('#deleteAssignmentModal #confirmForm').attr('action', href);
+            $('#deleteAssignmentModal').modal();
+         });
+        });
+    </script>
 </div>
 
 </body>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments/fragments :: header('Groups')"></head>
+
+<body>
+
+<div th:fragment="groups">
+    <p></p>
+    <p th:replace="fragments/fragments :: hints"></p>
+    <table class="table table-striped">
+        <thead>
+        <th>
+            <h4 class="mb-0">Groups:
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newModal">Add NEW
+                </button>
+            </h4>
+        </th>
+        </thead>
+        <tbody>
+        <tr th:each="group: ${groups}">
+            <td>
+                <a type="button" class="btn btn-outline-primary" th:href="@{/groups/info/(id=${group.id})}"
+                   th:text="${group.name}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="fragments/groups-frags :: group-new"></div>
+</div>
+
+<div th:fragment="group-info">
+    <p></p>
+    <p th:replace="fragments/fragments :: hints"></p>
+    <h4 th:text="|Group ${group.name}|">Group name</h4>
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit</button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+    <a role="button" class="btn btn-success" th:href="@{/groups/assign/(id=${group.id})}">
+        Assign new courses</a>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h5>Group's courses:</h5>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr th:each="course: ${courses}">
+                        <td>
+                            <a type="button" class="btn btn-outline-primary"
+                               th:href="@{/courses/info/(id=${course.id})}" th:text="${course.name}"></a>
+                        </td>
+                        <td class="text-right mb-0">
+                            <a type="button" class="btn btn-outline-danger" id="deleteButton"
+                               th:href="@{/groups/assign/delete/(groupId=${group.id},courseId=${course.id})}">
+                                Delete course
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <h5>Group's students:</h5>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr th:each="student: ${group.students}">
+                        <td>
+                            <a role="button" class="btn btn-outline-info" th:href="@{/students/info/(id=${student.id})}"
+                               th:text="| ${student.firstName} ${student.lastName} |"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/groups-frags :: group-edit"></div>
+    <div th:replace="fragments/groups-frags :: group-delete"></div>
+    <div th:replace="fragments/groups-frags :: delete-assignment"></div>
+    <div th:replace="fragments/fragments :: deleteConfirmScript"></div>
+</div>
+
+<div th:fragment="group-new">
+    <div class="modal fade" id="newModal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="newGroupLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newGroupLabel">Add new group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/groups/new/}" th:object="${newGroup}"
+                          method="POST">
+                        <div class="form-group">
+                            <label for="newName" class="col-sm-2 col-form-label">Name:</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="newName" rows="1" th:field="*{name}"
+                                       required>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="group-edit">
+    <div class="modal fade" id="editModal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="editGroupLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editGroupLabel">Edit group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/groups/edit/}" th:object="${group}"
+                          method="POST">
+                        <div class="form-group row">
+                            <label for="id" class="col-sm-2 col-form-label">ID:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="id" th:field="*{id}"
+                                       th:value="${group.id}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="editName" class="col-sm-2 col-form-label">Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="editName" th:field="*{name}"
+                                       th:value="${group.name}" required>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="group-delete">
+    <div class="modal fade" id="deleteModal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="deleteGroupLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteGroupLabel">Confirm deletion group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/groups/delete/(id=${group.id})}" th:object="${group}" method="POST">
+                        <div th:replace="fragments/groups-frags :: group-description"></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="group-description">
+    <div class="form-group row">
+        <label for="groupId" class="col-sm-2 col-form-label">ID:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="groupId" th:field="*{id}"
+                   th:value="${group.id}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="groupNameRead" class="col-sm-2 col-form-label">Name:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="groupNameRead" th:field="*{name}"
+                   th:value="${group.name}">
+        </div>
+    </div>
+</div>
+
+<div th:fragment="group-assign">
+    <div class="text-center">
+        <h4>Assign group to courses:</h4>
+    </div>
+
+    <form th:action="@{/groups/assign/}" th:object="${groupDTO}" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">ID:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext"
+                       th:field="*{group.id}" th:value="*{group.id}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Name:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext"
+                       th:field="*{group.name}" th:value="*{group.name}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="selectCourses">Select courses:</label>
+            <select multiple class="form-control" id="selectCourses" name="courses" required>
+                <option th:each="course, itemStat : ${courses}" th:value="${course.id}" th:text="${course.name}"
+                        th:unless="${#lists.contains(groupsCourses, course)}">course</option>
+            </select>
+        </div>
+        <a href="#" role="button" class="btn btn-outline-danger" onclick="history.back();">Cancel</a>
+        <button type="submit" class="btn btn-success">Assign</button>
+    </form>
+</div>
+
+<div th:fragment="delete-assignment">
+    <div class="modal fade" id="deleteAssignmentModal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="deleteAssignmentLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteAssignmentLabel">Confirm assignment's deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <form action="" id="confirmForm" method="POST">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
