@@ -132,10 +132,8 @@
                     <option value="" disabled th:selected="${teacher.course==null}">
                         Choose course
                     </option>
-                    <option th:each="course: ${courses}" th:value="${course.id}"
-                            th:text="${course.name}"
-                            th:selected="${teacher.course!=null} and ${teacher.course.id==course.id}">
-                        Course
+                    <option th:each="course: ${courses}" th:value="${course.id}" th:text="${course.name}"
+                            th:selected="${teacher.course!=null} and ${teacher.course.id==course.id}">Course
                     </option>
                 </select>
             </div>
