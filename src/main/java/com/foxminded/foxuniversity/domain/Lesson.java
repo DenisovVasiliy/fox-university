@@ -96,23 +96,12 @@ public class Lesson {
 
         Lesson lesson = (Lesson) o;
 
-        if (id != lesson.id) return false;
-        if (!course.equals(lesson.course)) return false;
-        if (classroom != lesson.classroom) return false;
-        if (day != lesson.day) return false;
-        if (!startTime.equals(lesson.startTime)) return false;
-        return type == lesson.type;
+        return id == lesson.id;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + course.hashCode();
-        result = 31 * result + groups.hashCode();
-        result = 31 * result + day.hashCode();
-        result = 31 * result + startTime.hashCode();
-        result = 31 * result + type.hashCode();
-        return result;
+        return id;
     }
 
     @Override
