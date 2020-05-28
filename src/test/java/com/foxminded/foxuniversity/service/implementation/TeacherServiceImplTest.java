@@ -125,6 +125,13 @@ class TeacherServiceImplTest {
     }
 
     @Test
+    public void shouldCallUpdateTeacherWithHisCourseAndReturnResult() {
+        when(teacherDao.updateWithCourse(teacher)).thenReturn(true);
+        assertTrue(teacherService.updateWithCourse(teacher));
+        verify(teacherDao).updateWithCourse(teacher);
+    }
+
+    @Test
     public void shouldCallDeleteTeacherIfTeacherHasNoLessons() {
         when(lessonService.getByTeacher(teacher)).thenReturn(emptyList());
         when(teacherDao.delete(teacher)).thenReturn(true);
