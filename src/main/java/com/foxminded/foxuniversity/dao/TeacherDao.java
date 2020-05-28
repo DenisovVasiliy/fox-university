@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface TeacherDao extends GenericDao<Teacher> {
     List<Teacher> getByCourse(Course course);
+
+    boolean updateWithCourse(Teacher teacher);
 }
