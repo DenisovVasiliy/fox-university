@@ -44,6 +44,8 @@ public class LessonDaoPostgres implements LessonDao {
     private String assignGroups;
     @Value("${lesson.getByCourse}")
     private String getByCourse;
+    @Value("${lesson.getByGroup}")
+    private String getByGroup;
     @Value("${lesson.getByStudent}")
     private String getByStudent;
     @Value("${lesson.getByTeacher}")
@@ -107,6 +109,21 @@ public class LessonDaoPostgres implements LessonDao {
             lessons = jdbcTemplate.query(getByCourse, new Object[]{course.getId()}, lessonMapper);
         } catch (DataAccessException e) {
             String msg = format(UNABLE_GET_BY_ENTITY, entity, course);
+            log.error(msg);
+            throw new QueryNotExecuteException(msg, e);
+        }
+        log.trace("Found {} {}s", lessons.size(), entity);
+        return lessons;
+    }
+
+    @Override
+    public List<Lesson> getByGroup(Group group) {
+        log.debug("getByGroup({})", group);
+        List<Lesson> lessons;
+        try {
+            lessons = jdbcTemplate.query(getByGroup, new Object[]{group.getId()}, lessonMapper);
+        } catch (DataAccessException e) {
+            String msg = format(UNABLE_GET_BY_ENTITY, entity, group);
             log.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
