@@ -3,6 +3,7 @@ package com.foxminded.foxuniversity.dao.implementation;
 import com.foxminded.foxuniversity.dao.CourseDao;
 import com.foxminded.foxuniversity.dao.DaoTestConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
+import com.foxminded.foxuniversity.dao.LessonDao;
 import com.foxminded.foxuniversity.dao.exceptions.EntityNotFoundException;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
@@ -43,6 +44,8 @@ class GroupDaoPostgresTest {
     @Autowired
     private GroupDao groupDao;
     @Autowired
+    private LessonDao lessonDao;
+    @Autowired
     private DataSource dataSource;
     private static ScriptRunner runner;
     private static Lesson lesson;
@@ -58,7 +61,7 @@ class GroupDaoPostgresTest {
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
         }
         Teacher teacher = new Teacher(0, "Test", "Teacher", courses.get(0));
-        lesson = new Lesson(2, courses.get(0), teacher, 10, Day.MONDAY,
+        lesson = new Lesson(2, courses.get(1), teacher, 10, Day.MONDAY,
                 new Time(9, 30, 0), LessonsType.LECTURE);
     }
 
@@ -138,27 +141,19 @@ class GroupDaoPostgresTest {
     }
 
     @Test
-    public void shouldDeleteGroupFromCourse() {
+    public void shouldDeleteGroupFromCourseAndFromAllLessonsOfThisCourse() {
         Group updatedGroup = groups.get(0);
         List<Course> actualCourses = courseDao.getByGroup(updatedGroup);
+        List<Lesson> lessonsBefore = lessonDao.getByGroup(updatedGroup);
         assertEquals(courses.subList(0, 2), actualCourses);
+        assertTrue(lessonsBefore.contains(lesson));
 
-        assertTrue(groupDao.deleteFromCourse(updatedGroup, courses.get(1)));
+        groupDao.deleteFromCourse(updatedGroup, courses.get(1));
 
         actualCourses = courseDao.getByGroup(updatedGroup);
         assertEquals(courses.subList(0, 1), actualCourses);
-    }
-
-    @Test
-    public void shouldDeleteGroupFromCourses() {
-        Group updatedGroup = groups.get(0);
-        List<Course> actualCourses = courseDao.getByGroup(updatedGroup);
-        assertEquals(courses.subList(0, 2), actualCourses);
-
-        assertTrue(groupDao.deleteFromCourse(updatedGroup, courses.subList(0, 2)));
-
-        actualCourses = courseDao.getByGroup(updatedGroup);
-        assertEquals(0, actualCourses.size());
+        List<Lesson> lessonsAfter = lessonDao.getByGroup(updatedGroup);
+        assertEquals(lessonsBefore.subList(0, 1), lessonsAfter);
     }
 
     @Test

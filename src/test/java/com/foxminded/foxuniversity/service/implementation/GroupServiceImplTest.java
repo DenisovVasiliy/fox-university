@@ -147,58 +147,13 @@ class GroupServiceImplTest {
     }
 
     @Test
-    public void shouldCallDeleteFromCourseAndIfItReturnsTrueRemoveGroupFromCourse() {
+    public void shouldCallDeleteFromCourseAndRemoveGroupFromCourse() {
         Course course = courses.get(0);
         course.setGroups(new ArrayList<>(groups));
-        when(groupDao.deleteFromCourse(group, course)).thenReturn(true);
 
         assertTrue(groupService.deleteFromCourse(group, course));
 
         verify(groupDao).deleteFromCourse(group, course);
         assertFalse(course.getGroups().contains(group));
-    }
-
-    @Test
-    public void shouldCallDeleteFromCourseAndIfItReturnsFalseDoNotRemoveGroupFromCourse() {
-        Course course = courses.get(0);
-        course.setGroups(new ArrayList<>(groups));
-        when(groupDao.deleteFromCourse(group, courses.get(0))).thenReturn(false);
-
-        assertFalse(groupService.deleteFromCourse(group, courses.get(0)));
-
-        verify(groupDao).deleteFromCourse(group, courses.get(0));
-        assertTrue(course.getGroups().contains(group));
-    }
-
-    @Test
-    public void shouldCallDeleteFromCoursesAndIfItReturnsTrueRemoveGroupFromCourses() {
-        for (Course course : courses) {
-            course.setGroups(new ArrayList<>(groups));
-        }
-        List<Course> coursesToDelete = courses.subList(1, 3);
-        when(groupDao.deleteFromCourse(group, coursesToDelete)).thenReturn(true);
-
-        assertTrue(groupService.deleteFromCourse(group, coursesToDelete));
-
-        verify(groupDao).deleteFromCourse(group, coursesToDelete);
-        assertTrue(courses.get(0).getGroups().contains(group));
-        assertFalse(courses.get(1).getGroups().contains(group));
-        assertFalse(courses.get(2).getGroups().contains(group));
-    }
-
-    @Test
-    public void shouldCallDeleteFromCoursesAndIfItReturnsFalseDoNotRemoveGroupFromCourses() {
-        for (Course course : courses) {
-            course.setGroups(new ArrayList<>(groups));
-        }
-        List<Course> coursesToDelete = courses.subList(1, 3);
-        when(groupDao.deleteFromCourse(group, coursesToDelete)).thenReturn(false);
-
-        assertFalse(groupService.deleteFromCourse(group, coursesToDelete));
-
-        verify(groupDao).deleteFromCourse(group, coursesToDelete);
-        for (Course course : courses) {
-            assertTrue(course.getGroups().contains(group));
-        }
     }
 }
