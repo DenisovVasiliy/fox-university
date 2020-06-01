@@ -208,8 +208,9 @@
         <div class="form-group">
             <label for="selectCourses">Select courses:</label>
             <select multiple class="form-control" id="selectCourses" name="courses" required>
-                <option th:each="course, itemStat : ${courses}" th:value="${course.id}" th:text="${course.name}"
-                        th:unless="${#lists.contains(groupsCourses, course)}">course</option>
+                <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.name}"
+                        th:unless="${#lists.contains(groupsCourses, course)}">course
+                </option>
             </select>
         </div>
         <a href="#" role="button" class="btn btn-outline-danger" onclick="history.back();">Cancel</a>

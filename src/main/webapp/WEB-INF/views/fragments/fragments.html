@@ -64,97 +64,6 @@
     </nav>
 </div>
 
-<div th:fragment="lessons">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Day</th>
-            <th scope="col">Time</th>
-            <th scope="col">Class #</th>
-            <th scope="col">Course</th>
-            <th scope="col">Teacher</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="lesson: ${lessons}">
-            <td>
-                <p th:text="${lesson.day}"></p>
-            </td>
-            <td>
-                <p th:text="${lesson.startTime}"></p>
-            </td>
-            <td>
-                <p th:text="${lesson.classroom}"></p>
-            </td>
-            <td>
-                <a th:href="@{/courses/info/(id=${lesson.course.id})}"
-                   th:text="| ${lesson.course.name} |"></a>
-                <p class="mb-0" th:text="|(${lesson.type})|"></p>
-            </td>
-            <td>
-                <a th:href="@{/teachers/info/(id=${lesson.teacher.id})}"
-                   th:text="| ${lesson.teacher.firstName} ${lesson.teacher.lastName} |"></a>
-            </td>
-            <td>
-                <a class="btn btn-outline-info"
-                   th:href="@{/lessons/info/(id=${lesson.id})}" role="button">Info</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<div th:fragment="lesson-info">
-    <table class="table table-striped">
-        <thead>
-        <th colspan="2">
-            <h4 class="text-center mb-0">Info</h4>
-        </th>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="col">Day</th>
-            <td>
-                <p class="mb-0" th:text="${lesson.day}"></p>
-            </td>
-        </tr>
-        <tr>
-            <th scope="col">Time</th>
-            <td>
-                <p class="mb-0" th:text="${lesson.startTime}"></p>
-            </td>
-        </tr>
-        <tr>
-            <th scope="col">Class #</th>
-            <td>
-                <p class="mb-0" th:text="${lesson.classroom}"></p>
-            </td>
-        </tr>
-        <tr>
-            <th scope="col">Course</th>
-            <td>
-                <a th:href="@{/courses/info/(id=${lesson.course.id})}"
-                   th:text="| ${lesson.course.name} |"></a>
-            </td>
-        </tr>
-        <tr>
-            <th scope="col">Lesson's type</th>
-            <td>
-                <p class="mb-0" th:text="|${lesson.type}|"></p>
-            </td>
-        </tr>
-        <tr>
-            <th scope="col">Teacher</th>
-            <td>
-                <a th:href="@{/teachers/info/(id=${lesson.teacher.id})}"
-                   th:text="| ${lesson.teacher.firstName} ${lesson.teacher.lastName} |"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
 <div th:fragment="notification">
     <div th:unless="${warnMessage==null}">
         <div class="alert alert-warning" role="alert">
@@ -181,6 +90,12 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+    <div th:unless="${warningMessage}==null" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p class="text-center mb-0" th:text="${warningMessage}"></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 </div>
 
 <div th:fragment="deleteConfirmScript">
@@ -193,6 +108,8 @@
             $('#deleteAssignmentModal').modal();
          });
         });
+
+
     </script>
 </div>
 
