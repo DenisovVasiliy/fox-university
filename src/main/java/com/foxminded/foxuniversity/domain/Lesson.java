@@ -9,13 +9,16 @@ public class Lesson {
     private Course course;
     private List<Group> groups = new ArrayList<>();
     private Teacher teacher;
-    private int classroom;
+    private Integer classroom;
     private Day day;
     private Time startTime;
     private LessonsType type;
 
+    public Lesson() {
+    }
+
     public Lesson(int id, Course course, Teacher teacher,
-                  int classroom, Day day, Time startTime, LessonsType type) {
+                  Integer classroom, Day day, Time startTime, LessonsType type) {
         this.id = id;
         this.course = course;
         this.teacher = teacher;
@@ -81,11 +84,11 @@ public class Lesson {
         this.teacher = teacher;
     }
 
-    public int getClassroom() {
+    public Integer getClassroom() {
         return classroom;
     }
 
-    public void setClassroom(int classroom) {
+    public void setClassroom(Integer classroom) {
         this.classroom = classroom;
     }
 
