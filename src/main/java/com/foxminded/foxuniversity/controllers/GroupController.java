@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.foxminded.foxuniversity.controllers.util.Constants.*;
 import static com.foxminded.foxuniversity.controllers.util.Constants.DANGER;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequestMapping("/groups")
@@ -72,7 +72,6 @@ public class GroupController {
         List<Course> allCourses = courseService.getAll();
         GroupAssignmentDTO groupDTO = new GroupAssignmentDTO();
         groupDTO.setGroup(group);
-        groupDTO.addCoursesByCounter(allCourses.size());
         model.addAttribute("groupsCourses", groupsCourses);
         model.addAttribute("courses", allCourses);
         model.addAttribute("groupDTO", groupDTO);
@@ -106,7 +105,7 @@ public class GroupController {
     @PostMapping("/assign")
     public ModelAndView assignGroup(@ModelAttribute("groupDTO") GroupAssignmentDTO groupDTO) {
         List<Course> courses = groupDTO.getCourses().stream().
-                filter(course -> course.getId() != 0).collect(Collectors.toList());
+                filter(course -> course.getId() != 0).collect(toList());
         groupService.assignToCourses(groupDTO.getGroup(), courses);
         String redirect = format(REDIRECT_TO_INFO_PAGE, groupDTO.getGroup().getId(), SUCCESS);
         return new ModelAndView(redirect);

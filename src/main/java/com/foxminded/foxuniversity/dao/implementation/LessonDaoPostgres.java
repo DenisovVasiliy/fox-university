@@ -189,7 +189,7 @@ public class LessonDaoPostgres implements LessonDao {
 
     @Override
     public boolean assignGroups(Lesson lesson, List<Group> groups) {
-        log.debug("assignToCourses({}, {})", lesson, groups);
+        log.debug("assignGroups({}, {})", lesson, groups);
         try {
             int[] result = jdbcTemplate.batchUpdate(assignGroups, new BatchPreparedStatementSetter() {
                 @Override

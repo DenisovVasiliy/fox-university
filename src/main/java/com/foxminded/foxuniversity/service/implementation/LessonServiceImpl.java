@@ -96,7 +96,9 @@ public class LessonServiceImpl implements LessonService {
         log.debug("LessonService calls lessonDao.assignGroups({}, {}).", lesson, groups);
         if (lessonDao.assignGroups(lesson, groups)) {
             log.debug("Assignment was successful. Set groups to the lesson.");
-            lesson.setGroups(groups);
+            for (Group group : groups) {
+                lesson.getGroups().add(group);
+            }
             return true;
         }
         log.warn("Assignment groups to lesson was cancelled: ({}, {}).", lesson, groups);
@@ -147,7 +149,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private void setCourse(Lesson lesson, Course course) {
-        log.debug("Set inputted {} to {}",course, lesson);
+        log.debug("Set inputted {} to {}", course, lesson);
         lesson.setCourse(course);
         log.debug("Set inputted {} to lesson's {}.", course, lesson.getTeacher());
         lesson.getTeacher().setCourse(course);
@@ -164,7 +166,7 @@ public class LessonServiceImpl implements LessonService {
         Course course = courseService.getById(lesson.getCourse().getId());
         log.debug("Set returned {} to {}.", course, lesson);
         lesson.setCourse(course);
-        log.debug("Set returned {} to lesson's {}",course, lesson.getTeacher());
+        log.debug("Set returned {} to lesson's {}", course, lesson.getTeacher());
         lesson.getTeacher().setCourse(course);
     }
 

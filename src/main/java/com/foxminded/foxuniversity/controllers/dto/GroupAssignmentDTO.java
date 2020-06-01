@@ -26,12 +26,6 @@ public class GroupAssignmentDTO {
         this.courses = courses;
     }
 
-    public void addCoursesByCounter(int counter) {
-        for (int i = 0; i < counter; i++) {
-            courses.add(new Course());
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

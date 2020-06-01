@@ -1,7 +1,6 @@
 package com.foxminded.foxuniversity.controllers;
 
 import com.foxminded.foxuniversity.domain.Course;
-import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Teacher;
 import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.LessonService;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.foxminded.foxuniversity.controllers.util.Constants.*;
