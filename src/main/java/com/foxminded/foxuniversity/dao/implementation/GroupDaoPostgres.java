@@ -199,42 +199,18 @@ public class GroupDaoPostgres implements GroupDao {
     }
 
     @Override
-    public boolean deleteFromCourse(Group group, Course course) {
+    public void deleteFromCourse(Group group, Course course) {
         log.debug("deleteFromCourse({}, {})", group, course);
         int counter;
         try {
-            counter = jdbcTemplate.update(deleteFromCourse, group.getId(), course.getId());
+            counter = jdbcTemplate.update(deleteFromCourse, group.getId(), course.getId(),
+                    group.getId(), course.getId());
         } catch (DataAccessException e) {
             String msg = format(UNABLE_DELETE_FROM, group, course);
             log.error(msg);
             throw new QueryNotExecuteException(msg, e);
         }
         log.trace("{} deleted from '{}' {}.", group, counter, course);
-        return counter > 0;
-    }
 
-    @Override
-    public boolean deleteFromCourse(Group group, List<Course> courses) {
-        log.debug("deleteFromCourse({}, {})", group, courses);
-        try {
-            int[] result = jdbcTemplate.batchUpdate(deleteFromCourse, new BatchPreparedStatementSetter() {
-                @Override
-                public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
-                    preparedStatement.setInt(1, group.getId());
-                    preparedStatement.setInt(2, courses.get(i).getId());
-                }
-
-                @Override
-                public int getBatchSize() {
-                    return courses.size();
-                }
-            });
-            log.trace("{} deleted from '{}' {}.", group, of(result).sum(), courses);
-            return of(result).sum() == courses.size();
-        } catch (DataAccessException e) {
-            String msg = format(UNABLE_DELETE_FROM, group, courses);
-            log.error(msg);
-            throw new QueryNotExecuteException(msg, e);
-        }
     }
 }

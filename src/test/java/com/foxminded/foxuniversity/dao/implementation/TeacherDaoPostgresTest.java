@@ -114,6 +114,23 @@ class TeacherDaoPostgresTest {
 
         Teacher actual = teacherDao.getById(updatedTeacher.getId());
         assertEquals(updatedTeacher, actual);
+        assertEquals(teachers.get(1).getCourse(), actual.getCourse());
+    }
+
+    @Test
+    public void shouldUpdateTeacherWithCourse() {
+        Teacher updatedTeacher = teacherDao.getById(2);
+        assertEquals(updatedTeacher, teachers.get(1));
+        assertEquals(updatedTeacher.getCourse(), teachers.get(1).getCourse());
+
+        updatedTeacher.setFirstName("T-Up");
+        updatedTeacher.setLastName("Updated");
+        updatedTeacher.setCourse(courses.get(2));
+
+        assertTrue(teacherDao.updateWithCourse(updatedTeacher));
+
+        Teacher actual = teacherDao.getById(updatedTeacher.getId());
+        assertEquals(updatedTeacher, actual);
         assertEquals(updatedTeacher.getCourse(), actual.getCourse());
     }
 

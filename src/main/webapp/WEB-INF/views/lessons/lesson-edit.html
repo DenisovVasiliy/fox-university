@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="fragments/fragments :: header('Students')"></head>
-
+<head th:replace="fragments/fragments :: header('Lesson: edit')"></head>
 <body>
 <div th:replace="fragments/fragments :: menu"></div>
-
 <div class="container-lg">
-    <div th:replace="fragments/students-frags :: students"></div>
+    <div th:replace="fragments/lessons-frags :: lesson-edit"></div>
 </div>
 </body>
 </html>

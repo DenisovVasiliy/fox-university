@@ -5,7 +5,9 @@
 <body>
 <div th:replace="fragments/fragments :: menu"></div>
 
-<div class="container-lg" th:insert="fragments/fragments :: course-info"></div>
+<div class="container-lg">
+    <div th:insert="fragments/courses-frags :: course-info"></div>
+</div>
 </body>
 </html>
 

@@ -9,13 +9,16 @@ public class Lesson {
     private Course course;
     private List<Group> groups = new ArrayList<>();
     private Teacher teacher;
-    private int classroom;
+    private Integer classroom;
     private Day day;
     private Time startTime;
     private LessonsType type;
 
+    public Lesson() {
+    }
+
     public Lesson(int id, Course course, Teacher teacher,
-                  int classroom, Day day, Time startTime, LessonsType type) {
+                  Integer classroom, Day day, Time startTime, LessonsType type) {
         this.id = id;
         this.course = course;
         this.teacher = teacher;
@@ -81,11 +84,11 @@ public class Lesson {
         this.teacher = teacher;
     }
 
-    public int getClassroom() {
+    public Integer getClassroom() {
         return classroom;
     }
 
-    public void setClassroom(int classroom) {
+    public void setClassroom(Integer classroom) {
         this.classroom = classroom;
     }
 
@@ -96,23 +99,12 @@ public class Lesson {
 
         Lesson lesson = (Lesson) o;
 
-        if (id != lesson.id) return false;
-        if (!course.equals(lesson.course)) return false;
-        if (classroom != lesson.classroom) return false;
-        if (day != lesson.day) return false;
-        if (!startTime.equals(lesson.startTime)) return false;
-        return type == lesson.type;
+        return id == lesson.id;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + course.hashCode();
-        result = 31 * result + groups.hashCode();
-        result = 31 * result + day.hashCode();
-        result = 31 * result + startTime.hashCode();
-        result = 31 * result + type.hashCode();
-        return result;
+        return id;
     }
 
     @Override

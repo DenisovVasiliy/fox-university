@@ -52,6 +52,12 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public boolean updateWithCourse(Teacher teacher) {
+        log.debug("TeacherService calls teacherDao.updateWithCourse({}).", teacher);
+        return teacherDao.updateWithCourse(teacher);
+    }
+
+    @Override
     public boolean delete(Teacher teacher) {
         log.debug("Checking timetable of the {} before deleting.", teacher);
         if (getTimetable(teacher).isEmpty()) {

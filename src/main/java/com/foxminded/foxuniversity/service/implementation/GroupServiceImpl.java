@@ -88,35 +88,12 @@ public class GroupServiceImpl implements GroupService {
     public boolean deleteFromCourse(Group group, Course course) {
         if (course.getGroups().contains(group)) {
             log.debug("Call groupDao.deleteFromCourse({},{}).", group, course);
-            if (groupDao.deleteFromCourse(group, course)) {
-                log.debug("Deletion was successful. Remove group from course.");
-                course.getGroups().remove(group);
-                return true;
-            }
-            log.warn("Deletion {} from {} was cancelled in DAO-layer.", group, course);
-            return false;
-        }
-        log.warn("Deletion was cancelled: {} isn't assigned to the {}", group, course);
-        return false;
-    }
-
-    @Override
-    public boolean deleteFromCourse(Group group, List<Course> courses) {
-        for (Course course : courses) {
-            if (!course.getGroups().contains(group)) {
-                log.warn("Deletion was cancelled: {} isn't assigned to the {}", group, course);
-                return false;
-            }
-        }
-        log.debug("Call groupDao.deleteFromCourse({}, {}).", group, courses.size());
-        if (groupDao.deleteFromCourse(group, courses)) {
-            log.debug("Deletion was successful. Remove group from courses.");
-            for (Course course : courses) {
-                course.getGroups().remove(group);
-            }
+            groupDao.deleteFromCourse(group, course);
+            log.debug("Deletion was successful. Remove group from course.");
+            course.getGroups().remove(group);
             return true;
         }
-        log.warn("Deletion {} from courses was cancelled in DAO-layer.", group);
+        log.warn("Deletion was cancelled: {} isn't assigned to the {}", group, course);
         return false;
     }
 

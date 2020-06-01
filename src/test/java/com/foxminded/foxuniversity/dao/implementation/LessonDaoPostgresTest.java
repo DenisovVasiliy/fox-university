@@ -115,6 +115,12 @@ class LessonDaoPostgresTest {
     }
 
     @Test
+    public void shouldGetLessonByGroup() {
+        List<Lesson> actual = lessonDao.getByGroup(groups.get(0));
+        assertEquals(lessons.subList(0, 2), actual);
+    }
+
+    @Test
     public void shouldGetLessonByStudent() {
         List<Lesson> actual = lessonDao.getByStudent(student);
         assertEquals(lessons.subList(0, 2), actual);

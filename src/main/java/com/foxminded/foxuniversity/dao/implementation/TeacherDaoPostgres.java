@@ -42,8 +42,8 @@ public class TeacherDaoPostgres implements TeacherDao {
     private String getByCourse;
     @Value("${teacher.update}")
     private String update;
-    @Value("${teacher.updateCourse}")
-    private String updateCourse;
+    @Value("${teacher.updateWithCourse}")
+    private String updateWithCourse;
     @Value("${teacher.delete}")
     private String delete;
 
@@ -130,6 +130,22 @@ public class TeacherDaoPostgres implements TeacherDao {
         int counter;
         try {
             counter = jdbcTemplate.update(update,
+                    teacher.getFirstName(), teacher.getLastName(), teacher.getId());
+        } catch (DataAccessException e) {
+            String msg = format(UNABLE_UPDATE, teacher);
+            log.error(msg);
+            throw new QueryNotExecuteException(msg, e);
+        }
+        log.trace("Updated '{}' {}", counter, teacher);
+        return counter > 0;
+    }
+
+    @Override
+    public boolean updateWithCourse(Teacher teacher) {
+        log.debug("updateWithCourse({})", teacher);
+        int counter;
+        try {
+            counter = jdbcTemplate.update(updateWithCourse,
                     teacher.getFirstName(), teacher.getLastName(), teacher.getCourse().getId(), teacher.getId());
         } catch (DataAccessException e) {
             String msg = format(UNABLE_UPDATE, teacher);

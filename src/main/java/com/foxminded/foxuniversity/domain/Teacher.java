@@ -6,6 +6,8 @@ public class Teacher {
     private String lastName;
     private Course course;
 
+    public Teacher() {}
+
     public Teacher(int id) {
         this.id = id;
     }

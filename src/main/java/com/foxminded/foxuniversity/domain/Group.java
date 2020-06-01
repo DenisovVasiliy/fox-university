@@ -8,12 +8,11 @@ public class Group {
     private String name;
     private List<Student> students = new ArrayList<>();
 
-    public Group(int id) {
-        this.id = id;
+    public Group() {
     }
 
-    public Group(String name) {
-        this.name = name;
+    public Group(int id) {
+        this.id = id;
     }
 
     public Group(int id, String name) {

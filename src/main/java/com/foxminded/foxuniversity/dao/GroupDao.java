@@ -11,9 +11,7 @@ import java.util.List;
 public interface GroupDao extends GenericDao<Group> {
     boolean assignToCourses(Group group, List<Course> courses);
 
-    boolean deleteFromCourse(Group group, Course course);
-
-    boolean deleteFromCourse(Group group, List<Course> courses);
+    void deleteFromCourse(Group group, Course course);
 
     List<Group> getByLesson(Lesson lesson);
 
