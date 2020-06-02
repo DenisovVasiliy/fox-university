@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jndi.JndiTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,22 +18,17 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("com.foxminded.foxuniversity")
 @EnableWebMvc
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:persistence-jndi.properties")
 public class AppConfig implements WebMvcConfigurer {
 
-    @Value("${url}")
+    @Value("${jdbc.url}")
     private String url;
-    @Value("${driver}")
-    private String driver;
-    @Value("${user}")
-    private String user;
-    @Value("${password}")
-    private String password;
 
     private final ApplicationContext context;
 
@@ -43,23 +38,18 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(url);
-        dataSource.setUsername(user);
-        dataSource.setPassword(password);
-        return dataSource;
+    DataSource dataSource() throws NamingException {
+        return (DataSource) new JndiTemplate().lookup(url);
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate() {
+    public JdbcTemplate jdbcTemplate() throws NamingException {
         return new JdbcTemplate(dataSource());
     }
 
     @Bean()
     @Scope("prototype")
-    public SimpleJdbcInsert jdbcInsert() {
+    public SimpleJdbcInsert jdbcInsert() throws NamingException {
         return new SimpleJdbcInsert(dataSource());
     }
 
