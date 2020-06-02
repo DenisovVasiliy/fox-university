@@ -62,7 +62,7 @@ class LessonServiceImplTest {
     public void rollbackLesson() {
         lesson.setTeacher(teacher);
         lesson.setCourse(course);
-        lesson.setGroups(null);
+        lesson.setGroups(new ArrayList<>());
     }
 
     @Test
@@ -190,7 +190,7 @@ class LessonServiceImplTest {
         when(lessonDao.assignGroups(lesson, groups)).thenReturn(false);
         assertFalse(lessonService.assignGroups(lesson, groups));
         verify(lessonDao).assignGroups(lesson, groups);
-        assertNull(lesson.getGroups());
+        assertEquals(0, lesson.getGroups().size());
     }
 
     @Test
