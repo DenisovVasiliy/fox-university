@@ -1,12 +1,8 @@
 package com.foxminded.foxuniversity.service.implementation;
 
-import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.LessonDao;
 import com.foxminded.foxuniversity.domain.*;
-import com.foxminded.foxuniversity.service.CourseService;
-import com.foxminded.foxuniversity.service.GroupService;
-import com.foxminded.foxuniversity.service.LessonService;
-import com.foxminded.foxuniversity.service.TeacherService;
+import com.foxminded.foxuniversity.service.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -28,19 +25,22 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ServiceTestConfig.class})
 class LessonServiceImplTest {
     @Mock
-    private static Student student;
+    private Student student;
     @Mock
-    private static LessonDao lessonDao;
+    private LessonDao lessonDao;
     @Mock
-    private static GroupService groupService;
+    private GroupService groupService;
     @Mock
-    private static CourseService courseService;
+    private CourseService courseService;
     @Mock
-    private static TeacherService teacherService;
+    private TeacherService teacherService;
     @InjectMocks
-    private static LessonService lessonService;
+    @Autowired
+    private LessonService lessonService;
 
     private static List<Group> groups = new ArrayList<>();
     private static Course course = new Course(1, "C-Name", "Desc.");
@@ -53,18 +53,16 @@ class LessonServiceImplTest {
 
     @BeforeAll
     public static void setUp() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        lessonService = context.getBean(LessonServiceImpl.class);
         for (int i = 0; i < 3; i++) {
             groups.add(new Group(i + 1, "gr-0" + (i + 1)));
         }
     }
-
+    
     @BeforeEach
     public void rollbackLesson() {
         lesson.setTeacher(teacher);
         lesson.setCourse(course);
-        lesson.setGroups(null);
+        lesson.setGroups(new ArrayList<>());
     }
 
     @Test
@@ -192,7 +190,7 @@ class LessonServiceImplTest {
         when(lessonDao.assignGroups(lesson, groups)).thenReturn(false);
         assertFalse(lessonService.assignGroups(lesson, groups));
         verify(lessonDao).assignGroups(lesson, groups);
-        assertNull(lesson.getGroups());
+        assertEquals(0, lesson.getGroups().size());
     }
 
     @Test

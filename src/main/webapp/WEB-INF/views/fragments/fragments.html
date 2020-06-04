@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:fragment="header (title)">
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div th:fragment="menu">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffc966;">
+        <a class="navbar-brand" href="/foxUniversity/">Fox-University</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/foxUniversity/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/courses/">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/groups/">Groups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/students/">Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foxUniversity/teachers/">Teachers</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/foxUniversity/timetable/"
+                       id="LessonsDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Lessons
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="LessonsDropdown">
+                        <a class="dropdown-item" href="/foxUniversity/lessons/">All lessons</a>
+                        <a class="dropdown-item" href="/foxUniversity/courses/">By course</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle disabled" href="/foxUniversity/timetable/"
+                       id="TimetableDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Timetable
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="TimetableDropdown">
+                        <a class="dropdown-item" href="/foxUniversity/timetable/">Teacher's</a>
+                        <a class="dropdown-item" href="/foxUniversity/timetable/">Student's</a>
+                    </div>
+                </li>
+            </ul>
+            <span class="navbar-text">
+        "From Fox with love"
+        </span>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="notification">
+    <div th:unless="${warnMessage==null}">
+        <div class="alert alert-warning" role="alert">
+            <p class="text-center mb-0" th:text="${warnMessage}">Sorry, page not found...</p>
+        </div>
+    </div>
+    <div th:unless="${errorMessage==null}">
+        <div class="alert alert-danger" role="alert">
+            <p class="text-center mb-0" th:text="${errorMessage}">Sorry, something went wrong...</p>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="hints">
+    <div th:unless="${dangerMessage}==null" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p class="text-center mb-0" th:text="${dangerMessage}"></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div th:unless="${successMessage}==null" class="alert alert-success alert-dismissible fade show" role="alert">
+        <p class="text-center mb-0" th:text="${successMessage}"></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div th:unless="${warningMessage}==null" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p class="text-center mb-0" th:text="${warningMessage}"></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+
+<div th:fragment="deleteConfirmScript">
+    <script>
+        $('document').ready(function() {
+            $('.table #deleteButton').on('click',function(event) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            $('#deleteAssignmentModal #confirmForm').attr('action', href);
+            $('#deleteAssignmentModal').modal();
+         });
+        });
+
+
+    </script>
+</div>
+
+</body>
+</html>

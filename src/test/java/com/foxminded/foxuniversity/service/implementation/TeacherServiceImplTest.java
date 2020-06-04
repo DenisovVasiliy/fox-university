@@ -1,6 +1,5 @@
 package com.foxminded.foxuniversity.service.implementation;
 
-import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.TeacherDao;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
@@ -8,6 +7,7 @@ import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Teacher;
 import com.foxminded.foxuniversity.service.CourseService;
 import com.foxminded.foxuniversity.service.LessonService;
+import com.foxminded.foxuniversity.service.ServiceTestConfig;
 import com.foxminded.foxuniversity.service.TeacherService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
@@ -26,20 +27,22 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ServiceTestConfig.class})
 class TeacherServiceImplTest {
     @Mock
     private static Lesson lesson;
     @Mock
     private static Group group;
     @Mock
-    private static TeacherDao teacherDao;
+    private TeacherDao teacherDao;
     @Mock
-    private static LessonService lessonService;
+    private LessonService lessonService;
     @Mock
-    private static CourseService courseService;
+    private CourseService courseService;
     @InjectMocks
-    private static TeacherService teacherService;
-
+    @Autowired
+    private TeacherService teacherService;
 
     private Course course = new Course(1, "Test", "Course");
     private Teacher teacher = new Teacher(1, "Test", "Teacher", course);
@@ -48,8 +51,6 @@ class TeacherServiceImplTest {
 
     @BeforeAll
     public static void setUp() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        teacherService = context.getBean(TeacherServiceImpl.class);
         filledCourse.setLessons(singletonList(lesson));
         filledCourse.setGroups(singletonList(group));
     }
@@ -65,8 +66,7 @@ class TeacherServiceImplTest {
         verify(teacherDao).getAll();
         verify(courseService).getById(1);
         assertEquals(teachers, actual);
-        assertEquals(filledCourse, actual.get(0).getCourse());
-        assertEquals(filledCourse.getLessons(), actual.get(0).getCourse().getLessons());
+        assertSame(filledCourse, actual.get(0).getCourse());
     }
 
     @Test
@@ -80,8 +80,7 @@ class TeacherServiceImplTest {
         verify(teacherDao).getById(1);
         verify(courseService).getById(1);
         assertEquals(teacher, actual);
-        assertEquals(filledCourse, actual.getCourse());
-        assertEquals(filledCourse.getLessons(), actual.getCourse().getLessons());
+        assertSame(filledCourse, actual.getCourse());
     }
 
     @Test
@@ -94,8 +93,7 @@ class TeacherServiceImplTest {
         verify(teacherDao).getByCourse(course);
         verifyZeroInteractions(courseService);
         assertEquals(teachers, actual);
-        assertEquals(filledCourse, actual.get(0).getCourse());
-        assertEquals(filledCourse.getLessons(), actual.get(0).getCourse().getLessons());
+        assertSame(filledCourse, actual.get(0).getCourse());
     }
 
     @Test
@@ -124,6 +122,13 @@ class TeacherServiceImplTest {
         when(teacherDao.update(teacher)).thenReturn(true);
         assertTrue(teacherService.update(teacher));
         verify(teacherDao).update(teacher);
+    }
+
+    @Test
+    public void shouldCallUpdateTeacherWithHisCourseAndReturnResult() {
+        when(teacherDao.updateWithCourse(teacher)).thenReturn(true);
+        assertTrue(teacherService.updateWithCourse(teacher));
+        verify(teacherDao).updateWithCourse(teacher);
     }
 
     @Test

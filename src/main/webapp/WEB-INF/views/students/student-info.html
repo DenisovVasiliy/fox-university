@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments/fragments :: header('Student: info')"></head>
+
+<body>
+<div th:replace="fragments/fragments :: menu"></div>
+
+<div class="container-lg">
+    <div th:insert="fragments/students-frags :: student-info"></div>
+</div>
+</body>
+</html>

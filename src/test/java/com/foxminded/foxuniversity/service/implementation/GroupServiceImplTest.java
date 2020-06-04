@@ -1,12 +1,12 @@
 package com.foxminded.foxuniversity.service.implementation;
 
-import com.foxminded.foxuniversity.AppConfig;
 import com.foxminded.foxuniversity.dao.GroupDao;
 import com.foxminded.foxuniversity.domain.Course;
 import com.foxminded.foxuniversity.domain.Group;
 import com.foxminded.foxuniversity.domain.Lesson;
 import com.foxminded.foxuniversity.domain.Student;
 import com.foxminded.foxuniversity.service.GroupService;
+import com.foxminded.foxuniversity.service.ServiceTestConfig;
 import com.foxminded.foxuniversity.service.StudentService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +29,20 @@ import static org.mockito.Mockito.when;
 import static java.util.Collections.singletonList;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ServiceTestConfig.class})
 class GroupServiceImplTest {
     @Mock
     private Lesson lesson;
     @Mock
     private Student student;
     @Mock
-    private static GroupDao groupDao;
+    private GroupDao groupDao;
     @Mock
-    private static StudentService studentService;
+    private StudentService studentService;
     @InjectMocks
-    private static GroupService groupService;
+    @Autowired
+    private GroupService groupService;
 
     private static Group group = new Group(1, "test");
     private static List<Group> groups = new ArrayList<>();
@@ -47,8 +51,6 @@ class GroupServiceImplTest {
 
     @BeforeAll
     public static void setUp() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        groupService = context.getBean(GroupServiceImpl.class);
         for (int i = 0; i < 3; i++) {
             courses.add(new Course(i + 1, "C-0" + (i + 1), "C-0" + (i + 1) + " course"));
         }
@@ -145,58 +147,13 @@ class GroupServiceImplTest {
     }
 
     @Test
-    public void shouldCallDeleteFromCourseAndIfItReturnsTrueRemoveGroupFromCourse() {
+    public void shouldCallDeleteFromCourseAndRemoveGroupFromCourse() {
         Course course = courses.get(0);
         course.setGroups(new ArrayList<>(groups));
-        when(groupDao.deleteFromCourse(group, course)).thenReturn(true);
 
         assertTrue(groupService.deleteFromCourse(group, course));
 
         verify(groupDao).deleteFromCourse(group, course);
         assertFalse(course.getGroups().contains(group));
-    }
-
-    @Test
-    public void shouldCallDeleteFromCourseAndIfItReturnsFalseDoNotRemoveGroupFromCourse() {
-        Course course = courses.get(0);
-        course.setGroups(new ArrayList<>(groups));
-        when(groupDao.deleteFromCourse(group, courses.get(0))).thenReturn(false);
-
-        assertFalse(groupService.deleteFromCourse(group, courses.get(0)));
-
-        verify(groupDao).deleteFromCourse(group, courses.get(0));
-        assertTrue(course.getGroups().contains(group));
-    }
-
-    @Test
-    public void shouldCallDeleteFromCoursesAndIfItReturnsTrueRemoveGroupFromCourses() {
-        for (Course course : courses) {
-            course.setGroups(new ArrayList<>(groups));
-        }
-        List<Course> coursesToDelete = courses.subList(1, 3);
-        when(groupDao.deleteFromCourse(group, coursesToDelete)).thenReturn(true);
-
-        assertTrue(groupService.deleteFromCourse(group, coursesToDelete));
-
-        verify(groupDao).deleteFromCourse(group, coursesToDelete);
-        assertTrue(courses.get(0).getGroups().contains(group));
-        assertFalse(courses.get(1).getGroups().contains(group));
-        assertFalse(courses.get(2).getGroups().contains(group));
-    }
-
-    @Test
-    public void shouldCallDeleteFromCoursesAndIfItReturnsFalseDoNotRemoveGroupFromCourses() {
-        for (Course course : courses) {
-            course.setGroups(new ArrayList<>(groups));
-        }
-        List<Course> coursesToDelete = courses.subList(1, 3);
-        when(groupDao.deleteFromCourse(group, coursesToDelete)).thenReturn(false);
-
-        assertFalse(groupService.deleteFromCourse(group, coursesToDelete));
-
-        verify(groupDao).deleteFromCourse(group, coursesToDelete);
-        for (Course course : courses) {
-            assertTrue(course.getGroups().contains(group));
-        }
     }
 }

@@ -13,6 +13,8 @@ import java.util.List;
 public interface LessonDao extends GenericDao<Lesson> {
     List<Lesson> getByCourse(Course course);
 
+    List<Lesson> getByGroup(Group group);
+
     List<Lesson> getByStudent(Student student);
 
     List<Lesson> getByTeacher(Teacher teacher);

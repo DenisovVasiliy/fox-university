@@ -7,14 +7,14 @@ import com.foxminded.foxuniversity.domain.Student;
 import com.foxminded.foxuniversity.service.GroupService;
 import com.foxminded.foxuniversity.service.LessonService;
 import com.foxminded.foxuniversity.service.StudentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Slf4j
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentDao studentDao;
@@ -23,11 +23,9 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private GroupService groupService;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Override
     public List<Student> getAll() {
-        logger.debug("StudentService calls studentDao.getAll().");
+        log.debug("StudentService calls studentDao.getAll().");
         List<Student> students = studentDao.getAll();
         setGroup(students);
         return students;
@@ -35,7 +33,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getById(int id) {
-        logger.debug("StudentService calls studentDao.getById(" + id + ").");
+        log.debug("StudentService calls studentDao.getById({}).", id);
         Student student = studentDao.getById(id);
         setGroup(student);
         return student;
@@ -43,25 +41,25 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void save(Student student) {
-        logger.debug("StudentService calls studentDao.save(Student{id = " + student.getId() + "}).");
+        log.debug("StudentService calls studentDao.save({}).", student);
         studentDao.save(student);
     }
 
     @Override
     public boolean update(Student student) {
-        logger.debug("StudentService calls studentDao.update(Student{id = " + student.getId() + "}).");
+        log.debug("StudentService calls studentDao.update({}).", student);
         return studentDao.update(student);
     }
 
     @Override
     public boolean delete(Student student) {
-        logger.debug("StudentService calls studentDao.delete(Student{id = " + student.getId() + "}).");
+        log.debug("StudentService calls studentDao.delete({}).", student);
         return studentDao.delete(student);
     }
 
     @Override
     public List<Student> getByGroup(Group group) {
-        logger.debug("StudentService calls studentDao.getByGroup(" + group + ").");
+        log.debug("StudentService calls studentDao.getByGroup({}).", group);
         List<Student> students = studentDao.getByGroup(group);
         setGroup(students, group);
         return students;
@@ -70,66 +68,67 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public boolean assignToGroup(Student student, Group group) {
         if (group == null) {
-            logger.warn("StudentService.assignToGroup was invoked with group = null.");
+            log.warn("StudentService.assignToGroup was invoked with group = null.");
             return false;
         }
         if (student.getGroup() == null) {
-            logger.debug("StudentService calls studentDao.assignToGroup(" +
-                    "Student{id = " + student.getId() + ", " + group + ").");
+            log.debug("StudentService calls studentDao.assignToGroup({}, {}).", student, group);
             if (studentDao.assignToGroup(student, group)) {
-                logger.debug("Assignment student to group was successful. Set group to student.");
+                log.debug("Assignment student to group was successful. Set group to student.");
                 student.setGroup(group);
                 return true;
             }
-            logger.warn("Assignment Student{id = " + student.getId() + "} to " + group +
-                    " was cancelled in DAO-layer.");
+            log.warn("Assignment {} to {} was cancelled in DAO-layer.", student, group);
             return false;
         } else if (student.getGroup() != group) {
-            logger.debug("Backup old " + group + " of Student{id = " + student.getId() + "}.");
-            logger.debug("Set new " + group + " to the " + "Student{id = " + student.getId() + "}.");
+            log.debug("Backup old {} of {}.", student.getGroup(), student);
             Group oldGroup = student.getGroup();
+            log.debug("Set new {} to the {}.", group, student);
             student.setGroup(group);
             if (!updateAssignment(student)) {
-                logger.warn("Update Student's{id = " + student.getId() + "} group was cancelled in DAO-layer.");
-                logger.warn("Set backed up " + group + " to the student.");
+                log.warn("Update group of {} was cancelled in DAO-layer.", student);
+                log.warn("Set backed up {} to the {}.", oldGroup, student);
                 student.setGroup(oldGroup);
                 return false;
             }
             return true;
         }
-        logger.warn("Update Student's{id = " + student.getId() + "} group was cancelled, because passed " +
-                group + " is the same as current student's group.");
+        log.warn("Update {} group was cancelled, " +
+                "because passed {} is the same as current student's group.", student, group);
         return false;
     }
 
     @Override
     public boolean updateAssignment(Student student) {
-        logger.debug("StudentService calls studentDao.updateAssignment(" + student + ").");
-        return studentDao.updateAssignment(student);
+        if (student.getGroup() != null) {
+            log.debug("StudentService calls studentDao.updateAssignment({}).", student);
+            return studentDao.updateAssignment(student);
+        }
+        log.debug("Updating cancelled: student's group is 'null'.");
+        return false;
     }
 
     @Override
     public boolean deleteAssignment(Student student) {
-        logger.debug("StudentService calls studentDao.deleteAssignment(" + student + ").");
+        log.debug("StudentService calls studentDao.deleteAssignment({}).", student);
         if (studentDao.deleteAssignment(student)) {
-            logger.debug("Assignment's deletion was successful. Set null to student's group.");
+            log.debug("Assignment's deletion was successful. Set null to student's group.");
             student.setGroup(null);
             return true;
         }
-        logger.warn("Assignment's deletion of " + student + " was cancelled in DAO-layer");
+        log.warn("Assignment's deletion of {} was cancelled in DAO-layer.", student);
         return false;
     }
 
     @Override
     public List<Lesson> getTimetable(Student student) {
-        logger.debug("Call lessonService.getByStudent(" + student + ").");
+        log.debug("Call lessonService.getByStudent({}).", student);
         return lessonService.getByStudent(student);
     }
 
     private void setGroup(Student student) {
         if (student.getGroup() != null) {
-            logger.debug("Call groupService.getById(" + student.getGroup().getId() + ") " +
-                    "and set result to the " + student);
+            log.debug("Call groupService.getById({}) and set result to the {}.", student.getGroup().getId(), student);
             student.setGroup(groupService.getById(student.getGroup().getId()));
         }
     }
@@ -141,7 +140,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private void setGroup(Student student, Group group) {
-        logger.debug("Set passed " + group + " to the " + student);
+        log.debug("Set passed {} to the {}", group, student);
         student.setGroup(group);
     }
 

@@ -17,7 +17,7 @@
         <file>${LOGS}/spring.log</file>
         <append>true</append>
         <encoder>
-            <pattern>%-5relative %d{ISO8601} [%thread] %-5level %42.42c{1} - %msg%n</pattern>
+            <pattern>%-8.8relative %d{ISO8601} [%25.25thread] %-5level %42.42c{1} - %msg%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
@@ -35,7 +35,7 @@
         <file>${LOGS}/service.log</file>
         <append>true</append>
         <encoder>
-            <pattern>%-5relative %d{ISO8601} [%thread] %-5level %29.29c{1} - %msg%n</pattern>
+            <pattern>%-8.8relative %d{ISO8601} [%25.25thread] %-5level %29.29c{1} - %msg%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
@@ -48,12 +48,34 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="Dao-File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/dao.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%-8.8relative %d{ISO8601} [%25.25thread] %-5level %29.29c{1} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${ARCHIVE}/dao/dao-logger-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <!-- each file should be at most 1MB, keep 7 days worth of history, but at most 10MB -->
+            <maxFileSize>1MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
     <logger name="com.foxminded.foxuniversity.service" level="DEBUG">
         <appender-ref ref="Service-File" />
     </logger>
 
+    <logger name="com.foxminded.foxuniversity.dao" level="TRACE">
+        <appender-ref ref="Dao-File" />
+    </logger>
+
     <logger name="org.springframework" additivity="false">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="Spring-FILE"/>
     </logger>
 
