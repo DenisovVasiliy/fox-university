@@ -1,11 +1,18 @@
 package com.foxminded.foxuniversity.domain;
 
+import javax.persistence.*;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "lessons")
 public class Lesson {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @ManyToOne
+    @JoinColumn(name="course_id", nullable=false)
     private Course course;
     private List<Group> groups = new ArrayList<>();
     private Teacher teacher;
